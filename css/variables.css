@@ -1,0 +1,42 @@
+:root {
+  /* Design System: Modern Minimalist & Clean Data (Tối giản, Sạch sẽ, Tập trung dữ liệu) */
+  /* LIGHT MODE PALETTE */
+
+  /* --- FONT FAMILY --- */
+  --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+  /* --- BORDER RADIUS --- */
+  --border-radius-default: 8px;
+  --border-radius-card: 12px;
+  --border-radius-button: 6px;
+
+  /* --- COLOR PALETTE --- */
+  --color-background: #f8f9fa;      /* Light background */
+  --color-surface: #ffffff;         /* White surfaces (cards, modals) */
+  --color-primary: #3b82f6;         /* Blue 500 */
+  --color-primary-soft: #eff6ff;    /* Blue 50 */
+  --color-text-dark: #1f2937;       /* Dark text for headings, main content */
+  --color-text-gray: #6b7280;       /* Gray text for secondary information */
+  --color-border: #e5e7eb;          /* Light gray border */
+  --color-success: #10b981;         /* Green (for Save/Add buttons) */
+  --color-danger: #ef4444;          /* Red (for Delete/Holiday) */
+  --color-warning: #f59e0b;         /* Yellow (for Edit buttons) */
+
+  /* --- LAYOUT & GRID (Kept from previous for consistency, can be adjusted in layout.css) --- */
+  --header-height: 60px;
+  --grid-gap: 1px;
+}
+
+[data-theme="dark"] {
+  /* DARK MODE PALETTE */
+  --color-background: #111827;      /* xám đen */
+  --color-surface: #1f2937;         /* surface */
+  --color-primary: #60a5fa;         /* Blue 400 - for better contrast */
+  --color-primary-soft: #1e293b;    /* Slate 800 - for soft backgrounds */
+  --color-text-dark: #f9fafb;       /* Light text for headings, main content */
+  --color-text-gray: #9ca3af;       /* Gray text for secondary information */
+  --color-border: #374151;          /* Dark gray border */
+  --color-success: #34d399;         /* Lighter Green */
+  --color-danger: #f87171;          /* Lighter Red */
+  --color-warning: #fbbf24;         /* Lighter Yellow */
+}

@@ -1,0 +1,386 @@
+/* Import variables first */
+@import url("./variables.css");
+/* Other imports will be handled after their respective files are updated */
+@import url("./layout.css");
+@import url("./components.css");
+
+
+/* Reset CSS cơ bản */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  line-height: 1.6; /* Adjusted for better readability */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- VIEW TRANSITION STYLES (RIPPLE EFFECT) --- */
+@keyframes ripple-effect {
+  from {
+    clip-path: circle(0% at var(--x) var(--y));
+  }
+  to {
+    clip-path: circle(150% at var(--x) var(--y));
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+/* Animate the NEW view */
+::view-transition-new(root) {
+  animation-name: ripple-effect;
+}
+
+/* Scrollbar đẹp hơn cho Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background); /* Use a variable */
+  border-radius: var(--border-radius-default);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-gray); /* Use a variable */
+  border-radius: var(--border-radius-default);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-dark); /* Use a variable */
+}
+
+/* CẤU TRÚC CHÍNH */
+main {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+
+/* HEADER (Thanh điều hướng & Công cụ) */
+.app-header {
+  background-color: var(--color-surface); /* Use variable */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--color-border); /* Add subtle border */
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-top h1 {
+  font-size: 1.75rem; /* Slightly larger */
+  color: var(--color-primary);
+  font-weight: 700; /* Bolder */
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px; /* Slightly more space */
+}
+
+#btn-theme-toggle .theme-icon.dark {
+    display: none;
+}
+#btn-theme-toggle .theme-icon.light {
+    display: inline-block;
+}
+[data-theme="dark"] #btn-theme-toggle .theme-icon.dark {
+    display: inline-block;
+}
+[data-theme="dark"] #btn-theme-toggle .theme-icon.light {
+    display: none;
+}
+
+/* TIMELINE (Thanh trượt tuần) */
+.week-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-primary-soft); /* Use variable */
+  padding: 8px 12px; /* Adjusted padding */
+  border-radius: var(--border-radius-default); /* Use variable */
+  max-width: 1400px;
+  margin: 15px auto 0 auto; /* Add some top margin */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+.nav-arrow {
+  background: var(--color-surface); /* Use variable */
+  border: 1px solid var(--color-border); /* Use variable */
+  border-radius: 50%;
+  width: 36px; /* Slightly larger */
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-primary);
+  transition: all 0.2s ease-in-out; /* Smooth transition */
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+}
+.nav-arrow:hover {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+  transform: translateY(-2px); /* Lift effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.week-scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 2px 0;
+  flex-grow: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.week-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Nút tuần (Chips) */
+.week-chip {
+  flex: 0 0 auto;
+  padding: 6px 16px;
+  border: 1px solid var(--color-border); /* Explicit border */
+  border-radius: 20px;
+  background-color: var(--color-surface);
+  color: var(--color-text-gray);
+  font-size: 0.875rem; /* Slightly larger */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.week-chip:hover {
+  background-color: var(--color-primary-soft); /* Use soft primary */
+  color: var(--color-primary); /* Use primary text */
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+.week-chip.active {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); /* Custom shadow with primary color */
+  border-color: var(--color-primary);
+}
+
+/* BANNER NGÀY NGHỈ (Dòng chữ đỏ bên dưới timeline) */
+.holiday-note {
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-danger);
+  margin-top: 10px; /* Adjusted margin */
+  height: 20px;
+  font-weight: 600;
+}
+
+/* KHU VỰC GHI CHÚ & MÔN TỰ DO (Bên dưới Grid) */
+.notes-container {
+  margin-top: 30px;
+  padding: 20px;
+  background: var(--color-surface); /* Use variable */
+  border-radius: var(--border-radius-card); /* Use card border-radius */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Deeper shadow */
+  border: 1px solid var(--color-border);
+}
+
+.notes-container h3 {
+  color: var(--color-primary);
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--color-primary-soft); /* Use soft primary */
+  padding-bottom: 10px;
+  font-size: 1.25rem; /* Slightly larger */
+  font-weight: 600;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Adjusted min-width for cards */
+  gap: 20px; /* Slightly more gap */
+}
+
+.note-card {
+  background: var(--color-warning); /* Use warning color for note background */
+  color: var(--color-text-dark); /* Darker text for readability */
+  padding: 15px;
+  border-radius: var(--border-radius-default);
+  border-left: 5px solid #e0a800; /* Darker yellow accent */
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+}
+.note-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* More prominent shadow on hover */
+}
+.note-card h4 {
+  margin-bottom: 8px;
+  color: var(--color-text-dark);
+  font-size: 1rem;
+}
+.note-card p {
+  font-size: 0.875rem;
+  color: var(--color-text-gray);
+  margin-bottom: 4px;
+}
+/* KHU VỰC DANH SÁCH CHI TIẾT */
+.course-list-section {
+  margin-top: 30px;
+  background: var(--color-surface);
+  padding: 20px;
+  border-radius: var(--border-radius-card);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
+}
+
+.course-list-section h3 {
+  color: var(--color-text-dark);
+  margin-bottom: 15px;
+  font-size: 1.25rem;
+  border-left: 5px solid var(--color-primary);
+  padding-left: 10px;
+  font-weight: 600;
+}
+
+/* Bảng */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.course-table {
+  width: 100%;
+  border-collapse: separate; /* Changed to separate for rounded borders if needed on cells */
+  border-spacing: 0; /* Remove space between cell borders */
+  min-width: 700px; /* Increased min-width for better readability */
+}
+
+.course-table th,
+.course-table td {
+  padding: 14px 15px; /* Increased padding */
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.course-table th {
+  background-color: var(--color-primary-soft); /* Light primary background */
+  color: var(--color-primary); /* Primary text color */
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.course-table thead th:first-child {
+  border-top-left-radius: var(--border-radius-default);
+}
+.course-table thead th:last-child {
+  border-top-right-radius: var(--border-radius-default);
+}
+.course-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: var(--border-radius-default);
+}
+.course-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: var(--border-radius-default);
+}
+
+
+.course-table tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02); /* Subtle zebra striping */
+}
+
+.course-table tr:hover {
+  background-color: var(--color-primary-soft); /* Hiệu ứng hover dòng, use soft primary */
+  cursor: pointer;
+}
+
+/* Style cho cột Môn học */
+.course-table td.col-name {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-dark); /* Use darker text */
+}
+
+/* Nút hành động nhỏ trong bảng */
+.action-btn {
+  border: none;
+  padding: 8px 12px; /* Increased padding */
+  border-radius: var(--border-radius-button); /* Use button border-radius */
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease-in-out;
+  margin: 0 4px; /* Adjusted margin */
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit-row {
+  background: var(--color-warning);
+  color: var(--color-text-dark); /* Darker text for contrast */
+}
+.btn-delete-row {
+  background: var(--color-danger);
+  color: var(--color-surface); /* White text */
+}
+
+/* Responsive adjustments for main layout (can be moved to layout.css) */
+@media (max-width: 768px) {
+  main {
+    padding: 10px;
+  }
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .action-buttons {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  .week-navigation {
+    padding: 8px;
+  }
+  .notes-container, .course-list-section {
+    padding: 15px;
+  }
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+  .course-table {
+    min-width: 100%; /* Allow scroll only if content exceeds */
+  }
+}

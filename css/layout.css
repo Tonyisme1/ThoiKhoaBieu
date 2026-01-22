@@ -1,0 +1,98 @@
+/* CONTAINER CHÍNH CỦA LƯỚI */
+.timetable-container {
+  display: grid;
+  /* Cấu trúc: 1 cột giờ (80px cố định) + 7 cột thứ (tự động co giãn đều nhau) */
+  grid-template-columns: 80px repeat(7, 1fr);
+
+  /* Tạo đường kẻ ngăn cách giữa các ô bằng khoảng hở 1px */
+  gap: var(--grid-gap);
+  background-color: var(--color-border); /* Use variable */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-default); /* Use variable */
+
+  /* Đảm bảo lưới không bị vỡ trên màn hình nhỏ (cho phép cuộn ngang) */
+  overflow-x: auto;
+  background-color: var(--color-background); /* Use variable */
+}
+
+/* HEADER CỦA GRID (Hàng chứa Thứ 2 -> CN) */
+.grid-header {
+  grid-column: 1 / -1;
+
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-columns: 80px repeat(7, 1fr); /* Fallback */
+}
+
+.grid-header > div {
+  background-color: var(--color-primary); /* Use variable */
+  color: var(--color-surface); /* White text */
+  padding: 12px 5px;
+  text-align: center;
+  font-weight: 600; /* Bold */
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 10; /* Ensure header is above grid content */
+}
+
+/* BODY CỦA GRID (Nơi chứa các tiết học) */
+.grid-body {
+  grid-column: 1 / -1;
+
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-columns: 80px repeat(7, 1fr); /* Fallback */
+
+  grid-auto-rows: minmax(50px, auto); /* minmax(50px, auto): Mỗi tiết cao ít nhất 50px */
+
+  background-color: var(--color-surface); /* Use variable */
+}
+
+/* CỘT MỐC THỜI GIAN (Tiết 1, Tiết 2...) */
+.time-slot-marker {
+  grid-column: 1 / 2;
+  background-color: var(--color-background); /* Use variable */
+  color: var(--color-text-gray); /* Use variable */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.85rem;
+  padding: 5px;
+  border-bottom: 1px solid var(--color-border); /* Use variable */
+  font-weight: 500;
+}
+
+/* DÒNG NGHỈ TRƯA (The Lunch Break) */
+.lunch-break-row {
+  grid-column: 1 / -1;
+  background-color: var(--color-primary-soft); /* Use soft primary */
+  color: var(--color-primary); /* Use primary text */
+  text-align: center;
+  font-weight: bold;
+  padding: 5px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  border-top: 1px dashed var(--color-primary); /* Use primary color */
+  border-bottom: 1px dashed var(--color-primary); /* Use primary color */
+}
+
+/* RESPONSIVE CHO MOBILE */
+@media (max-width: 768px) {
+  .timetable-container {
+    grid-template-columns: 50px repeat(7, 120px);
+  }
+  .grid-header,
+  .grid-body {
+    grid-template-columns: 50px repeat(7, 120px);
+  }
+}

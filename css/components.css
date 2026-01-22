@@ -1,0 +1,407 @@
+/* --- BUTTONS --- */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-surface); /* White text */
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-button); /* Use variable */
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem; /* Adjusted font size */
+}
+.btn-primary:hover {
+  background-color: var(--color-primary); /* Already primary, no dark variant for now */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text-gray); /* Use variable */
+  border: 1px solid var(--color-border); /* Use variable */
+  padding: 8px 16px;
+  border-radius: var(--border-radius-button); /* Use variable */
+  cursor: pointer;
+  margin-right: 5px;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+  font-size: 0.9rem; /* Adjusted font size */
+}
+.btn-secondary:hover {
+  background-color: var(--color-background); /* Lighter background on hover */
+  border-color: var(--color-text-gray); /* Darker border on hover */
+  color: var(--color-text-dark);
+}
+
+.btn-danger {
+  background-color: var(--color-danger); /* Use variable */
+  color: var(--color-surface); /* White text */
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-button); /* Use variable */
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem; /* Adjusted font size */
+}
+.btn-danger:hover {
+  background-color: #d32f2f; /* Slightly darker red */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+.btn-danger:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+
+/* --- COURSE CARD (Thẻ môn học trong lưới) --- */
+.course-card {
+  /* Màu mặc định sẽ bị ghi đè bởi JS */
+  background-color: var(--color-primary-soft); /* Default to soft primary, JS can override */
+  color: var(--color-text-dark);
+  padding: 8px; /* Slightly more padding */
+  margin: 1px; /* Gap handled by grid, this is for inner spacing */
+  border-radius: var(--border-radius-default); /* Use variable */
+  font-size: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+  border-left: 4px solid var(--color-primary); /* Viền trái tạo điểm nhấn, use primary color */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  position: relative; /* For potential positioning of elements inside */
+
+  /* Initial state for animation */
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.course-card.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05); /* Slightly brighter on hover */
+}
+
+.course-name {
+  font-weight: 600; /* Medium bold */
+  margin-bottom: 2px;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--color-text-dark);
+}
+
+.course-room {
+  font-size: 0.75rem;
+  color: var(--color-text-gray); /* Use variable */
+  font-weight: 500;
+}
+
+/* --- MODAL (Dialog) - OLD STYLES, KEPT FOR OTHER DIALOGS --- */
+/* These styles will still apply to holiday-modal and settings-modal */
+dialog {
+  border: none;
+  border-radius: var(--border-radius-card); /* Large border-radius */
+  padding: 25px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Deeper shadow */
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  background: var(--color-surface); /* Use variable */
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px); /* Stronger blur */
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-dark); /* Darker label text */
+}
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button); /* Use button border-radius */
+  font-size: 1rem;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-color: var(--color-surface); /* Ensure white background */
+  color: var(--color-text-dark);
+}
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary); /* Primary color on focus */
+  box-shadow: 0 0 0 3px var(--color-primary-soft); /* Soft primary shadow */
+}
+
+/* --- WEEK SELECTOR GRID (Bảng chọn tuần) --- */
+.week-grid-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding: 8px; /* Adjusted padding */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-default);
+  background: var(--color-background); /* Use background color */
+}
+
+.week-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-gray);
+  user-select: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.week-checkbox:hover {
+  background-color: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Trạng thái ĐÃ CHỌN */
+.week-checkbox.selected {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 5px rgba(59, 130, 246, 0.4);
+  transform: scale(1.03); /* Slight scale */
+}
+
+/* --- HOLIDAY LIST (Danh sách ngày nghỉ) --- */
+.holiday-list-container {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-default);
+  margin-top: 10px;
+  background-color: var(--color-surface);
+}
+
+.holiday-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+.holiday-item:last-child {
+  border-bottom: none;
+}
+
+.btn-remove-holiday {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: all 0.2s ease-in-out;
+  color: var(--color-danger); /* Use danger color */
+}
+.btn-remove-holiday:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  color: var(--color-danger);
+}
+
+
+/* --- SLIDING SIDEBAR --- */
+.input-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px; /* Fixed width, can be responsive */
+  max-width: 90%;
+  height: 100%;
+  background-color: var(--color-surface);
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* More refined curve */
+  display: flex;
+  flex-direction: column;
+}
+
+.input-sidebar.is-open {
+  transform: translateX(0);
+}
+
+.input-sidebar form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 25px; /* Adjusted padding */
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--color-primary-soft); /* Softer border */
+  padding-bottom: 15px;
+  font-size: 1.6rem; /* Slightly larger */
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.optional-section {
+  background: var(--color-primary-soft); /* Use soft primary background */
+  padding: 15px;
+  border-radius: var(--border-radius-default);
+  border: 1px dashed var(--color-primary); /* Use primary color for dashed border */
+  margin-bottom: 15px;
+}
+.optional-section-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--color-primary); /* Primary color for title */
+  font-size: 0.9rem;
+}
+.week-selector-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+.btn-toggle-weeks {
+  font-size: 0.8rem;
+  padding: 4px 10px; /* Adjusted padding */
+  cursor: pointer;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius-button);
+  transition: all 0.2s ease-in-out;
+}
+.btn-toggle-weeks:hover {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+.week-range-display {
+  margin-top: 8px; /* Adjusted margin */
+  background: var(--color-background); /* Use background color */
+  color: var(--color-text-gray);
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border); /* Add subtle border */
+  border-radius: var(--border-radius-button);
+  width: 100%;
+  padding: 8px;
+}
+
+.sidebar-actions {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- SIDEBAR OVERLAY --- */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  backdrop-filter: blur(4px); /* Consistent blur */
+}
+
+.sidebar-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- CONFIGURATION SECTIONS in Modals --- */
+/* (For holiday and settings modals) */
+.holiday-modal-content,
+.settings-modal-content {
+  background: var(--color-primary-soft); /* Light blue background */
+  padding: 15px;
+  border-radius: var(--border-radius-default);
+  border: 1px dashed var(--color-primary);
+  margin-bottom: 20px;
+}
+
+/* Specific styling for dialogs button in modals (for Holiday and Settings) */
+dialog .modal-actions button[value="cancel"],
+dialog .modal-actions button {
+    margin-right: 0; /* Remove margin from generic secondary button */
+}
+dialog .modal-actions button.btn-secondary {
+    margin-right: 10px; /* Re-add for the secondary button in dialogs */
+}
+
+/* --- GENERAL NOTES SECTION --- */
+#general-notes-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
+  font-size: 1rem;
+  font-family: var(--font-family);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-color: var(--color-surface);
+  color: var(--color-text-dark);
+  resize: vertical; /* Allow vertical resizing */
+}
+
+#general-notes-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}

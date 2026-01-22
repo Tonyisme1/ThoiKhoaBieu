@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart University Timetable</title>
+    <link rel="stylesheet" href="./css/variables.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/layout.css" />
+    <link rel="stylesheet" href="./css/components.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-top">
+        <h1>📅 Thời Khóa Biểu</h1>
+        <div class="action-buttons">
+          <button id="btn-theme-toggle" class="btn-secondary" title="Đổi giao diện Sáng/Tối">
+              <span class="theme-icon light">☀️</span>
+              <span class="theme-icon dark">🌙</span>
+          </button>
+          <button
+            id="btn-config"
+            class="btn-secondary"
+            title="Cấu hình ngày nghỉ"
+          >
+            ⚙️ Ngày Nghỉ
+          </button>
+          <button id="btn-settings" class="btn-secondary" title="Cấu hình chung">
+            ⚙️ Cấu hình
+          </button>
+          <button id="btn-export" class="btn-secondary" title="Sao lưu JSON">
+            📤 Export
+          </button>
+          <button id="btn-import" class="btn-secondary" title="Nạp JSON">
+            📥 Import
+          </button>
+          <button id="btn-open-input" class="btn-primary">✏️ Thêm Môn</button>
+        </div>
+      </div>
+
+      <nav class="week-navigation">
+        <button id="btn-prev-week" class="nav-arrow" aria-label="Tuần trước">
+          ❮
+        </button>
+        <div id="week-list" class="week-scroller"></div>
+        <button id="btn-next-week" class="nav-arrow" aria-label="Tuần sau">
+          ❯
+        </button>
+      </nav>
+
+      <div id="holiday-banner" class="holiday-note"></div>
+    </header>
+
+    <main>
+      <div class="timetable-container">
+        <div class="grid-header">
+          <div>Tiết / Thứ</div>
+          <div>Thứ 2</div>
+          <div>Thứ 3</div>
+          <div>Thứ 4</div>
+          <div>Thứ 5</div>
+          <div>Thứ 6</div>
+          <div>Thứ 7</div>
+          <div>CN</div>
+        </div>
+
+        <div id="timetable-grid" class="grid-body"></div>
+      </div>
+
+      <section class="notes-container">
+        <h3>📌 Ghi Chú & Môn Tự Do</h3>
+        <div id="notes-list" class="notes-grid"></div>
+      </section>
+
+      <section id="general-notes-section" class="notes-container">
+        <h3>📝 Ghi Chú Chung</h3>
+        <textarea id="general-notes-textarea" placeholder="Nhập các ghi chú, lời nhắc, hoặc thông tin quan trọng khác ở đây..."></textarea>
+        <button id="btn-save-notes" class="btn-primary" style="margin-top: 10px;">Lưu Ghi Chú</button>
+      </section>
+
+      <section class="course-list-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>📋 Danh Sách Môn Học Chi Tiết</h3>
+            <input type="search" id="search-input" placeholder="🔍 Tìm kiếm môn học..." style="padding: 8px; border: 1px solid var(--color-border); border-radius: var(--border-radius-button); width: 300px;">
+        </div>
+        <div class="table-wrapper">
+          <table class="course-table">
+            <thead>
+              <tr>
+                <th style="width: 50px">STT</th>
+                <th style="text-align: left">Môn Học</th>
+                <th>Lịch Học</th>
+                <th>Phòng</th>
+                <th>Giảng Viên</th>
+                <th>Thời Gian (Tuần)</th>
+                <th style="width: 120px">Hành Động</th>
+              </tr>
+            </thead>
+            <tbody id="course-list-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="input-sidebar" class="input-sidebar">
+      <form>
+        <h2 id="modal-title" class="sidebar-title">Thêm Môn Học Mới</h2>
+
+        <input type="hidden" id="edit-course-id" />
+
+        <div class="form-group">
+          <label for="subject-name">Tên môn học <span style="color: red">*</span>:</label>
+          <input type="text" id="subject-name" required placeholder="Ví dụ: Lập trình Web" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
+          <div class="form-group">
+            <label for="day-select">Thứ:</label>
+            <select id="day-select" required>
+              <option value="2">Thứ 2</option>
+              <option value="3">Thứ 3</option>
+              <option value="4">Thứ 4</option>
+              <option value="5">Thứ 5</option>
+              <option value="6">Thứ 6</option>
+              <option value="7">Thứ 7</option>
+              <option value="8">Chủ Nhật</option>
+              <option value="0" style="color: #e74c3c; font-weight: bold">📌 Môn Tự Do / Ghi Chú</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="room-name">Phòng học:</label>
+            <input type="text" id="room-name" placeholder="VD: 301-G2" />
+          </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="teacher-name">Tên Giảng Viên:</label>
+            <input type="text" id="teacher-name" placeholder="VD: Thầy An" />
+        </div>
+        
+        <div class="form-group">
+            <label for="course-color">Màu sắc môn học:</label>
+            <input type="color" id="course-color" value="#3b82f6" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
+          <div class="form-group">
+            <label for="start-period">Tiết bắt đầu:</label>
+            <input type="number" id="start-period" min="1" max="15" value="1" required />
+          </div>
+          <div class="form-group">
+            <label for="period-count">Số tiết:</label>
+            <input type="number" id="period-count" min="1" max="5" value="3" required />
+          </div>
+        </div>
+
+        <div class="optional-section">
+          <p class="optional-section-title">📅 Tự động chọn tuần theo ngày (Tùy chọn):</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
+            <div class="form-group" style="margin-bottom: 0">
+              <input type="date" id="start-date-picker" title="Ngày bắt đầu" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0">
+              <input type="date" id="end-date-picker" title="Ngày kết thúc" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="week-selector-label">
+            <span>📅 Chọn tuần học:</span>
+            <div>
+                <button type="button" id="btn-select-even" class="btn-toggle-weeks small">Tuần Chẵn</button>
+                <button type="button" id="btn-select-odd" class="btn-toggle-weeks small">Tuần Lẻ</button>
+                <button type="button" id="btn-toggle-all" class="btn-toggle-weeks">Chọn tất cả</button>
+            </div>
+          </label>
+          <div id="week-checkbox-container" class="week-grid-selector"></div>
+          <input type="text" id="week-range" readonly placeholder="Các tuần được chọn sẽ hiện ở đây..." class="week-range-display" />
+        </div>
+
+        <div class="sidebar-actions">
+          <button id="btn-delete" type="button" class="btn-danger" style="display: none">🗑️ Xóa</button>
+          <div style="margin-left: auto">
+            <button id="btn-cancel-sidebar" type="button" class="btn-secondary">Hủy</button>
+            <button id="btn-save" type="button" class="btn-primary">Lưu Lại</button>
+          </div>
+        </div>
+      </form>
+    </aside>
+
+    <dialog id="holiday-modal">
+      <form method="dialog">
+        <h2 style="border-bottom: 2px solid #e74c3c; padding-bottom: 10px; color: #e74c3c;">🎉 Quản Lý Ngày Nghỉ</h2>
+        <div style="background: #fff5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <div class="form-group">
+            <label>Tên kỳ nghỉ:</label>
+            <input type="text" id="holiday-name" placeholder="VD: Tết Nguyên Đán" />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+            <div class="form-group">
+              <label>Từ:</label><input type="date" id="holiday-start" />
+            </div>
+            <div class="form-group">
+              <label>Đến:</label><input type="date" id="holiday-end" />
+            </div>
+          </div>
+          <button id="btn-add-holiday" type="button" class="btn-primary" style="background-color: #e74c3c; width: 100%; margin-top: 10px">➕ Thêm</button>
+        </div>
+        <h3>Danh sách đã lưu:</h3>
+        <ul id="holiday-list" class="holiday-list-container"></ul>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="this.closest('dialog').close()">Đóng</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="settings-modal">
+      <form method="dialog">
+        <h2 style="border-bottom: 2px solid var(--color-primary); padding-bottom: 10px;">⚙️ Cấu hình Hệ thống</h2>
+        <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px">
+          <div class="form-group">
+            <label for="setting-start-date">Ngày bắt đầu kỳ:</label>
+            <input type="date" id="setting-start-date" required />
+          </div>
+          <div class="form-group">
+            <label for="setting-start-week">Tuần bắt đầu:</label>
+            <input type="number" id="setting-start-week" min="1" value="1" required />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button value="cancel" class="btn-secondary" type="button" onclick="this.closest('dialog').close()">Hủy</button>
+          <button id="btn-save-settings" value="default" class="btn-primary">Lưu cấu hình</button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="course-card-template">
+      <article class="course-card">
+        <h3 class="course-name"></h3>
+        <p class="course-room"></p>
+      </article>
+    </template>
+
+    <dialog id="import-modal">
+        <h2 style="margin-bottom: 15px; border-bottom: 2px solid var(--color-primary); padding-bottom: 10px;">Nạp Dữ Liệu (Import JSON)</h2>
+        <p style="margin-bottom: 10px; font-size: 0.9rem; color: var(--color-text-gray);">Dán nội dung file JSON đã sao lưu vào ô bên dưới:</p>
+        <textarea id="import-area" style="width: 100%; min-height: 250px; font-family: monospace; border: 1px solid var(--color-border); border-radius: var(--border-radius-default); padding: 10px;"></textarea>
+        <div class="modal-actions" style="margin-top: 15px;">
+            <button id="btn-cancel-import" class="btn-secondary">Hủy</button>
+            <button id="btn-confirm-import" class="btn-primary">Xác Nhận</button>
+        </div>
+    </dialog>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
