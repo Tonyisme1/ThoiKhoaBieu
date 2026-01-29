@@ -30,6 +30,7 @@ let appData = {
   assignments: [], // { id, courseId, courseName, title, description, deadline, completed, priority, createdAt }
   exams: [], // { id, courseId, courseName, title, date, duration, room, format, notes, completed, createdAt }
   attendance: {}, // { courseId: { 'YYYY-MM-DD': { status: 'present'|'absent'|'late', note: '' } } }
+  smartNotes: [], // { id, title, content, type: 'normal'|'todo', tags: [], color, pinned, createdAt, updatedAt }
   settings: {
     startDate: "2026-01-26", // Default
     startWeek: 22, // Default
@@ -68,6 +69,7 @@ function init() {
       if (!appData.assignments) appData.assignments = [];
       if (!appData.exams) appData.exams = [];
       if (!appData.attendance) appData.attendance = {};
+      if (!appData.smartNotes) appData.smartNotes = [];
       if (!appData.settings) {
         appData.settings = { startDate: "2026-01-26", startWeek: 22 };
       }
@@ -110,9 +112,11 @@ function init() {
   renderAssignments();
   renderExams();
   renderAttendance();
+  renderSmartNotes();
 
   // Setup Events
   setupEventListeners();
+  setupNotesListeners();
 
   // Setup tooltip hover behavior để giữ tooltip khi hover vào nó
   const tooltip = document.getElementById("course-detail-tooltip");
@@ -2919,6 +2923,594 @@ function calculateTotalAttendanceStats() {
   });
 
   return { total: totalSessions, attended: attendedSessions };
+}
+
+// ========================================
+// SMART NOTES SYSTEM
+// ========================================
+
+/**
+ * Render markdown to HTML
+ */
+function renderMarkdown(text) {
+  if (!text) return "";
+
+  let html = text;
+
+  // Headers
+  html = html.replace(/^### (.*$)/gim, "<h3>$1</h3>");
+  html = html.replace(/^## (.*$)/gim, "<h2>$1</h2>");
+  html = html.replace(/^# (.*$)/gim, "<h1>$1</h1>");
+
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+  // Italic
+  html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+
+  // Strikethrough
+  html = html.replace(/~~(.+?)~~/g, "<del>$1</del>");
+
+  // Links (auto-detect URLs)
+  html = html.replace(
+    /(https?:\/\/[^\s]+)/g,
+    '<a href="$1" target="_blank">$1</a>',
+  );
+
+  // Todo checkboxes
+  html = html.replace(
+    /\[x\]\s(.+)/gi,
+    '<div class="todo-item completed"><input type="checkbox" class="todo-checkbox" checked disabled> <span>$1</span></div>',
+  );
+  html = html.replace(
+    /\[ \]\s(.+)/g,
+    '<div class="todo-item"><input type="checkbox" class="todo-checkbox" disabled> <span>$1</span></div>',
+  );
+
+  // Bullet lists
+  html = html.replace(/^\- (.+)$/gim, "<li>$1</li>");
+  html = html.replace(/(<li>.*<\/li>)/s, "<ul>$1</ul>");
+
+  // Line breaks
+  html = html.replace(/\n/g, "<br>");
+
+  return html;
+}
+
+/**
+ * Parse tags from string
+ */
+function parseTags(tagString) {
+  if (!tagString) return [];
+  return tagString
+    .split(/\s+/)
+    .filter((t) => t.startsWith("#"))
+    .map((t) => t.toLowerCase());
+}
+
+/**
+ * Calculate todo progress
+ */
+function calculateTodoProgress(content) {
+  const totalMatch = content.match(/\[[ x]\]/gi);
+  const completedMatch = content.match(/\[x\]/gi);
+
+  const total = totalMatch ? totalMatch.length : 0;
+  const completed = completedMatch ? completedMatch.length : 0;
+
+  return {
+    total,
+    completed,
+    percentage: total > 0 ? (completed / total) * 100 : 0,
+  };
+}
+
+/**
+ * Render smart notes grid
+ */
+function renderSmartNotes(filterType = "all", searchQuery = "") {
+  const container = document.getElementById("smart-notes-list");
+  const emptyState = document.getElementById("notes-empty-state");
+
+  if (!container) return;
+
+  let notes = [...appData.smartNotes];
+
+  // Apply filter
+  if (filterType === "pinned") {
+    notes = notes.filter((n) => n.pinned);
+  } else if (filterType === "todos") {
+    notes = notes.filter((n) => n.type === "todo");
+  } else if (filterType === "normal") {
+    notes = notes.filter((n) => n.type === "normal");
+  }
+
+  // Apply search
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    notes = notes.filter(
+      (n) =>
+        n.title.toLowerCase().includes(query) ||
+        n.content.toLowerCase().includes(query) ||
+        n.tags.some((t) => t.includes(query)),
+    );
+  }
+
+  // Sort: pinned first, then by updatedAt
+  notes.sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
+  });
+
+  // Render
+  container.innerHTML = "";
+
+  if (notes.length === 0) {
+    if (emptyState) emptyState.style.display = "block";
+    return;
+  }
+
+  if (emptyState) emptyState.style.display = "none";
+
+  notes.forEach((note) => {
+    const card = createNoteCard(note);
+    container.appendChild(card);
+  });
+
+  updateNotesStats();
+}
+
+/**
+ * Create note card element
+ */
+function createNoteCard(note) {
+  const card = document.createElement("div");
+  card.className = "note-card";
+  card.dataset.id = note.id;
+  card.style.setProperty("--note-color", note.color || "#60a5fa");
+
+  // Header
+  const header = document.createElement("div");
+  header.className = "note-card-header";
+
+  const title = document.createElement("h4");
+  title.className = "note-title";
+  title.textContent = note.title;
+
+  const actions = document.createElement("div");
+  actions.className = "note-actions";
+
+  if (note.pinned) {
+    const pinIndicator = document.createElement("span");
+    pinIndicator.className = "note-pinned-indicator";
+    pinIndicator.textContent = "📌";
+    header.appendChild(pinIndicator);
+  }
+
+  const editBtn = document.createElement("button");
+  editBtn.className = "note-action-btn";
+  editBtn.textContent = "✏️";
+  editBtn.title = "Chỉnh sửa";
+  editBtn.onclick = (e) => {
+    e.stopPropagation();
+    openNoteModal(note);
+  };
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "note-action-btn";
+  deleteBtn.textContent = "🗑️";
+  deleteBtn.title = "Xóa";
+  deleteBtn.onclick = (e) => {
+    e.stopPropagation();
+    deleteNote(note.id);
+  };
+
+  actions.appendChild(editBtn);
+  actions.appendChild(deleteBtn);
+
+  header.appendChild(title);
+  header.appendChild(actions);
+  card.appendChild(header);
+
+  // Tags
+  if (note.tags.length > 0) {
+    const tagsContainer = document.createElement("div");
+    tagsContainer.className = "note-tags";
+    note.tags.forEach((tag) => {
+      const tagEl = document.createElement("span");
+      tagEl.className = "note-tag";
+      tagEl.textContent = tag;
+      tagsContainer.appendChild(tagEl);
+    });
+    card.appendChild(tagsContainer);
+  }
+
+  // Todo progress
+  if (note.type === "todo") {
+    const progress = calculateTodoProgress(note.content);
+    const progressContainer = document.createElement("div");
+    progressContainer.className = "note-todo-progress";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "note-progress-bar";
+
+    const progressFill = document.createElement("div");
+    progressFill.className = "note-progress-fill";
+    progressFill.style.width = `${progress.percentage}%`;
+
+    progressBar.appendChild(progressFill);
+
+    const progressText = document.createElement("span");
+    progressText.className = "note-progress-text";
+    progressText.textContent = `${progress.completed}/${progress.total}`;
+
+    progressContainer.appendChild(progressBar);
+    progressContainer.appendChild(progressText);
+    card.appendChild(progressContainer);
+  }
+
+  // Content preview
+  const content = document.createElement("div");
+  content.className = "note-content-preview rendered-markdown";
+  content.innerHTML = renderMarkdown(note.content);
+  card.appendChild(content);
+
+  // Footer
+  const footer = document.createElement("div");
+  footer.className = "note-footer";
+
+  const meta = document.createElement("div");
+  meta.className = "note-meta";
+
+  const typeBadge = document.createElement("span");
+  typeBadge.className = "note-type-badge";
+  typeBadge.innerHTML =
+    note.type === "todo" ? "<span>✓</span> Todo" : "<span>📄</span> Ghi chú";
+  meta.appendChild(typeBadge);
+
+  const timestamp = document.createElement("span");
+  timestamp.textContent = formatNoteDate(note.updatedAt);
+  meta.appendChild(timestamp);
+
+  footer.appendChild(meta);
+  card.appendChild(footer);
+
+  // Click to expand/view
+  card.onclick = () => {
+    openNoteModal(note);
+  };
+
+  return card;
+}
+
+/**
+ * Format note date
+ */
+function formatNoteDate(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = now - date;
+
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+
+  if (minutes < 1) return "Vừa xong";
+  if (minutes < 60) return `${minutes} phút trước`;
+  if (hours < 24) return `${hours} giờ trước`;
+  if (days < 7) return `${days} ngày trước`;
+
+  return date.toLocaleDateString("vi-VN");
+}
+
+/**
+ * Update notes stats
+ */
+function updateNotesStats() {
+  const totalEl = document.getElementById("total-notes-count");
+  const pinnedEl = document.getElementById("pinned-notes-count");
+  const todoEl = document.getElementById("todo-notes-count");
+  const completedEl = document.getElementById("completed-todos-count");
+
+  if (totalEl) totalEl.textContent = appData.smartNotes.length;
+  if (pinnedEl)
+    pinnedEl.textContent = appData.smartNotes.filter((n) => n.pinned).length;
+  if (todoEl)
+    todoEl.textContent = appData.smartNotes.filter(
+      (n) => n.type === "todo",
+    ).length;
+
+  // Calculate completed todos
+  let totalCompleted = 0;
+  appData.smartNotes
+    .filter((n) => n.type === "todo")
+    .forEach((n) => {
+      const progress = calculateTodoProgress(n.content);
+      if (progress.percentage === 100) totalCompleted++;
+    });
+
+  if (completedEl) completedEl.textContent = totalCompleted;
+}
+
+/**
+ * Open note modal for create/edit
+ */
+function openNoteModal(note = null) {
+  const modal = document.getElementById("note-modal");
+  const title = document.getElementById("note-modal-title");
+  const form = modal.querySelector("form");
+
+  if (!modal) return;
+
+  // Reset form
+  form.reset();
+  document.getElementById("note-preview").style.display = "none";
+  document.getElementById("note-content").style.display = "block";
+
+  if (note) {
+    // Edit mode
+    title.textContent = "✏️ Chỉnh Sửa Ghi Chú";
+    document.getElementById("note-id").value = note.id;
+    document.getElementById("note-title").value = note.title;
+    document.getElementById("note-tags").value = note.tags.join(" ");
+    document.getElementById("note-color").value = note.color || "#60a5fa";
+    document.getElementById("note-content").value = note.content;
+    document.getElementById("note-pinned").checked = note.pinned;
+
+    const typeRadio = document.querySelector(
+      `input[name="note-type"][value="${note.type}"]`,
+    );
+    if (typeRadio) typeRadio.checked = true;
+  } else {
+    // Create mode
+    title.textContent = "📝 Tạo Ghi Chú Mới";
+    document.getElementById("note-id").value = "";
+    document.getElementById("note-color").value = "#60a5fa";
+  }
+
+  updateCharCount();
+  modal.showModal();
+}
+
+/**
+ * Close note modal
+ */
+function closeNoteModal() {
+  const modal = document.getElementById("note-modal");
+  if (modal) modal.close();
+}
+
+/**
+ * Save note
+ */
+function saveNote(e) {
+  e.preventDefault();
+
+  const id = document.getElementById("note-id").value;
+  const title = document.getElementById("note-title").value.trim();
+  const tagsInput = document.getElementById("note-tags").value.trim();
+  const color = document.getElementById("note-color").value;
+  const content = document.getElementById("note-content").value.trim();
+  const pinned = document.getElementById("note-pinned").checked;
+  const type = document.querySelector('input[name="note-type"]:checked').value;
+
+  if (!title || !content) {
+    alert("Vui lòng nhập tiêu đề và nội dung!");
+    return;
+  }
+
+  const tags = parseTags(tagsInput);
+  const now = new Date().toISOString();
+
+  if (id) {
+    // Update existing note
+    const index = appData.smartNotes.findIndex((n) => n.id == id);
+    if (index !== -1) {
+      appData.smartNotes[index] = {
+        ...appData.smartNotes[index],
+        title,
+        content,
+        type,
+        tags,
+        color,
+        pinned,
+        updatedAt: now,
+      };
+    }
+  } else {
+    // Create new note
+    const newNote = {
+      id: Date.now(),
+      title,
+      content,
+      type,
+      tags,
+      color,
+      pinned,
+      createdAt: now,
+      updatedAt: now,
+    };
+    appData.smartNotes.push(newNote);
+  }
+
+  saveData();
+  renderSmartNotes();
+  closeNoteModal();
+}
+
+/**
+ * Delete note
+ */
+function deleteNote(id) {
+  if (!confirm("Bạn có chắc muốn xóa ghi chú này?")) return;
+
+  appData.smartNotes = appData.smartNotes.filter((n) => n.id != id);
+  saveData();
+  renderSmartNotes();
+}
+
+/**
+ * Toggle preview mode
+ */
+function togglePreview() {
+  const editor = document.getElementById("note-content");
+  const preview = document.getElementById("note-preview");
+  const btn = document.getElementById("btn-toggle-preview");
+
+  if (!editor || !preview) return;
+
+  if (preview.style.display === "none") {
+    // Show preview
+    preview.innerHTML = renderMarkdown(editor.value);
+    preview.style.display = "block";
+    editor.style.display = "none";
+    btn.classList.add("active");
+  } else {
+    // Show editor
+    preview.style.display = "none";
+    editor.style.display = "block";
+    btn.classList.remove("active");
+  }
+}
+
+/**
+ * Insert markdown formatting
+ */
+function insertMarkdown(before, after = "") {
+  const editor = document.getElementById("note-content");
+  if (!editor) return;
+
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+  const text = editor.value;
+  const selectedText = text.substring(start, end);
+
+  const newText =
+    text.substring(0, start) +
+    before +
+    selectedText +
+    after +
+    text.substring(end);
+
+  editor.value = newText;
+  editor.focus();
+  editor.selectionStart = start + before.length;
+  editor.selectionEnd = start + before.length + selectedText.length;
+
+  updateCharCount();
+}
+
+/**
+ * Update character count
+ */
+function updateCharCount() {
+  const editor = document.getElementById("note-content");
+  const counter = document.getElementById("note-char-count");
+  if (editor && counter) {
+    counter.textContent = `${editor.value.length} ký tự`;
+  }
+}
+
+/**
+ * Setup notes event listeners
+ */
+function setupNotesListeners() {
+  // Add note button
+  const btnAddNote = document.getElementById("btn-add-note");
+  if (btnAddNote) {
+    btnAddNote.addEventListener("click", () => openNoteModal());
+  }
+
+  // Close modal buttons
+  const btnCloseModal = document.getElementById("btn-close-note-modal");
+  const btnCancelNote = document.getElementById("btn-cancel-note");
+
+  if (btnCloseModal) {
+    btnCloseModal.addEventListener("click", closeNoteModal);
+  }
+  if (btnCancelNote) {
+    btnCancelNote.addEventListener("click", closeNoteModal);
+  }
+
+  // Save note
+  const noteForm = document.querySelector("#note-modal form");
+  if (noteForm) {
+    noteForm.addEventListener("submit", saveNote);
+  }
+
+  // Search
+  const searchInput = document.getElementById("notes-search");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const filterSelect = document.getElementById("notes-filter");
+      const filterType = filterSelect ? filterSelect.value : "all";
+      renderSmartNotes(filterType, e.target.value);
+    });
+  }
+
+  // Filter
+  const filterSelect = document.getElementById("notes-filter");
+  if (filterSelect) {
+    filterSelect.addEventListener("change", (e) => {
+      const searchInput = document.getElementById("notes-search");
+      const searchQuery = searchInput ? searchInput.value : "";
+      renderSmartNotes(e.target.value, searchQuery);
+    });
+  }
+
+  // Editor toolbar
+  const btnBold = document.getElementById("btn-format-bold");
+  const btnItalic = document.getElementById("btn-format-italic");
+  const btnStrike = document.getElementById("btn-format-strike");
+  const btnLink = document.getElementById("btn-insert-link");
+  const btnCheckbox = document.getElementById("btn-insert-checkbox");
+  const btnPreview = document.getElementById("btn-toggle-preview");
+
+  if (btnBold)
+    btnBold.addEventListener("click", () => insertMarkdown("**", "**"));
+  if (btnItalic)
+    btnItalic.addEventListener("click", () => insertMarkdown("*", "*"));
+  if (btnStrike)
+    btnStrike.addEventListener("click", () => insertMarkdown("~~", "~~"));
+  if (btnLink)
+    btnLink.addEventListener("click", () => {
+      const url = prompt("Nhập URL:");
+      if (url) insertMarkdown(`[`, `](${url})`);
+    });
+  if (btnCheckbox)
+    btnCheckbox.addEventListener("click", () => insertMarkdown("[ ] "));
+  if (btnPreview) btnPreview.addEventListener("click", togglePreview);
+
+  // Color presets
+  document.querySelectorAll(".color-preset").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const color = btn.dataset.color;
+      const colorInput = document.getElementById("note-color");
+      if (colorInput) colorInput.value = color;
+    });
+  });
+
+  // Character count
+  const noteContent = document.getElementById("note-content");
+  if (noteContent) {
+    noteContent.addEventListener("input", updateCharCount);
+  }
+
+  // Keyboard shortcuts
+  if (noteContent) {
+    noteContent.addEventListener("keydown", (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === "b") {
+          e.preventDefault();
+          insertMarkdown("**", "**");
+        } else if (e.key === "i") {
+          e.preventDefault();
+          insertMarkdown("*", "*");
+        }
+      }
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", init);
