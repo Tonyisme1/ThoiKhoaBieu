@@ -6,6 +6,14 @@
 [![Made with Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red.svg)](https://github.com)
 [![No Build Tools](https://img.shields.io/badge/No%20Build%20Tools-Vanilla%20JS-yellow.svg)](https://github.com)
 
+## 🌐 Live Demo
+
+**🎯 [View Landing Page](https://your-username.github.io/smart-timetable/public/landing.html)**
+
+**📱 [Launch App](https://your-username.github.io/smart-timetable/public/index.html)**
+
+> Replace `your-username` with your GitHub username after deploying
+
 ## 🚀 Quick Start
 
 ### Option 1: Direct Open
@@ -24,9 +32,12 @@ npx serve -l 3001
 http://localhost:3001/public/index.html
 ```
 
-### Demo
+### Option 3: GitHub Pages (Online)
 
-🎯 [View Landing Page](public/landing.html) - Beautiful introduction to the app
+1. Fork this repository
+2. Go to Settings → Pages
+3. Select `main` branch as source
+4. Your site will be live at `https://your-username.github.io/smart-timetable/public/index.html`
 
 ## 📁 Project Structure
 
