@@ -1,42 +1,82 @@
-/* CONTAINER CHÍNH CỦA LƯỚI */
+/* CONTAINER CHÍNH CỦA LƯỚI - COMPACT */
 .timetable-container {
   display: grid;
-  /* Cấu trúc: 1 cột giờ (80px cố định) + 7 cột thứ (tự động co giãn đều nhau) */
-  grid-template-columns: 80px repeat(7, 1fr);
-
-  /* Tạo đường kẻ ngăn cách giữa các ô bằng khoảng hở 1px */
-  gap: var(--grid-gap);
-  background-color: var(--color-border); /* Use variable */
+  grid-template-columns: 90px repeat(7, 1fr);
+  gap: 2px;
+  background-color: #e5e7eb;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-default); /* Use variable */
-
-  /* Đảm bảo lưới không bị vỡ trên màn hình nhỏ (cho phép cuộn ngang) */
-  overflow-x: auto;
-  background-color: var(--color-background); /* Use variable */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* HEADER CỦA GRID (Hàng chứa Thứ 2 -> CN) */
+/* Dark mode timetable */
+[data-theme="dark"] .timetable-container {
+  background-color: #0d1117;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* HEADER CỦA GRID */
 .grid-header {
   grid-column: 1 / -1;
-
   display: grid;
   grid-template-columns: subgrid;
-  grid-template-columns: 80px repeat(7, 1fr); /* Fallback */
+  grid-template-columns: 90px repeat(7, 1fr);
 }
 
 .grid-header > div {
-  background-color: var(--color-primary); /* Use variable */
-  color: var(--color-surface); /* White text */
-  padding: 12px 5px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+  color: var(--color-text-dark);
+  padding: 10px 6px;
   text-align: center;
-  font-weight: 600; /* Bold */
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.85rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: sticky;
-  top: 0;
-  z-index: 10; /* Ensure header is above grid content */
+  gap: 4px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Dark mode header */
+[data-theme="dark"] .grid-header > div {
+  background: linear-gradient(to bottom, #1e293b, #1a2332);
+  border-bottom: 2px solid #334155;
+}
+
+.grid-header > div .day-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.grid-header > div .day-date {
+  font-size: 0.7rem;
+  color: var(--color-text-gray);
+  font-weight: 400;
+}
+
+/* Dark mode today highlight */
+[data-theme="dark"] .grid-header > div.is-today {
+  background: linear-gradient(to bottom, #1e3a8a, #1e40af);
+  color: #93c5fd;
+}
+
+.grid-header > div.is-today {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.today-badge {
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
 }
 
 /* BODY CỦA GRID (Nơi chứa các tiết học) */
@@ -45,54 +85,191 @@
 
   display: grid;
   grid-template-columns: subgrid;
-  grid-template-columns: 80px repeat(7, 1fr); /* Fallback */
+  grid-template-columns: 90px repeat(7, 1fr); /* Fallback */
 
-  grid-auto-rows: minmax(50px, auto); /* minmax(50px, auto): Mỗi tiết cao ít nhất 50px */
+  grid-auto-rows: minmax(55px, auto); /* Mỗi tiết cao ít nhất 55px */
 
-  background-color: var(--color-surface); /* Use variable */
+  background-color: var(--color-surface);
 }
 
 /* CỘT MỐC THỜI GIAN (Tiết 1, Tiết 2...) */
 .time-slot-marker {
   grid-column: 1 / 2;
-  background-color: var(--color-background); /* Use variable */
-  color: var(--color-text-gray); /* Use variable */
+  background: linear-gradient(to right, #f9fafb, #ffffff);
+  color: var(--color-text-gray);
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  /* Dark mode time marker */
+  [data-theme="dark"] .time-slot-marker {
+    background: linear-gradient(to right, #1a2332, #1e293b);
+    border-bottom: 1px solid #334155;
+    border-right: 2px solid #334155;
+  }
   align-items: center;
+  font-size: 0.75rem;
+  padding: 8px 4px;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 2px solid #e5e7eb;
+  gap: 4px;
+}
+
+.time-slot-marker .period-number {
+  font-weight: 700;
+  color: var(--color-text-dark);
   font-size: 0.85rem;
-  padding: 5px;
-  border-bottom: 1px solid var(--color-border); /* Use variable */
+}
+
+.time-slot-marker .period-time {
+  font-size: 0.7rem;
+  color: var(--color-text-gray);
   font-weight: 500;
 }
 
 /* DÒNG NGHỈ TRƯA (The Lunch Break) */
 .lunch-break-row {
   grid-column: 1 / -1;
-  background-color: var(--color-primary-soft); /* Use soft primary */
-  color: var(--color-primary); /* Use primary text */
+  background: linear-gradient(to right, #dbeafe, #eff6ff, #dbeafe);
+  color: var(--color-primary);
   text-align: center;
-  font-weight: bold;
-  padding: 5px;
+
+  /* Dark mode lunch break */
+  [data-theme="dark"] .lunch-break-row {
+    background: linear-gradient(to right, #1e3a8a, #1e40af, #1e3a8a);
+    color: #93c5fd;
+    border-top: 2px solid #3b82f6;
+    border-bottom: 2px solid #3b82f6;
+    box-shadow: inset 0 1px 2px rgba(96, 165, 250, 0.2);
+  }
+  font-weight: 700;
+  padding: 8px;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
+  font-size: 0.75rem;
+  letter-spacing: 1.2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 35px;
-  border-top: 1px dashed var(--color-primary); /* Use primary color */
-  border-bottom: 1px dashed var(--color-primary); /* Use primary color */
+  gap: 10px;
+  height: 38px;
+  border-top: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  box-shadow: inset 0 1px 2px rgba(59, 130, 246, 0.1);
+}
+
+.lunch-break-row .lunch-icon {
+  font-size: 1rem;
+}
+
+.lunch-break-row .lunch-time {
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 /* RESPONSIVE CHO MOBILE */
-@media (max-width: 768px) {
+
+/* Tablet */
+@media (max-width: 1024px) {
   .timetable-container {
-    grid-template-columns: 50px repeat(7, 120px);
+    grid-template-columns: 80px repeat(7, 1fr);
   }
   .grid-header,
   .grid-body {
-    grid-template-columns: 50px repeat(7, 120px);
+    grid-template-columns: 80px repeat(7, 1fr);
+  }
+  .grid-header > div {
+    padding: 12px 5px;
+  }
+  .time-slot-marker .period-time {
+    font-size: 0.6rem;
+    padding: 1px 4px;
+  }
+}
+
+/* Mobile - Scroll horizontal */
+@media (max-width: 768px) {
+  .timetable-container {
+    grid-template-columns: 55px repeat(7, 110px);
+    overflow-x: auto;
+    border-radius: var(--border-radius-default);
+  }
+  .grid-header,
+  .grid-body {
+    grid-template-columns: 55px repeat(7, 110px);
+  }
+  .grid-header > div {
+    padding: 10px 4px;
+  }
+  .grid-header > div .header-icon {
+    display: none;
+  }
+  .grid-header > div .day-name {
+    font-size: 0.75rem;
+  }
+  .grid-header > div .day-date {
+    font-size: 0.65rem;
+  }
+  .today-badge {
+    font-size: 0.5rem;
+    padding: 1px 4px;
+  }
+  .time-slot-marker {
+    padding: 5px 2px;
+  }
+  .time-slot-marker .period-number {
+    font-size: 0.7rem;
+  }
+  .time-slot-marker .period-time {
+    display: none;
+  }
+  .grid-body {
+    grid-auto-rows: minmax(45px, auto);
+  }
+  .lunch-break-row {
+    font-size: 0.65rem;
+    height: 30px;
+    gap: 5px;
+    letter-spacing: 0.5px;
+  }
+  .lunch-break-row .lunch-icon {
+    font-size: 0.9rem;
+  }
+  .lunch-break-row .lunch-time {
+    display: none;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .timetable-container {
+    grid-template-columns: 45px repeat(7, 95px);
+  }
+  .grid-header,
+  .grid-body {
+    grid-template-columns: 45px repeat(7, 95px);
+  }
+  .grid-header > div {
+    padding: 8px 3px;
+  }
+  .grid-header > div .day-name {
+    font-size: 0.68rem;
+  }
+  .grid-header > div .day-date {
+    font-size: 0.6rem;
+  }
+  .today-badge {
+    font-size: 0.45rem;
+    padding: 1px 3px;
+  }
+  .time-slot-marker .period-number {
+    font-size: 0.65rem;
+  }
+  .grid-body {
+    grid-auto-rows: minmax(40px, auto);
+  }
+  .lunch-break-row {
+    font-size: 0.6rem;
+    height: 25px;
   }
 }

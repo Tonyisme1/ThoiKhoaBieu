@@ -17,11 +17,9 @@ let WEEK_OFFSET_REAL = 22;
 export function setSystemConfig(date, week) {
   if (date) {
     SEMESTER_START_DATE = new Date(`${date}T00:00:00`);
-    console.log(`[CORE] Semester start date updated to: ${SEMESTER_START_DATE.toDateString()}`);
   }
   if (week) {
     WEEK_OFFSET_REAL = week;
-    console.log(`[CORE] Week offset updated to: ${WEEK_OFFSET_REAL}`);
   }
 }
 
@@ -58,7 +56,6 @@ export function getRealWeekFromDate(inputDateStr) {
   return WEEK_OFFSET_REAL + weeksPassed;
 }
 
-
 /**
  * 4. Lấy mảng ngày trong tuần
  * Input: 25 -> Output: ["16/02", "17/02", ..., "22/02"]
@@ -80,6 +77,33 @@ export function getDatesForWeek(weekNumber) {
     const day = String(currentDay.getDate()).padStart(2, "0");
     const month = String(currentDay.getMonth() + 1).padStart(2, "0");
     dates.push(`${day}/${month}`);
+  }
+  return dates;
+}
+
+/**
+ * 4b. Lấy mảng ngày trong tuần (ISO format YYYY-MM-DD)
+ * Input: 25 -> Output: ["2026-02-16", "2026-02-17", ..., "2026-02-22"]
+ */
+export function getDatesForWeekISO(weekNumber) {
+  const dates = [];
+  const weeksPassed = weekNumber - WEEK_OFFSET_REAL;
+  const daysToAdd = weeksPassed * 7;
+
+  // Tính ngày thứ 2 của tuần đó - dùng local time
+  const mondayOfTargetWeek = new Date(SEMESTER_START_DATE.getTime());
+  mondayOfTargetWeek.setDate(mondayOfTargetWeek.getDate() + daysToAdd);
+
+  // Lặp để lấy 7 ngày trong tuần
+  for (let i = 0; i < 7; i++) {
+    const currentDay = new Date(mondayOfTargetWeek.getTime());
+    currentDay.setDate(currentDay.getDate() + i);
+
+    // Format thành YYYY-MM-DD trong local timezone
+    const year = currentDay.getFullYear();
+    const month = String(currentDay.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDay.getDate()).padStart(2, "0");
+    dates.push(`${year}-${month}-${day}`);
   }
   return dates;
 }
@@ -140,4 +164,56 @@ export function parseWeekString(weekString) {
 
   // Trả về mảng đã sắp xếp tăng dần
   return Array.from(resultWeeks).sort((a, b) => a - b);
+}
+
+/**
+ * 5. Lấy giờ học thực tế từ số tiết
+ * Input: 1 -> Output: "07h00"
+ */
+export function getPeriodTime(periodNumber) {
+  const periodTimes = {
+    1: "07h00",
+    2: "07h50",
+    3: "08h40",
+    4: "09h35",
+    5: "10h25",
+    6: "11h15",
+    7: "12h35",
+    8: "13h25",
+    9: "14h15",
+    10: "15h10",
+    11: "16h00",
+    12: "16h50",
+    13: "17h45",
+    14: "18h35",
+    15: "19h25",
+  };
+  return periodTimes[periodNumber] || "";
+}
+
+/**
+ * 6. Kiểm tra ngày trong tuần có phải là hôm nay không
+ * Input: weekNumber, dayIndex (0=Thứ 2, 6=CN)
+ * Output: true/false
+ */
+export function isToday(weekNumber, dayIndex) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const weeksPassed = weekNumber - WEEK_OFFSET_REAL;
+  const daysToAdd = weeksPassed * 7 + dayIndex;
+
+  const targetDate = new Date(SEMESTER_START_DATE);
+  targetDate.setDate(targetDate.getDate() + daysToAdd);
+  targetDate.setHours(0, 0, 0, 0);
+
+  return today.getTime() === targetDate.getTime();
+}
+
+/**
+ * 7. Lấy tuần hiện tại
+ */
+export function getCurrentWeek() {
+  const today = new Date();
+  return getRealWeekFromDate(today.toISOString().split("T")[0]);
 }

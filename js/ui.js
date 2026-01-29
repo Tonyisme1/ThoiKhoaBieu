@@ -3,7 +3,13 @@
  * Chịu trách nhiệm thao tác DOM và Render giao diện.
  */
 
-import { convertToRealWeek, getDatesForWeek } from "./core.js";
+import {
+  convertToRealWeek,
+  getDatesForWeek,
+  getPeriodTime,
+  isToday,
+  getCurrentWeek,
+} from "./core.js";
 
 // DOM Elements cache
 const gridBody = document.getElementById("timetable-grid");
@@ -26,13 +32,24 @@ export function renderGridHeader(weekNumber) {
 
   // Cột đầu tiên (cố định)
   const firstCell = document.createElement("div");
-  firstCell.innerHTML = `Tiết / Thứ`;
+  firstCell.innerHTML = `<span class=""></span> Tiết`;
   gridHeader.appendChild(firstCell);
 
   // Render 7 ngày trong tuần
   dayNames.forEach((name, index) => {
     const cell = document.createElement("div");
-    cell.innerHTML = `${name} (${dates[index]})`;
+    const isTodayCell = isToday(weekNumber, index);
+
+    cell.innerHTML = `
+      <span class="day-name">${name}</span>
+      <span class="day-date">${dates[index]}</span>
+    `;
+
+    if (isTodayCell) {
+      cell.classList.add("is-today");
+      cell.innerHTML += `<span class="today-badge">HÔM NAY</span>`;
+    }
+
     gridHeader.appendChild(cell);
   });
 }
@@ -45,7 +62,7 @@ export function initGridStructure() {
   // CSS Grid: Đặt ở dòng 7 (sau tiết 6)
   const lunchDiv = document.createElement("div");
   lunchDiv.className = "lunch-break-row";
-  lunchDiv.textContent = "--- NGHỈ TRƯA (12:05 - 12:35) ---";
+  lunchDiv.innerHTML = `<span class="lunch-icon">Break</span> NGHỈ TRƯA <span class="lunch-time">12:05 - 12:35</span>`;
   lunchDiv.style.gridRow = "7 / 8";
   gridBody.appendChild(lunchDiv);
 
@@ -53,7 +70,11 @@ export function initGridStructure() {
   for (let i = 1; i <= 15; i++) {
     const slot = document.createElement("div");
     slot.className = "time-slot-marker";
-    slot.innerHTML = `<b>Tiết ${i}</b>`;
+    const time = getPeriodTime(i);
+    slot.innerHTML = `
+      <span class="period-number">Tiết ${i}</span>
+      <span class="period-time">${time}</span>
+    `;
 
     // Tính toán vị trí dòng: Nếu >= tiết 7 thì nhảy 1 dòng (nghỉ trưa)
     const rowPos = i < 7 ? i : i + 1;
@@ -69,13 +90,19 @@ export function renderWeekNavigation(totalWeeks, currentSelectedWeek) {
   weekListContainer.innerHTML = "";
 
   const fragment = document.createDocumentFragment();
+  const currentWeek = getCurrentWeek(); // Tuần hiện tại theo ngày thực
 
   for (let i = 1; i <= totalWeeks; i++) {
     const realWeek = convertToRealWeek(i); // i=1 -> Tuần 22
     const btn = document.createElement("button");
     btn.className = "week-chip";
 
-    // Active tuần hiện tại
+    // Đánh dấu tuần hiện tại (theo ngày thực)
+    if (realWeek === currentWeek) {
+      btn.classList.add("is-current");
+    }
+
+    // Active tuần đang xem
     if (realWeek === currentSelectedWeek) {
       btn.classList.add("active");
       // Auto scroll tới nút đang chọn
@@ -99,6 +126,8 @@ export function renderWeekNavigation(totalWeeks, currentSelectedWeek) {
 
 // Hàm cập nhật trạng thái Active trên Timeline
 export function setActiveWeek(weekNumber) {
+  if (!weekListContainer) return;
+
   const currentActive = weekListContainer.querySelector(".week-chip.active");
   if (currentActive) currentActive.classList.remove("active");
 
@@ -107,8 +136,10 @@ export function setActiveWeek(weekNumber) {
   );
   if (newActive) {
     newActive.classList.add("active");
+    // Disable smooth scroll trên mobile
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     newActive.scrollIntoView({
-      behavior: "smooth",
+      behavior: isMobile ? "auto" : "smooth",
       block: "nearest",
       inline: "center",
     });
@@ -125,21 +156,43 @@ export function renderSchedule(courses, selectedWeek) {
 
   courses.forEach((course) => {
     // Chỉ render nếu môn đó có học trong tuần này
-    if (!course.weeks.includes(parseInt(selectedWeek))) return;
+    if (!course.weeks || !course.weeks.includes(parseInt(selectedWeek))) return;
 
     const clone = cardTemplate.content.cloneNode(true);
     const card = clone.querySelector(".course-card");
 
     // Gán ID vào dataset để Click-to-Edit
     card.dataset.id = course.id;
+    card.dataset.courseId = course.id;
+
+    // Tooltip chi tiết khi hover
+    const dayLabel = course.day === 8 ? "Chủ Nhật" : `Thứ ${course.day}`;
+    const periodLabel = `Tiết ${course.startPeriod}-${
+      course.startPeriod + course.periodCount - 1
+    }`;
+    const tooltip = document.createElement("div");
+    tooltip.className = "course-tooltip";
+    tooltip.innerHTML = `
+      <div class="tooltip-name">${course.name}</div>
+      <div class="tooltip-line">${dayLabel} • ${periodLabel}</div>
+      <div class="tooltip-line">Phòng: ${course.room || "?"}</div>
+      ${course.teacher ? `<div class="tooltip-line">GV: ${course.teacher}</div>` : ""}
+    `;
+    card.appendChild(tooltip);
+
+    // Set favorite button data
+    const favBtn = card.querySelector(".btn-favorite");
+    if (favBtn) {
+      favBtn.dataset.courseId = course.id;
+    }
 
     card.querySelector(".course-name").textContent = course.name;
 
-    // Hiển thị Phòng và Giảng viên
+    // Hiển thị Phòng và Giảng viên (đơn sắc)
     const roomP = card.querySelector(".course-room");
-    let roomText = `📍 ${course.room}`;
+    let roomText = `Phòng: ${course.room || "?"}`;
     if (course.teacher) {
-      roomText += ` • 👨‍🏫 ${course.teacher}`;
+      roomText += ` · GV: ${course.teacher}`;
     }
     roomP.textContent = roomText;
 
@@ -155,22 +208,24 @@ export function renderSchedule(courses, selectedWeek) {
     card.style.gridColumn = `${colStart} / ${colStart + 1}`;
     card.style.gridRow = `${rowStart} / ${rowEnd}`;
 
-    // Use custom color if available, otherwise fall back to random
+    // Use custom color for border only, keep background white
     if (course.color) {
-        card.style.backgroundColor = course.color;
-        card.style.borderColor = course.color; // Also set border color for consistency
+      card.style.borderColor = course.color;
+      card.style.borderLeftColor = course.color;
     } else {
-        const colors = [
-          "#ffeaa7",
-          "#81ecec",
-          "#74b9ff",
-          "#a29bfe",
-          "#ff7675",
-          "#55efc4",
-        ];
-        card.style.backgroundColor = colors[Math.floor(course.id) % colors.length];
+      const colors = [
+        "#ffeaa7",
+        "#81ecec",
+        "#74b9ff",
+        "#a29bfe",
+        "#ff7675",
+        "#55efc4",
+      ];
+      const borderColor = colors[Math.floor(course.id) % colors.length];
+      card.style.borderColor = borderColor;
+      card.style.borderLeftColor = borderColor;
     }
-    
+
     fragment.appendChild(card);
   });
 
@@ -179,13 +234,14 @@ export function renderSchedule(courses, selectedWeek) {
   // We add the animation class after appending, to trigger the transition
   // This is a simple way, for staggered effect, a loop with timeout is needed.
   setTimeout(() => {
-    const cards = gridBody.querySelectorAll('.course-card');
-    cards.forEach(card => card.classList.add('animate-in'));
+    const cards = gridBody.querySelectorAll(".course-card");
+    cards.forEach((card) => card.classList.add("animate-in"));
   }, 10);
 }
 
 // --- 4. RENDER GHI CHÚ & MÔN TỰ DO (Day = 0) ---
-export function renderNotes(notes) {
+export function renderNotes(notes, containerId = "notes-list") {
+  const notesContainer = document.getElementById(containerId);
   if (!notesContainer) return;
   notesContainer.innerHTML = "";
 
@@ -195,8 +251,8 @@ export function renderNotes(notes) {
     div.dataset.id = note.id; // Gán ID để Click-to-Edit
     div.innerHTML = `
             <h4>${note.name}</h4>
-            <p>📅 <b>Tuần:</b> ${note.weekString || "Tự do"}</p>
-            <p>📝 <b>Phòng/Ghi chú:</b> ${note.room || "Không có"}</p>
+            <p><b>Tuần:</b> ${note.weekString || "Tự do"}</p>
+            <p><b>Phòng/Ghi chú:</b> ${note.room || "Không có"}</p>
         `;
     notesContainer.appendChild(div);
   });
@@ -305,8 +361,8 @@ export function renderCourseListTable(coursesToRender) {
             <td>${course.teacher || ""}</td>
             <td><small>${course.weekString || "N/A"}</small></td>
             <td>
-                <button class="action-btn btn-edit-row" data-id="${course.id}" title="Sửa">✏️</button>
-                <button class="action-btn btn-delete-row" data-id="${course.id}" title="Xóa">🗑️</button>
+              <button class="action-btn btn-edit-row" data-id="${course.id}" title="Sửa">Sửa</button>
+              <button class="action-btn btn-delete-row" data-id="${course.id}" title="Xóa">Xóa</button>
             </td>
         `;
 

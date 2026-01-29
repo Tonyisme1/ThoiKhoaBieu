@@ -1,42 +1,139 @@
 :root {
-  /* Design System: Modern Minimalist & Clean Data (Tối giản, Sạch sẽ, Tập trung dữ liệu) */
+  /* Design System: Modern Minimalist & Clean */
   /* LIGHT MODE PALETTE */
 
   /* --- FONT FAMILY --- */
-  --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* --- SPACING SYSTEM (8px grid) --- */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+
+  /* --- TYPOGRAPHY SCALE --- */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+
+  /* Line heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
 
   /* --- BORDER RADIUS --- */
-  --border-radius-default: 8px;
-  --border-radius-card: 12px;
-  --border-radius-button: 6px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  /* Legacy support */
+  --border-radius-default: var(--radius-lg);
+  --border-radius-card: var(--radius-xl);
+  --border-radius-button: var(--radius-md);
 
   /* --- COLOR PALETTE --- */
-  --color-background: #f8f9fa;      /* Light background */
-  --color-surface: #ffffff;         /* White surfaces (cards, modals) */
-  --color-primary: #3b82f6;         /* Blue 500 */
-  --color-primary-soft: #eff6ff;    /* Blue 50 */
-  --color-text-dark: #1f2937;       /* Dark text for headings, main content */
-  --color-text-gray: #6b7280;       /* Gray text for secondary information */
-  --color-border: #e5e7eb;          /* Light gray border */
-  --color-success: #10b981;         /* Green (for Save/Add buttons) */
-  --color-danger: #ef4444;          /* Red (for Delete/Holiday) */
-  --color-warning: #f59e0b;         /* Yellow (for Edit buttons) */
+  --color-background: #ffffff; /* Pure white background */
+  --color-surface: #f9fafb; /* Light gray surfaces */
+  --color-primary: #2563eb; /* Blue 600 */
+  --color-primary-dark: #1d4ed8; /* Blue 700 */
+  --color-primary-soft: #dbeafe; /* Blue 100 */
+  --color-text-dark: #1f2937; /* Gray 800 */
+  --color-text-gray: #6b7280; /* Gray 500 */
+  --color-border: #e5e7eb; /* Gray 200 */
+  --color-hover: #f3f4f6; /* Gray 100 */
+  --color-success: #10b981; /* Emerald 500 */
+  --color-danger: #ef4444; /* Red 500 */
+  --color-warning: #f59e0b; /* Amber 500 */
 
-  /* --- LAYOUT & GRID (Kept from previous for consistency, can be adjusted in layout.css) --- */
+  /* --- SHADOWS (Enhanced) --- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 8px 10px rgba(0, 0, 0, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.15);
+
+  /* --- ANIMATIONS --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- LAYOUT & GRID --- */
   --header-height: 60px;
   --grid-gap: 1px;
+  --container-max: 1400px;
 }
 
 [data-theme="dark"] {
-  /* DARK MODE PALETTE */
-  --color-background: #111827;      /* xám đen */
-  --color-surface: #1f2937;         /* surface */
-  --color-primary: #60a5fa;         /* Blue 400 - for better contrast */
-  --color-primary-soft: #1e293b;    /* Slate 800 - for soft backgrounds */
-  --color-text-dark: #f9fafb;       /* Light text for headings, main content */
-  --color-text-gray: #9ca3af;       /* Gray text for secondary information */
-  --color-border: #374151;          /* Dark gray border */
-  --color-success: #34d399;         /* Lighter Green */
-  --color-danger: #f87171;          /* Lighter Red */
-  --color-warning: #fbbf24;         /* Lighter Yellow */
+  /* DARK MODE PALETTE - Optimized */
+  --color-background: #0f172a; /* Slate 900 - darker, richer */
+  --color-surface: #1e293b; /* Slate 800 - warmer gray */
+  --color-primary: #60a5fa; /* Blue 400 - brighter for dark bg */
+  --color-primary-dark: #3b82f6; /* Blue 500 */
+  --color-primary-soft: #1e3a8a; /* Blue 900 - subtle highlight */
+  --color-text-dark: #f1f5f9; /* Slate 100 - softer white */
+  --color-text-gray: #94a3b8; /* Slate 400 - better contrast */
+  --color-border: #334155; /* Slate 700 - visible but subtle */
+  --color-hover: #293548; /* Slate 750 - custom hover */
+  --color-success: #4ade80; /* Green 400 - vibrant */
+  --color-danger: #fb7185; /* Rose 400 - softer red */
+  --color-warning: #fbbf24; /* Amber 400 */
+
+  /* --- SHADOWS (Dark mode - with glow) --- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.8), 0 4px 6px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.9), 0 8px 10px rgba(0, 0, 0, 0.7);
+  --shadow-focus: 0 0 0 3px rgba(96, 165, 250, 0.4);
+}
+
+/* --- ICON STYLES (CSS-based) --- */
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  vertical-align: middle;
+}
+
+.icon-sm {
+  width: 0.875em;
+  height: 0.875em;
+}
+.icon-md {
+  width: 1em;
+  height: 1em;
+}
+.icon-lg {
+  width: 1.25em;
+  height: 1.25em;
+}
+.icon-xl {
+  width: 1.5em;
+  height: 1.5em;
 }

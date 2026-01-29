@@ -1,48 +1,241 @@
-# Thời Khóa Biểu (Timetable)
+# 📅 Thời Khóa Biểu - Smart Timetable Manager
 
-## Giới thiệu
+## 📖 Giới thiệu
 
-Đây là một ứng dụng web xem thời khóa biểu đơn giản, sạch sẽ và dễ sử dụng. Giao diện được thiết kế để cung cấp một cái nhìn tổng quan và rõ ràng về lịch học trong tuần.
+Ứng dụng web quản lý thời khóa biểu hiện đại, đầy đủ tính năng cho sinh viên và giáo viên. Hỗ trợ đa tuần, điểm danh, ghi chú, dark mode và dashboard analytics chi tiết.
 
-## Vấn đề được giải quyết
+## 🎯 Vấn đề được giải quyết
 
-Trong môi trường học đường, việc quản lý và theo dõi lịch học hàng ngày có thể trở nên phức tạp. Thời khóa biểu giấy dễ bị mất hoặc hư hỏng, trong khi các ứng dụng phức tạp lại yêu cầu nhiều thao tác cài đặt và sử dụng.
+Quản lý lịch học trong môi trường giáo dục thường gặp nhiều khó khăn:
 
-Dự án này giải quyết vấn đề đó bằng cách cung cấp một giải pháp đơn giản: một trang web duy nhất hiển thị toàn bộ lịch học trong tuần một cách trực quan. Nó giúp sinh viên và giáo viên:
+- Thời khóa biểu giấy dễ thất lạc, hư hỏng
+- Các app phức tạp đòi hỏi nhiều bước cài đặt
+- Khó theo dõi điểm danh và tiến độ học tập
+- Thiếu công cụ phân tích thống kê học kỳ
 
--   Nhanh chóng xem lịch học hàng ngày.
--   Dễ dàng theo dõi các môn học, giáo viên phụ trách và phòng học.
--   Tránh sự lộn xộn của các phương pháp quản lý lịch học truyền thống.
+**Giải pháp:** Một ứng dụng web đơn giản, không cần cài đặt, chạy trực tiếp trên trình duyệt với đầy đủ tính năng quản lý học tập chuyên nghiệp.
 
-## Tính năng
+## ✨ Tính năng chính
 
--   **Hiển thị lịch học cả tuần:** Xem toàn bộ lịch học từ Thứ 2 đến Thứ 7.
--   **Giao diện rõ ràng:** Các môn học được sắp xếp gọn gàng theo ngày và buổi học (sáng/chiều).
--   **Dễ dàng tùy chỉnh:** Dữ liệu thời khóa biểu được quản lý trong một file `Lich_Hoc.json` duy nhất, giúp người dùng dễ dàng cập nhật lịch trình của riêng mình mà không cần thay đổi mã nguồn.
--   **Không cần cài đặt:** Chỉ cần mở file `index.html` trên trình duyệt là có thể sử dụng ngay.
+### 🗓️ Quản lý thời khóa biểu
 
-## Hướng dẫn sử dụng
+- **Lưới 15 tiết/ngày:** Hiển thị trực quan theo từng tuần
+- **Đa tuần linh hoạt:** Hỗ trợ cấu hình tuần bắt đầu tùy chỉnh
+- **Ghi chú môn học:** Thêm notes cho từng môn với tự động phát hiện link
+- **Color coding:** Phân biệt môn học bằng màu sắc
+- **Responsive design:** Tối ưu cho desktop, tablet và mobile
 
-1.  Mở file `index.html` trong một trình duyệt web hiện đại (ví dụ: Chrome, Firefox, Edge).
-2.  Thời khóa biểu của bạn sẽ được hiển thị ngay lập tức.
+### 🎨 Giao diện & Trải nghiệm
 
-## Hướng dẫn tùy chỉnh lịch học
+- **Dark Mode:** Chuyển đổi theme mượt mà với View Transition API
+- **Tooltip chi tiết:** Hover để xem thông tin đầy đủ, có thể click link trong notes
+- **Mini Calendar:** Nhảy nhanh đến tuần bất kỳ
+- **Timeline Navigation:** Duyệt tuần bằng chips hoặc dropdown
+- **Search nhanh:** Tìm kiếm môn học theo tên/giáo viên/phòng học
 
-Bạn có thể dễ dàng thay đổi lịch học cho phù hợp với nhuKk cầu của mình.
+### 📊 Dashboard & Analytics
 
-1.  Mở file `Lich_Hoc.json`.
-2.  File này chứa một danh sách (mảng) các buổi học. Mỗi buổi học là một đối tượng (object) với các thuộc tính sau:
-    -   `ngay`: Ngày trong tuần (ví dụ: "Thứ 2").
-    -   `buoi`: Buổi học (ví dụ: "Sáng", "Chiều").
-    -   `monHoc`: Tên môn học (ví dụ: "Toán").
-    -   `giaoVien`: Tên giáo viên (ví dụ: "Nguyễn Văn A").
-    -   `phongHoc`: Tên phòng học (ví dụ: "P.101").
-3.  **Chỉnh sửa, thêm hoặc xóa** các đối tượng trong danh sách để cập nhật lịch học của bạn.
-4.  Lưu lại file `Lich_Hoc.json`.
-5.  Tải lại trang `index.html` để xem các thay đổi.
+- **Chế độ xem kép:**
+  - **Tuần hiện tại:** Thống kê chi tiết từng tuần
+  - **Toàn học kỳ:** Tổng quan toàn bộ học kỳ
+- **Thống kê tự động:**
+  - Tổng môn học & tiết học
+  - Lớp sắp tới (tìm kiếm toàn học kỳ)
+  - Tỷ lệ điểm danh
+  - Môn yêu thích
+- **Biểu đồ trực quan:**
+  - Phân bổ tiết học theo ngày/tuần
+  - Click tuần để xem chi tiết
+  - Danh sách ngày nghỉ
 
-## Công nghệ sử dụng
+### ✅ Điểm danh & Theo dõi
 
--   HTML5
--   CSS3
--   JavaScript (Vanilla)
+- **Điểm danh chi tiết:** Đi học / Nghỉ / Đi muộn
+- **Timeline điểm danh:** Theo dõi lịch sử từng buổi học
+- **Thống kê tự động:** Tính toán chính xác theo giờ học thực tế
+- **Filter theo môn:** Lọc nhanh điểm danh theo môn học
+
+### 📝 Quản lý học tập
+
+- **Bài tập:** Thêm, sửa, xóa assignment với deadline
+- **Lịch thi:** Quản lý lịch thi cuối kỳ
+- **Ngày nghỉ:** Đánh dấu các tuần nghỉ lễ
+- **Ghi chú chung:** Notes riêng cho từng tab
+- **Yêu thích:** Đánh dấu môn quan trọng
+
+### 💾 Dữ liệu
+
+- **LocalStorage:** Lưu tự động mọi thay đổi
+- **Export/Import JSON:** Sao lưu và khôi phục dữ liệu
+- **Không cần server:** Chạy offline hoàn toàn
+
+## 🚀 Hướng dẫn sử dụng
+
+### Khởi động
+
+1. Mở file `index.html` trên trình duyệt (Chrome, Edge, Firefox)
+2. Không cần cài đặt hay server
+
+### Thêm môn học
+
+1. Click nút **"+ Thêm môn"**
+2. Điền thông tin: Tên môn, giáo viên, phòng học, thời gian
+3. Chọn tuần học (Tất cả / Chẵn / Lẻ / Tùy chọn)
+4. Chọn màu và thêm ghi chú (tùy chọn)
+5. Click **"Lưu"**
+
+### Xem thống kê
+
+1. Mở tab **"Dashboard"**
+2. Chọn chế độ xem:
+   - **Toàn học kỳ:** Xem tổng quan
+   - **Tuần hiện tại:** Xem chi tiết tuần
+3. Click vào cột tuần trong biểu đồ để xem tuần đó
+
+### Điểm danh
+
+1. Mở tab **"Điểm danh"**
+2. Click vào buổi học để đánh dấu: Đi / Nghỉ / Muộn
+3. Xem thống kê tổng hợp ở đầu trang
+
+### Tùy chỉnh
+
+- **Theme:** Click icon 🌙/☀️ ở header
+- **Tuần bắt đầu:** Vào tab Cài đặt → Chọn ngày bắt đầu
+- **Backup:** Export JSON để sao lưu
+
+## 📁 Cấu trúc dự án
+
+```
+Thoi_Khoa_Bieu-JS/
+├── index.html          # Giao diện chính
+├── README.md           # Tài liệu
+├── Lich_Hoc.json       # Dữ liệu mẫu (không sử dụng khi có LocalStorage)
+├── css/
+│   ├── main.css        # Import tổng hợp
+│   ├── variables.css   # Biến CSS & dark mode
+│   ├── layout.css      # Layout grid & responsive
+│   └── components.css  # Component styles
+└── js/
+    ├── app.js          # Logic chính & UI
+    ├── core.js         # Utils & data handling
+    └── ui.js           # UI helpers & rendering
+```
+
+## 🎨 Công nghệ sử dụng
+
+- **HTML5** - Cấu trúc semantic
+- **CSS3** - Variables, Grid, Flexbox, Transitions
+- **JavaScript (Vanilla)** - Không dùng framework
+- **LocalStorage API** - Lưu trữ dữ liệu
+- **View Transition API** - Chuyển theme mượt mà
+
+## 🔧 Tùy chỉnh dữ liệu
+
+### Định dạng JSON
+
+```json
+{
+  "courses": [
+    {
+      "id": 1234567890,
+      "name": "Lập trình Web",
+      "teacher": "Nguyễn Văn A",
+      "day": 2,
+      "room": "A101",
+      "startPeriod": 1,
+      "periodCount": 3,
+      "weeks": [1, 2, 3, 4],
+      "weekString": "1, 2, 3, 4",
+      "color": "#3b82f6",
+      "notes": "Link tài liệu: https://example.com"
+    }
+  ],
+  "holidays": [
+    {
+      "name": "Tết Nguyên Đán",
+      "weeks": [5, 6]
+    }
+  ],
+  "settings": {
+    "startDate": "2026-01-26",
+    "startWeek": 22,
+    "totalWeeks": 22,
+    "weekOffsetReal": 22
+  },
+  "theme": "light",
+  "attendance": {},
+  "assignments": [],
+  "exams": []
+}
+```
+
+### Các trường dữ liệu
+
+#### Course
+
+- `id`: Unique ID (timestamp)
+- `name`: Tên môn học
+- `teacher`: Giáo viên
+- `day`: Thứ (0=Ghi chú, 1=T2, 2=T3,..., 7=CN)
+- `room`: Phòng học
+- `startPeriod`: Tiết bắt đầu (1-15)
+- `periodCount`: Số tiết
+- `weeks`: Mảng tuần học
+- `color`: Mã màu hex
+- `notes`: Ghi chú (tự động link hóa URL)
+- `isFavorite`: Đánh dấu yêu thích
+
+#### Settings
+
+- `startDate`: Ngày bắt đầu học kỳ (YYYY-MM-DD)
+- `startWeek`: Tuần bắt đầu
+- `totalWeeks`: Tổng số tuần học
+- `weekOffsetReal`: Offset tuần
+
+## ✅ Trạng thái dự án
+
+- ✅ **Visual Design** - Gradients, responsive, modern UI
+- ✅ **Core Features** - CRUD môn học, multi-week support
+- ✅ **Interactions** - Search, calendar, favorites, tooltips
+- ✅ **Dashboard & Analytics** - Dual-view dashboard, charts
+- ✅ **Attendance System** - Điểm danh chi tiết với timeline
+- ✅ **Dark Mode** - Theme switching với transitions
+- ✅ **Data Management** - Export/import, localStorage
+- ✅ **Notes System** - Course notes với clickable links
+- ✅ **UI Polish** - Compact design, hover effects
+
+## 🎯 Roadmap
+
+### Đã hoàn thành
+
+- [x] Thời khóa biểu đa tuần
+- [x] Dashboard analytics 2 chế độ
+- [x] Điểm danh tự động
+- [x] Dark mode
+- [x] Ghi chú môn học với link
+- [x] Tìm kiếm nhanh
+- [x] Mini calendar
+- [x] Export/Import
+
+### Tính năng tiềm năng
+
+- [ ] Thông báo lớp sắp tới (browser notification)
+- [ ] PWA support (cài đặt như app)
+- [ ] Sync multi-device (Firebase/Supabase)
+- [ ] Widget customization
+- [ ] GPA calculator
+- [ ] Study timer/Pomodoro
+
+## 📄 License
+
+MIT License - Tự do sử dụng và chỉnh sửa
+
+## 👤 Tác giả
+
+Dự án cá nhân - Smart Timetable Manager
+
+---
+
+**Phiên bản:** 2.0  
+**Cập nhật:** 2026-01-29
