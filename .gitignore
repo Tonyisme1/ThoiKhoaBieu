@@ -38,5 +38,8 @@ logs/
 coverage/
 .nyc_output/
 
+# Documentation drafts
+docs/
+
 # Personal data (optional - uncomment if you don't want to share your data)
 # data/Lich_Hoc.json

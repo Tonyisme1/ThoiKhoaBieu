@@ -35,14 +35,10 @@ export function initNotesUI(data, saveCallback) {
  * Render smart notes grid
  */
 export function renderSmartNotes() {
-  console.log("=== renderSmartNotes() called ===");
   const grid = document.getElementById("smart-notes-list");
   const emptyState = document.getElementById("notes-empty-state");
-  console.log("Grid element:", grid);
-  console.log("Notes to render:", appData?.smartNotes);
 
   if (!grid) {
-    console.error("smart-notes-list NOT FOUND!");
     return;
   }
 
@@ -80,15 +76,12 @@ export function renderSmartNotes() {
   if (emptyState) emptyState.style.display = "none";
 
   // Render notes
-  console.log("Rendering", filteredNotes.length, "notes");
   filteredNotes.forEach((note) => {
-    console.log("Creating card for:", note.title);
     const card = createNoteCard(note, {
       onEdit: openNoteModal,
       onDelete: deleteNote,
       onClick: openNoteModal,
     });
-    console.log("Card created:", card);
     grid.appendChild(card);
   });
 }
@@ -97,11 +90,7 @@ export function renderSmartNotes() {
  * Open note modal
  */
 export function openNoteModal(existingNote = null) {
-  console.log("openNoteModal called", existingNote);
-
   const modal = document.getElementById("note-modal");
-  console.log("Modal element:", modal);
-
   const titleInput = document.getElementById("note-title");
   const contentInput = document.getElementById("note-content");
   const tagsInput = document.getElementById("note-tags");
@@ -110,7 +99,6 @@ export function openNoteModal(existingNote = null) {
   const modalTitle = document.getElementById("note-modal-title");
 
   if (!modal) {
-    console.error("Modal not found!");
     return;
   }
 
@@ -152,9 +140,7 @@ export function openNoteModal(existingNote = null) {
 
   updateCharCount();
 
-  console.log("About to show modal");
   modal.showModal();
-  console.log("Modal shown");
 
   if (titleInput) titleInput.focus();
 }
@@ -175,7 +161,6 @@ export function closeNoteModal() {
  * Save note
  */
 export function saveNote() {
-  console.log("=== saveNote() called ===");
   const modal = document.getElementById("note-modal");
   const titleEl = document.getElementById("note-title");
   const contentEl = document.getElementById("note-content");
@@ -242,11 +227,7 @@ export function saveNote() {
     };
 
     appData.smartNotes.push(newNote);
-    console.log("New note created:", newNote);
   }
-
-  console.log("Total notes:", appData.smartNotes.length);
-  console.log("Notes array:", appData.smartNotes);
 
   // Save to localStorage
   saveDataCallback();
