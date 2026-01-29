@@ -345,24 +345,60 @@
 
       <!-- Tab: Notes -->
       <div class="tab-content" id="tab-notes">
-        <section class="notes-container">
-          <h3>Ghi Chú & Môn Tự Do</h3>
-          <div id="notes-list-2" class="notes-grid"></div>
+        <!-- Notes Header with Actions -->
+        <section class="notes-header-section">
+          <div class="notes-header">
+            <h3>📝 Ghi Chú Thông Minh</h3>
+            <div class="notes-actions">
+              <div class="notes-search-box">
+                <input type="text" id="notes-search" placeholder="🔍 Tìm kiếm ghi chú..." class="notes-search-input">
+              </div>
+              <select id="notes-filter" class="filter-select">
+                <option value="all">Tất cả</option>
+                <option value="pinned">📌 Đã ghim</option>
+                <option value="todos">✓ Todo</option>
+                <option value="normal">📄 Thường</option>
+              </select>
+              <button id="btn-add-note" class="btn-primary">+ Ghi Chú Mới</button>
+            </div>
+          </div>
+          
+          <!-- Notes Stats -->
+          <div class="notes-stats">
+            <div class="stat-card">
+              <div class="stat-value" id="total-notes-count">0</div>
+              <div class="stat-label">Tổng ghi chú</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="pinned-notes-count">0</div>
+              <div class="stat-label">Đã ghim</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="todo-notes-count">0</div>
+              <div class="stat-label">Todo lists</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="completed-todos-count">0</div>
+              <div class="stat-label">Đã hoàn thành</div>
+            </div>
+          </div>
         </section>
 
-        <section id="general-notes-section" class="notes-container">
-          <h3>Ghi Chú Chung</h3>
-          <textarea
-            id="general-notes-textarea"
-            placeholder="Nhập các ghi chú, lời nhắc, hoặc thông tin quan trọng khác ở đây..."
-          ></textarea>
-          <button
-            id="btn-save-notes"
-            class="btn-primary"
-            style="margin-top: 10px"
-          >
-            Lưu Ghi Chú
-          </button>
+        <!-- Notes Grid -->
+        <section class="smart-notes-container">
+          <div id="smart-notes-list" class="smart-notes-grid"></div>
+          <div id="notes-empty-state" class="empty-state" style="display: none;">
+            <div class="empty-icon">📝</div>
+            <h4>Chưa có ghi chú nào</h4>
+            <p>Tạo ghi chú đầu tiên để bắt đầu!</p>
+            <button class="btn-primary" onclick="document.getElementById('btn-add-note').click()">+ Tạo Ghi Chú</button>
+          </div>
+        </section>
+
+        <!-- Course Notes Section (môn tự do) -->
+        <section class="notes-container" style="margin-top: 30px;">
+          <h3>Môn Học Ghi Chú (Không có lịch)</h3>
+          <div id="notes-list-2" class="notes-grid"></div>
         </section>
       </div>
 
@@ -800,6 +836,113 @@
           <button id="btn-save-exam" value="default" class="btn-primary">
             Lưu Lịch Thi
           </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Smart Note Modal -->
+    <dialog id="note-modal">
+      <form method="dialog">
+        <div class="note-modal-header">
+          <h2 id="note-modal-title">📝 Tạo Ghi Chú Mới</h2>
+          <button type="button" id="btn-close-note-modal" class="btn-icon">✕</button>
+        </div>
+        
+        <input type="hidden" id="note-id">
+        
+        <div class="note-form-content">
+          <!-- Title -->
+          <div class="form-group">
+            <label for="note-title">Tiêu đề:</label>
+            <input type="text" id="note-title" placeholder="Nhập tiêu đề ghi chú..." required>
+          </div>
+
+          <!-- Tags -->
+          <div class="form-group">
+            <label for="note-tags">Tags:</label>
+            <input type="text" id="note-tags" placeholder="#work #study #important (phân cách bằng dấu cách)">
+            <small class="form-hint">Ví dụ: #deadline #important #review</small>
+          </div>
+
+          <!-- Color Label -->
+          <div class="form-group">
+            <label for="note-color">Màu nhãn:</label>
+            <div class="color-picker-inline">
+              <input type="color" id="note-color" value="#60a5fa">
+              <div class="color-presets">
+                <button type="button" class="color-preset" data-color="#ef4444" style="background: #ef4444;" title="Đỏ"></button>
+                <button type="button" class="color-preset" data-color="#f59e0b" style="background: #f59e0b;" title="Cam"></button>
+                <button type="button" class="color-preset" data-color="#10b981" style="background: #10b981;" title="Xanh lá"></button>
+                <button type="button" class="color-preset" data-color="#60a5fa" style="background: #60a5fa;" title="Xanh dương"></button>
+                <button type="button" class="color-preset" data-color="#8b5cf6" style="background: #8b5cf6;" title="Tím"></button>
+                <button type="button" class="color-preset" data-color="#ec4899" style="background: #ec4899;" title="Hồng"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Note Type -->
+          <div class="form-group">
+            <label>Loại ghi chú:</label>
+            <div class="note-type-selector">
+              <label class="radio-card">
+                <input type="radio" name="note-type" value="normal" checked>
+                <span class="radio-card-content">
+                  <span class="radio-card-icon">📄</span>
+                  <span class="radio-card-label">Ghi chú thường</span>
+                </span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="note-type" value="todo">
+                <span class="radio-card-content">
+                  <span class="radio-card-icon">✓</span>
+                  <span class="radio-card-label">Todo List</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Content Editor -->
+          <div class="form-group">
+            <div class="editor-toolbar">
+              <label>Nội dung:</label>
+              <div class="editor-actions">
+                <button type="button" class="btn-icon" id="btn-toggle-preview" title="Preview">👁️</button>
+                <button type="button" class="btn-icon" id="btn-format-bold" title="Bold (Ctrl+B)">B</button>
+                <button type="button" class="btn-icon" id="btn-format-italic" title="Italic (Ctrl+I)">I</button>
+                <button type="button" class="btn-icon" id="btn-format-strike" title="Strikethrough">S̶</button>
+                <button type="button" class="btn-icon" id="btn-insert-link" title="Insert Link">🔗</button>
+                <button type="button" class="btn-icon" id="btn-insert-checkbox" title="Insert Checkbox">☐</button>
+              </div>
+            </div>
+            <div class="editor-container">
+              <textarea id="note-content" class="note-editor" placeholder="Nhập nội dung...
+
+Hỗ trợ Markdown:
+**bold** *italic* ~~strikethrough~~
+- Bullet list
+[ ] Todo checkbox
+[x] Completed todo
+https://link.com (tự động link hóa)"></textarea>
+              <div id="note-preview" class="note-preview" style="display: none;"></div>
+            </div>
+            <div class="editor-footer">
+              <small id="note-char-count" class="form-hint">0 ký tự</small>
+              <small class="form-hint">Hỗ trợ Markdown & Auto-link</small>
+            </div>
+          </div>
+
+          <!-- Pin Option -->
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="note-pinned">
+              <span>📌 Ghim ghi chú này lên đầu</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="btn-cancel-note" class="btn-secondary">Hủy</button>
+          <button type="submit" id="btn-save-note" class="btn-primary">💾 Lưu Ghi Chú</button>
         </div>
       </form>
     </dialog>

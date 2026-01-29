@@ -478,18 +478,25 @@ function getDashboardStats(week) {
  */
 function getSemesterStats() {
   const allCourses = appData.courses;
-  let totalPeriods = 0;
   const weeklyData = [];
 
-  // Loop through all weeks to aggregate
-  const totalWeeks = appData.settings.totalWeeks || 22;
-  const startWeek = appData.settings.weekOffsetReal || 1;
+  // Sử dụng constant TOTAL_WEEKS_RENDER và startWeek từ settings
+  const totalWeeks = TOTAL_WEEKS_RENDER;
+  const startWeek = appData.settings.startWeek || 22;
 
+  // Tính tổng tiết theo lịch thực tế (periodCount × số tuần)
+  let totalPeriods = 0;
+  allCourses.forEach((course) => {
+    if (course.day !== 0 && course.weeks && Array.isArray(course.weeks)) {
+      // Số tiết mỗi buổi × số tuần có lịch
+      const periodsPerSession = course.periodCount || 0;
+      totalPeriods += periodsPerSession * course.weeks.length;
+    }
+  });
+
+  // Build weekly breakdown data
   for (let w = startWeek; w < startWeek + totalWeeks; w++) {
     const weekStats = getDashboardStats(w);
-
-    // Sum periods across all weeks
-    totalPeriods += weekStats.totalPeriods;
 
     // Store per-week data for breakdown
     weeklyData.push({
@@ -506,12 +513,23 @@ function getSemesterStats() {
   const favoritesCount = allCourses.filter((c) => c.isFavorite).length;
   const attendanceStats = calculateTotalAttendanceStats();
 
+  // Tính tổng buổi học theo lịch (không phải buổi đã điểm danh)
+  let totalScheduledSessions = 0;
+  allCourses.forEach((course) => {
+    // Chỉ đếm môn có thời gian (không phải ghi chú)
+    if (course.day !== 0 && course.weeks && Array.isArray(course.weeks)) {
+      // Mỗi môn có 1 buổi/tuần, nhân với số tuần có lịch
+      totalScheduledSessions += course.weeks.length;
+    }
+  });
+
   return {
     totalCourses,
     totalPeriods,
     hours,
     favoritesCount,
     attendanceStats,
+    totalScheduledSessions,
     weeklyBreakdown: weeklyData,
   };
 }
@@ -553,6 +571,18 @@ function renderWeekDashboard(week) {
   if (elFav) elFav.textContent = stats.favoritesCount;
   if (elNextTitle) elNextTitle.textContent = stats.nextTitle;
   if (elNextMeta) elNextMeta.textContent = stats.nextMeta;
+
+  // Hiển thị lại card "Lớp sắp tới" trong chế độ tuần
+  const cardNextClass = document.getElementById("card-next-class");
+  if (cardNextClass) cardNextClass.style.display = "";
+
+  // Khôi phục label attendance cho chế độ tuần
+  const cardAttendance = document.getElementById("card-attendance");
+  const elAttendanceLabel = cardAttendance?.querySelector(".dash-label");
+  const elAttendanceMeta = cardAttendance?.querySelector(".dash-meta");
+
+  if (elAttendanceLabel) elAttendanceLabel.textContent = "Điểm danh";
+  if (elAttendanceMeta) elAttendanceMeta.textContent = "Đã đi / Tổng buổi";
 
   // Attendance stats
   if (elAttendance) {
@@ -635,14 +665,19 @@ function renderSemesterDashboard() {
   if (elHours) elHours.textContent = `≈ ${stats.hours} giờ`;
   if (elFav) elFav.textContent = stats.favoritesCount;
 
-  // Next class stays the same (global search)
-  const nextStats = getDashboardStats(currentViewWeek);
-  if (elNextTitle) elNextTitle.textContent = nextStats.nextTitle;
-  if (elNextMeta) elNextMeta.textContent = nextStats.nextMeta;
+  // Ẩn card "Lớp sắp tới" trong chế độ toàn học kỳ
+  const cardNextClass = document.getElementById("card-next-class");
+  if (cardNextClass) cardNextClass.style.display = "none";
 
-  // Attendance stats
+  // Hiển thị tổng buổi học theo lịch thay vì buổi đã điểm danh
+  const cardAttendance = document.getElementById("card-attendance");
+  const elAttendanceLabel = cardAttendance?.querySelector(".dash-label");
+  const elAttendanceMeta = cardAttendance?.querySelector(".dash-meta");
+
+  if (elAttendanceLabel) elAttendanceLabel.textContent = "Tổng buổi học";
+  if (elAttendanceMeta) elAttendanceMeta.textContent = "Theo lịch toàn học kỳ";
   if (elAttendance) {
-    elAttendance.textContent = `${stats.attendanceStats.attended}/${stats.attendanceStats.total}`;
+    elAttendance.textContent = stats.totalScheduledSessions;
   }
 
   // Render weekly breakdown chart
@@ -651,8 +686,9 @@ function renderSemesterDashboard() {
     chart.innerHTML = "";
     chart.classList.add("semester-view");
     const maxVal = Math.max(...stats.weeklyBreakdown.map((w) => w.periods), 1);
+    const startWeek = appData.settings.weekOffsetReal || 1;
 
-    stats.weeklyBreakdown.forEach((weekData) => {
+    stats.weeklyBreakdown.forEach((weekData, index) => {
       const item = document.createElement("div");
       item.className = "bar-item";
       item.style.cursor = "pointer";
@@ -668,6 +704,7 @@ function renderSemesterDashboard() {
 
       const label = document.createElement("div");
       label.className = "bar-label";
+      // Hiển thị số tuần thực luôn
       label.textContent = `T${weekData.week}`;
 
       item.appendChild(fill);
