@@ -1,0 +1,223 @@
+/* Cards & Tooltips */
+
+/* --- COURSE CARD (Compact & Flat) --- */
+.course-card {
+  background: #fff;
+  color: var(--color-text-dark);
+  padding: 8px 10px;
+  margin: 3px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  line-height: 1.4;
+}
+
+.course-card:hover {
+  border-color: var(--color-primary);
+  background: #fff;
+  box-shadow:
+    0 4px 12px rgba(59, 130, 246, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  z-index: 10;
+  border-left-width: 4px;
+}
+
+.course-card.animate-in {
+  opacity: 1;
+}
+
+.course-card:active {
+  border-color: var(--color-primary-dark);
+  background: #fff;
+  transform: translateY(0);
+}
+
+/* Dark mode course card */
+[data-theme="dark"] .course-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .course-card:hover {
+  background: #253449;
+  border-color: #60a5fa;
+  box-shadow:
+    0 4px 12px rgba(96, 165, 250, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .course-card:active {
+  background: #1e293b;
+  border-color: #60a5fa;
+}
+
+/* --- FAVORITE BUTTON --- */
+.btn-favorite {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  z-index: 2;
+}
+
+.btn-favorite:hover {
+  background: var(--color-hover);
+}
+
+.btn-favorite.active {
+  color: #fbbf24;
+  background: #fef3c7;
+  border-color: #fbbf24;
+}
+
+.course-name {
+  font-weight: 600;
+  margin-bottom: 2px;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--color-text-dark);
+}
+
+.course-room {
+  font-size: 0.7rem;
+  color: var(--color-text-gray);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+/* --- MODAL (Dialog) - OLD STYLES, KEPT FOR OTHER DIALOGS --- */
+/* These styles will still apply to holiday-modal and settings-modal */
+dialog {
+  border: none;
+  border-radius: var(--border-radius-card); /* Large border-radius */
+  padding: 25px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Deeper shadow */
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  background: var(--color-surface); /* Use variable */
+}
+
+dialog::backdrop {
+  background-color: transparent;
+  backdrop-filter: none;
+}
+
+/* Course Detail Tooltip */
+.course-tooltip {
+  position: fixed;
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--border-radius-default);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-md);
+  z-index: 9999;
+  max-width: 280px;
+  min-width: 240px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.course-tooltip.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.course-tooltip.hidden {
+  display: none;
+}
+
+.course-tooltip .tooltip-header h4 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 6px;
+}
+
+.course-tooltip .tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.course-tooltip .tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.course-tooltip .tooltip-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.course-tooltip .tooltip-label {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.course-tooltip .tooltip-row span:last-child {
+  color: var(--color-text-dark);
+  font-weight: 500;
+}
+
+.course-tooltip .tooltip-row a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  word-break: break-all;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.course-tooltip .tooltip-row a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: none;
+}
+
+/* Dark mode tooltip */
+[data-theme="dark"] .course-tooltip {
+  background: #1e293b;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .course-tooltip .tooltip-header h4 {
+  color: #60a5fa;
+  border-bottom: 1px solid #334155;
+}

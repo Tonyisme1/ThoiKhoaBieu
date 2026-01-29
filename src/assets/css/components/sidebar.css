@@ -1,0 +1,217 @@
+/* Sidebar */
+/* --- SLIDING SIDEBAR --- */
+
+.input-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px; /* Fixed width, can be responsive */
+  max-width: 90%;
+  height: 100%;
+  background-color: var(--color-surface);
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* More refined curve */
+  display: flex;
+  flex-direction: column;
+}
+
+.input-sidebar.is-open {
+  transform: translateX(0);
+}
+
+/* Dark mode sidebar */
+[data-theme="dark"] .input-sidebar {
+  background-color: #1e293b;
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .sidebar-title {
+  color: #60a5fa;
+  border-bottom: 2px solid #334155;
+}
+
+.input-sidebar form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 25px; /* Adjusted padding */
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--color-primary-soft); /* Softer border */
+  padding-bottom: 15px;
+  font-size: 1.6rem; /* Slightly larger */
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.optional-section {
+  background: var(--color-primary-soft); /* Use soft primary background */
+  padding: 15px;
+  border-radius: var(--border-radius-default);
+  border: 1px dashed var(--color-primary); /* Use primary color for dashed border */
+  margin-bottom: 15px;
+}
+.optional-section-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--color-primary); /* Primary color for title */
+  font-size: 0.9rem;
+}
+.week-selector-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+.btn-toggle-weeks {
+  font-size: 0.8rem;
+  padding: 4px 10px; /* Adjusted padding */
+  cursor: pointer;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius-button);
+  transition: all 0.2s ease-in-out;
+}
+.btn-toggle-weeks:hover {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+.week-range-display {
+  margin-top: 8px; /* Adjusted margin */
+  background: var(--color-background); /* Use background color */
+  color: var(--color-text-gray);
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border); /* Add subtle border */
+  border-radius: var(--border-radius-button);
+  width: 100%;
+  padding: 8px;
+}
+
+.sidebar-actions {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- SIDEBAR OVERLAY --- */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+  backdrop-filter: blur(4px); /* Consistent blur */
+}
+
+.sidebar-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- CONFIGURATION SECTIONS in Modals --- */
+/* (For holiday and settings modals) */
+.holiday-modal-content,
+.settings-modal-content {
+  background: var(--color-primary-soft); /* Light blue background */
+  padding: 15px;
+  border-radius: var(--border-radius-default);
+  border: 1px dashed var(--color-primary);
+  margin-bottom: 20px;
+}
+
+/* Specific styling for dialogs button in modals (for Holiday and Settings) */
+dialog .modal-actions button[value="cancel"],
+dialog .modal-actions button {
+  margin-right: 0; /* Remove margin from generic secondary button */
+}
+dialog .modal-actions button.btn-secondary {
+  margin-right: 10px; /* Re-add for the secondary button in dialogs */
+}
+
+/* --- GENERAL NOTES SECTION --- */
+#general-notes-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
+  font-size: 1rem;
+  font-family: var(--font-family);
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  background-color: var(--color-surface);
+  color: var(--color-text-dark);
+  resize: vertical; /* Allow vertical resizing */
+}
+
+#general-notes-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* --- CALENDAR BUTTON --- */
+.btn-calendar {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+  font-size: 0.9rem;
+}
+
+.btn-calendar:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-calendar.active {
+  background: var(--color-success);
+}
+
+.calendar-nav-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dark);
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition-fast);
+  font-size: 0.9rem;
+}
+
+.calendar-nav-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-primary);
+}
+
+.mini-calendar-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+

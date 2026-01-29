@@ -1,6 +1,6 @@
 /**
  * SMART NOTES MODULE
- * Quản lý hệ thống ghi chú thông minh với markdown, todo lists, tags
+ * Manage smart notes system with markdown, todo lists, tags
  */
 
 /**
@@ -91,12 +91,12 @@ export function formatNoteDate(dateString) {
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
-  if (minutes < 1) return "Vừa xong";
-  if (minutes < 60) return `${minutes} phút trước`;
-  if (hours < 24) return `${hours} giờ trước`;
-  if (days < 7) return `${days} ngày trước`;
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} minutes ago`;
+  if (hours < 24) return `${hours} hours ago`;
+  if (days < 7) return `${days} days ago`;
 
-  return date.toLocaleDateString("vi-VN");
+  return date.toLocaleDateString("en-US");
 }
 
 /**
@@ -129,7 +129,7 @@ export function createNoteCard(note, { onEdit, onDelete, onClick }) {
   const editBtn = document.createElement("button");
   editBtn.className = "note-action-btn";
   editBtn.textContent = "✏️";
-  editBtn.title = "Chỉnh sửa";
+  editBtn.title = "Edit";
   editBtn.onclick = (e) => {
     e.stopPropagation();
     onEdit(note);
@@ -138,7 +138,7 @@ export function createNoteCard(note, { onEdit, onDelete, onClick }) {
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "note-action-btn";
   deleteBtn.textContent = "🗑️";
-  deleteBtn.title = "Xóa";
+  deleteBtn.title = "Delete";
   deleteBtn.onclick = (e) => {
     e.stopPropagation();
     onDelete(note.id);
@@ -204,7 +204,7 @@ export function createNoteCard(note, { onEdit, onDelete, onClick }) {
   const typeBadge = document.createElement("span");
   typeBadge.className = "note-type-badge";
   typeBadge.innerHTML =
-    note.type === "todo" ? "<span>✓</span> Todo" : "<span>📄</span> Ghi chú";
+    note.type === "todo" ? "<span>✓</span> Todo" : "<span>📄</span> Note";
   meta.appendChild(typeBadge);
 
   const timestamp = document.createElement("span");

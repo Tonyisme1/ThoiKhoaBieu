@@ -1,25 +1,21 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart University Timetable</title>
-    <link rel="stylesheet" href="./css/variables.css" />
-    <link rel="stylesheet" href="./css/main.css" />
-    <link rel="stylesheet" href="./css/layout.css" />
-    <link rel="stylesheet" href="./css/components.css" />
-    <link rel="stylesheet" href="./css/notes.css" />
+    <link rel="stylesheet" href="../src/assets/css/main.css" />
   </head>
   <body>
     <header class="app-header">
       <div class="header-top">
         <div class="header-logo">
-          <h1>Thời Khóa Biểu</h1>
+          <h1>Timetable</h1>
         </div>
         <button
           id="btn-theme-toggle"
           class="btn-icon"
-          title="Đổi giao diện"
+          title="Toggle theme"
           aria-label="Toggle theme"
         >
           <svg class="icon icon-lg" viewBox="0 0 24 24">
@@ -39,28 +35,28 @@
       <!-- Tab Navigation -->
       <nav class="tab-navigation">
         <button class="tab-btn active" data-tab="dashboard">
-          Trang Chủ
+          Dashboard
         </button>
         <button class="tab-btn" data-tab="timetable">
-          Thời Khóa Biểu
+          Timetable
         </button>
         <button class="tab-btn" data-tab="assignments">
-          Bài Tập
+          Assignments
         </button>
         <button class="tab-btn" data-tab="exams">
-          Lịch Thi
+          Exams
         </button>
         <button class="tab-btn" data-tab="attendance">
-          Điểm Danh
+          Attendance
         </button>
         <button class="tab-btn" data-tab="courses">
-          Danh Sách Môn
+          Courses
         </button>
         <button class="tab-btn" data-tab="notes">
-          Ghi Chú
+          Notes
         </button>
         <button class="tab-btn" data-tab="settings">
-          Cài Đặt
+          Settings
         </button>
       </nav>
 
@@ -72,13 +68,13 @@
       <div class="tab-content active" id="tab-dashboard">
         <!-- Week Navigation -->
         <nav class="week-navigation dashboard-week-nav">
-          <button id="btn-prev-week" class="nav-btn" aria-label="Tuần trước">
+          <button id="btn-prev-week" class="nav-btn" aria-label="Previous week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
           </button>
           <select id="week-dropdown-header" class="week-select"></select>
-          <button id="btn-next-week" class="nav-btn" aria-label="Tuần sau">
+          <button id="btn-next-week" class="nav-btn" aria-label="Next week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
@@ -90,54 +86,54 @@
         <div class="dashboard-header">
           <h3>Dashboard & Analytics</h3>
           <div style="display: flex; gap: 12px; align-items: center;">
-            <p class="dashboard-subtitle">Thống kê tổng quan</p>
+            <p class="dashboard-subtitle">Overview statistics</p>
             <select id="dashboard-view-select" class="filter-select" style="padding: 6px 12px; font-size: 0.85rem;">
-              <option value="semester">Toàn học kỳ</option>
-              <option value="week" selected>Tuần hiện tại</option>
+              <option value="semester">Full Semester</option>
+              <option value="week" selected>Current Week</option>
             </select>
           </div>
         </div>
         
         <div class="dashboard-cards">
           <div class="dash-card" id="card-total-courses">
-            <div class="dash-label" id="dash-label-courses">Môn trong tuần</div>
+            <div class="dash-label" id="dash-label-courses">Courses This Week</div>
             <div class="dash-value" id="stat-courses">0</div>
-            <div class="dash-meta" id="dash-meta-courses">Tất cả môn có lịch tuần này</div>
+            <div class="dash-meta" id="dash-meta-courses">All courses scheduled this week</div>
           </div>
           <div class="dash-card" id="card-total-hours">
-            <div class="dash-label">Tổng tiết</div>
+            <div class="dash-label">Total Periods</div>
             <div class="dash-value" id="stat-periods">0</div>
-            <div class="dash-meta" id="stat-hours">≈ 0 giờ</div>
+            <div class="dash-meta" id="stat-hours">≈ 0 hrs</div>
           </div>
           <div class="dash-card" id="card-favorites">
-            <div class="dash-label">Yêu thích</div>
+            <div class="dash-label">Favorites</div>
             <div class="dash-value" id="stat-favorites">0</div>
-            <div class="dash-meta">Môn đã đánh dấu</div>
+            <div class="dash-meta">Bookmarked courses</div>
           </div>
           <div class="dash-card" id="card-next-class">
-            <div class="dash-label">Lớp sắp tới</div>
+            <div class="dash-label">Next Class</div>
             <div class="dash-value" id="stat-next-title">—</div>
-            <div class="dash-meta" id="stat-next-meta">Chưa có lịch</div>
+            <div class="dash-meta" id="stat-next-meta">No upcoming classes</div>
           </div>
           <div class="dash-card" id="card-attendance">
-            <div class="dash-label">Điểm danh</div>
+            <div class="dash-label">Attendance</div>
             <div class="dash-value" id="stat-attendance">0/0</div>
-            <div class="dash-meta">Đã đi / Tổng buổi</div>
+            <div class="dash-meta">Attended / Total sessions</div>
           </div>
         </div>
 
         <div class="dashboard-grid">
           <div class="chart-card">
             <div class="chart-header">
-              <h4 id="chart-title-load">Biểu đồ tải tuần</h4>
-              <span class="chart-hint" id="chart-hint-load">Số tiết theo ngày</span>
+              <h4 id="chart-title-load">Weekly Load</h4>
+              <span class="chart-hint" id="chart-hint-load">Periods per day</span>
             </div>
             <div id="weekly-load-chart" class="bar-chart"></div>
           </div>
           <div class="chart-card">
             <div class="chart-header">
-              <h4>Ngày nghỉ</h4>
-              <span class="chart-hint">Tuần có nghỉ</span>
+              <h4>Holidays</h4>
+              <span class="chart-hint">Weeks with holidays</span>
             </div>
             <ul id="holiday-mini-list" class="holiday-mini-list"></ul>
           </div>
@@ -149,13 +145,13 @@
       <div class="tab-content" id="tab-timetable">
         <!-- Week Navigation -->
         <nav class="week-navigation timetable-week-nav">
-          <button id="btn-prev-week-2" class="nav-btn" aria-label="Tuần trước">
+          <button id="btn-prev-week-2" class="nav-btn" aria-label="Previous week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
           </button>
           <select id="week-dropdown-2" class="week-select"></select>
-          <button id="btn-next-week-2" class="nav-btn" aria-label="Tuần sau">
+          <button id="btn-next-week-2" class="nav-btn" aria-label="Next week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
@@ -164,14 +160,14 @@
 
         <div class="timetable-container">
         <div class="grid-header">
-          <div>Tiết / Thứ</div>
-          <div>Thứ 2</div>
-          <div>Thứ 3</div>
-          <div>Thứ 4</div>
-          <div>Thứ 5</div>
-          <div>Thứ 6</div>
-          <div>Thứ 7</div>
-          <div>CN</div>
+          <div>Period / Day</div>
+          <div>Mon</div>
+          <div>Tue</div>
+          <div>Wed</div>
+          <div>Thu</div>
+          <div>Fri</div>
+          <div>Sat</div>
+          <div>Sun</div>
         </div>
 
         <div id="timetable-grid" class="grid-body"></div>
@@ -182,37 +178,37 @@
       <div class="tab-content" id="tab-exams">
         <section class="exams-container">
           <div class="exams-header">
-            <h3>Lịch Thi & Kiểm Tra</h3>
+            <h3>Exam Schedule</h3>
             <div class="exams-actions">
               <select id="exam-filter" class="filter-select">
-                <option value="all">Tất cả</option>
-                <option value="upcoming">Sắp tới</option>
-                <option value="completed">Đã thi</option>
+                <option value="all">All</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="completed">Completed</option>
               </select>
               <select id="exam-sort" class="filter-select">
-                <option value="date">Sắp xếp theo ngày</option>
-                <option value="course">Sắp xếp theo môn</option>
+                <option value="date">Sort by date</option>
+                <option value="course">Sort by course</option>
               </select>
-              <button id="btn-add-exam" class="btn-primary">+ Thêm Lịch Thi</button>
+              <button id="btn-add-exam" class="btn-primary">+ Add Exam</button>
             </div>
           </div>
           
           <div class="exams-stats">
             <div class="stat-card">
               <div class="stat-value" id="total-exams">0</div>
-              <div class="stat-label">Tổng số</div>
+              <div class="stat-label">Total</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="upcoming-exams">0</div>
-              <div class="stat-label">Sắp tới</div>
+              <div class="stat-label">Upcoming</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="this-week-exams">0</div>
-              <div class="stat-label">Tuần này</div>
+              <div class="stat-label">This week</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="completed-exams">0</div>
-              <div class="stat-label">Đã thi</div>
+              <div class="stat-label">Completed</div>
             </div>
           </div>
 
@@ -223,14 +219,14 @@
       <!-- Tab: Courses -->
       <div class="tab-content" id="tab-courses">
         <div class="courses-header">
-          <h3>Danh Sách Môn Học Chi Tiết</h3>
+          <h3>Course List Details</h3>
           <div class="courses-actions">
             <div class="search-bar-container">
               <input
                 type="text"
                 id="search-input"
                 class="search-input"
-                placeholder="Tìm kiếm môn học..."
+                placeholder="Search courses..."
                 autocomplete="off"
               />
               <div
@@ -239,20 +235,20 @@
                 style="display: none"
               ></div>
             </div>
-            <button id="btn-add-course" class="btn-primary">+ Thêm Môn</button>
+            <button id="btn-add-course" class="btn-primary">+ Add Course</button>
           </div>
         </div>
         <div class="table-wrapper">
           <table class="course-table">
             <thead>
               <tr>
-                <th style="width: 50px">STT</th>
-                <th style="text-align: left">Môn Học</th>
-                <th>Lịch Học</th>
-                <th>Phòng</th>
-                <th>Giảng Viên</th>
-                <th>Thời Gian (Tuần)</th>
-                <th style="width: 120px">Hành Động</th>
+                <th style="width: 50px">No.</th>
+                <th style="text-align: left">Course</th>
+                <th>Schedule</th>
+                <th>Room</th>
+                <th>Instructor</th>
+                <th>Time (Weeks)</th>
+                <th style="width: 120px">Actions</th>
               </tr>
             </thead>
             <tbody id="course-list-body"></tbody>
@@ -265,39 +261,39 @@
       <div class="tab-content" id="tab-assignments">
         <section class="assignments-container">
           <div class="assignments-header">
-            <h3>Quản Lý Bài Tập</h3>
+            <h3>Assignment Management</h3>
             <div class="assignments-actions">
               <select id="assignment-filter" class="filter-select">
-                <option value="all">Tất cả</option>
-                <option value="active">Đang làm</option>
-                <option value="completed">Hoàn thành</option>
-                <option value="overdue">Quá hạn</option>
+                <option value="all">All</option>
+                <option value="active">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
               </select>
               <select id="assignment-sort" class="filter-select">
-                <option value="deadline">Sắp xếp theo hạn</option>
-                <option value="course">Sắp xếp theo môn</option>
-                <option value="priority">Sắp xếp theo độ ưu tiên</option>
+                <option value="deadline">Sort by deadline</option>
+                <option value="course">Sort by course</option>
+                <option value="priority">Sort by priority</option>
               </select>
-              <button id="btn-add-assignment" class="btn-primary">+ Thêm Bài Tập</button>
+              <button id="btn-add-assignment" class="btn-primary">+ Add Assignment</button>
             </div>
           </div>
           
           <div class="assignments-stats">
             <div class="stat-card">
               <div class="stat-value" id="total-assignments">0</div>
-              <div class="stat-label">Tổng số</div>
+              <div class="stat-label">Total</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="active-assignments">0</div>
-              <div class="stat-label">Đang làm</div>
+              <div class="stat-label">In Progress</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="completed-assignments">0</div>
-              <div class="stat-label">Hoàn thành</div>
+              <div class="stat-label">Completed</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="overdue-assignments">0</div>
-              <div class="stat-label">Quá hạn</div>
+              <div class="stat-label">Overdue</div>
             </div>
           </div>
 
@@ -309,14 +305,14 @@
       <div class="tab-content" id="tab-attendance">
         <section class="attendance-container">
           <div class="attendance-header">
-            <h3>Theo Dõi Điểm Danh</h3>
+            <h3>Attendance Tracking</h3>
             <div class="attendance-actions">
               <select id="attendance-course-filter" class="filter-select">
-                <option value="all">Tất cả môn</option>
+                <option value="all">All courses</option>
               </select>
               <select id="attendance-week-filter" class="filter-select">
-                <option value="current">Tuần hiện tại</option>
-                <option value="all">Tất cả tuần</option>
+                <option value="current">Current week</option>
+                <option value="all">All weeks</option>
               </select>
             </div>
           </div>
@@ -324,19 +320,19 @@
           <div class="attendance-stats">
             <div class="stat-card">
               <div class="stat-value" id="total-sessions">0</div>
-              <div class="stat-label">Tổng buổi</div>
+              <div class="stat-label">Total sessions</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="attended-sessions">0</div>
-              <div class="stat-label">Đã đi</div>
+              <div class="stat-label">Attended</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="absent-sessions">0</div>
-              <div class="stat-label">Vắng</div>
+              <div class="stat-label">Absent</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="attendance-rate">0%</div>
-              <div class="stat-label">Tỷ lệ đi học</div>
+              <div class="stat-label">Attendance rate</div>
             </div>
           </div>
 
@@ -349,18 +345,18 @@
         <!-- Notes Header with Actions -->
         <section class="notes-header-section">
           <div class="notes-header">
-            <h3>📝 Ghi Chú Thông Minh</h3>
+            <h3>📝 Smart Notes</h3>
             <div class="notes-actions">
               <div class="notes-search-box">
-                <input type="text" id="notes-search" placeholder="🔍 Tìm kiếm ghi chú..." class="notes-search-input">
+                <input type="text" id="notes-search" placeholder="Search notes..." class="notes-search-input">
               </div>
               <select id="notes-filter" class="filter-select">
-                <option value="all">Tất cả</option>
-                <option value="pinned">📌 Đã ghim</option>
+                <option value="all">All</option>
+                <option value="pinned">📌 Pinned</option>
                 <option value="todos">✓ Todo</option>
-                <option value="normal">📄 Thường</option>
+                <option value="normal">📄 Regular</option>
               </select>
-              <button id="btn-add-note" class="btn-primary">+ Ghi Chú Mới</button>
+              <button id="btn-add-note" class="btn-primary">+ New Note</button>
             </div>
           </div>
           
@@ -368,11 +364,11 @@
           <div class="notes-stats">
             <div class="stat-card">
               <div class="stat-value" id="total-notes-count">0</div>
-              <div class="stat-label">Tổng ghi chú</div>
+              <div class="stat-label">Total notes</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="pinned-notes-count">0</div>
-              <div class="stat-label">Đã ghim</div>
+              <div class="stat-label">Pinned</div>
             </div>
             <div class="stat-card">
               <div class="stat-value" id="todo-notes-count">0</div>
@@ -380,7 +376,7 @@
             </div>
             <div class="stat-card">
               <div class="stat-value" id="completed-todos-count">0</div>
-              <div class="stat-label">Đã hoàn thành</div>
+              <div class="stat-label">Completed</div>
             </div>
           </div>
         </section>
@@ -388,17 +384,14 @@
         <!-- Notes Grid -->
         <section class="smart-notes-container">
           <div id="smart-notes-list" class="smart-notes-grid"></div>
-          <div id="notes-empty-state" class="empty-state" style="display: none;">
-            <div class="empty-icon">📝</div>
-            <h4>Chưa có ghi chú nào</h4>
-            <p>Tạo ghi chú đầu tiên để bắt đầu!</p>
-            <button class="btn-primary" onclick="document.getElementById('btn-add-note').click()">+ Tạo Ghi Chú</button>
+          <div id="notes-empty-state" class="empty-state">
+            <h4>No notes yet</h4>
           </div>
         </section>
 
-        <!-- Course Notes Section (môn tự do) -->
+        <!-- Course Notes Section (free courses) -->
         <section class="notes-container" style="margin-top: 30px;">
-          <h3>Môn Học Ghi Chú (Không có lịch)</h3>
+          <h3>Course Notes (No schedule)</h3>
           <div id="notes-list-2" class="notes-grid"></div>
         </section>
       </div>
@@ -408,40 +401,40 @@
         <div class="settings-container">
           <!-- Section 1: Hệ Thống Kỳ Học -->
           <section class="settings-section">
-            <h3 class="settings-title">Hệ Thống Kỳ Học</h3>
+            <h3 class="settings-title">Semester System</h3>
             <div class="settings-grid">
               <div class="form-group">
-                <label for="semester-start-date">Ngày bắt đầu học kỳ:</label>
+                <label for="semester-start-date">Semester start date:</label>
                 <input type="date" id="semester-start-date" />
               </div>
               <div class="form-group">
-                <label for="semester-start-week">Tuần bắt đầu:</label>
+                <label for="semester-start-week">Starting week:</label>
                 <input 
                   type="number" 
                   id="semester-start-week" 
                   min="1" 
                   max="52" 
-                  placeholder="VD: 22"
+                  placeholder="E.g: 22"
                 />
               </div>
             </div>
             <button id="btn-save-semester" class="btn-primary">
-              Lưu Cài Đặt
+              Save Settings
             </button>
           </section>
 
-          <!-- Section 2: Lịch Nghỉ -->
+          <!-- Section 2: Holidays -->
           <section class="settings-section">
-            <h3 class="settings-title">Lịch Nghỉ</h3>
+            <h3 class="settings-title">Holiday Schedule</h3>
             <div id="holiday-list-settings" class="holiday-list"></div>
             <button id="btn-config-holiday" class="btn-secondary">
-              + Thêm Ngày Nghỉ
+              + Add Holiday
             </button>
           </section>
 
-          <!-- Section 3: Dữ Liệu -->
+          <!-- Section 3: Data -->
           <section class="settings-section">
-            <h3 class="settings-title">Quản Lý Dữ Liệu</h3>
+            <h3 class="settings-title">Data Management</h3>
             <div class="settings-actions">
               <button id="btn-export-settings" class="btn-secondary">
                 ↓ Export JSON
@@ -450,27 +443,27 @@
                 ↑ Import JSON
               </button>
               <button id="btn-clear-data" class="btn-danger">
-                × Xóa Toàn Bộ Dữ Liệu
+                × Clear All Data
               </button>
             </div>
           </section>
 
-          <!-- Section 4: Giao Diện -->
+          <!-- Section 4: Appearance -->
           <section class="settings-section">
-            <h3 class="settings-title">Giao Diện</h3>
+            <h3 class="settings-title">Appearance</h3>
             <div class="theme-selector">
               <label>
                 <input type="radio" name="theme" value="light" />
                 <span class="theme-option">
                   <span class="theme-preview light-preview"></span>
-                  <span>Sáng</span>
+                  <span>Light</span>
                 </span>
               </label>
               <label>
                 <input type="radio" name="theme" value="dark" />
                 <span class="theme-option">
                   <span class="theme-preview dark-preview"></span>
-                  <span>Tối</span>
+                  <span>Dark</span>
                 </span>
               </label>
             </div>
@@ -482,57 +475,57 @@
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
     <aside id="input-sidebar" class="input-sidebar">
       <form>
-        <h2 id="modal-title" class="sidebar-title">Thêm Môn Học Mới</h2>
+        <h2 id="modal-title" class="sidebar-title">Add New Course</h2>
 
         <input type="hidden" id="edit-course-id" />
 
         <div class="form-group">
           <label for="subject-name"
-            >Tên môn học <span style="color: red">*</span>:</label
+            >Course name <span style="color: red">*</span>:</label
           >
           <input
             type="text"
             id="subject-name"
             required
-            placeholder="Ví dụ: Lập trình Web"
+            placeholder="E.g: Web Programming"
           />
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
           <div class="form-group">
-            <label for="day-select">Thứ:</label>
+            <label for="day-select">Day:</label>
             <select id="day-select" required>
-              <option value="2">Thứ 2</option>
-              <option value="3">Thứ 3</option>
-              <option value="4">Thứ 4</option>
-              <option value="5">Thứ 5</option>
-              <option value="6">Thứ 6</option>
-              <option value="7">Thứ 7</option>
-              <option value="8">Chủ Nhật</option>
+              <option value="2">Monday</option>
+              <option value="3">Tuesday</option>
+              <option value="4">Wednesday</option>
+              <option value="5">Thursday</option>
+              <option value="6">Friday</option>
+              <option value="7">Saturday</option>
+              <option value="8">Sunday</option>
               <option value="0" style="color: #e74c3c; font-weight: bold">
-                Môn Tự Do / Ghi Chú
+                Free Course / Notes
               </option>
             </select>
           </div>
           <div class="form-group">
-            <label for="room-name">Phòng học:</label>
-            <input type="text" id="room-name" placeholder="VD: 301-G2" />
+            <label for="room-name">Room:</label>
+            <input type="text" id="room-name" placeholder="E.g: 301-G2" />
           </div>
         </div>
 
         <div class="form-group">
-          <label for="teacher-name">Tên Giảng Viên:</label>
-          <input type="text" id="teacher-name" placeholder="VD: Thầy An" />
+          <label for="teacher-name">Instructor name:</label>
+          <input type="text" id="teacher-name" placeholder="E.g: Mr. Smith" />
         </div>
 
         <div class="form-group">
-          <label for="course-color">Màu sắc môn học:</label>
+          <label for="course-color">Course color:</label>
           <input type="color" id="course-color" value="#3b82f6" />
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
           <div class="form-group">
-            <label for="start-period">Tiết bắt đầu:</label>
+            <label for="start-period">Start period:</label>
             <input
               type="number"
               id="start-period"
@@ -543,7 +536,7 @@
             />
           </div>
           <div class="form-group">
-            <label for="period-count">Số tiết:</label>
+            <label for="period-count">Number of periods:</label>
             <input
               type="number"
               id="period-count"
@@ -557,42 +550,42 @@
 
         <div class="optional-section">
           <p class="optional-section-title">
-            Tự động chọn tuần theo ngày (Tùy chọn):
+            Auto-select weeks by date (Optional):
           </p>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
             <div class="form-group" style="margin-bottom: 0">
-              <input type="date" id="start-date-picker" title="Ngày bắt đầu" />
+              <input type="date" id="start-date-picker" title="Start date" />
             </div>
             <div class="form-group" style="margin-bottom: 0">
-              <input type="date" id="end-date-picker" title="Ngày kết thúc" />
+              <input type="date" id="end-date-picker" title="End date" />
             </div>
           </div>
         </div>
 
         <div class="form-group">
           <label class="week-selector-label">
-            <span>Chọn tuần học:</span>
+            <span>Select weeks:</span>
             <div>
               <button
                 type="button"
                 id="btn-select-even"
                 class="btn-toggle-weeks small"
               >
-                Tuần Chẵn
+                Even Weeks
               </button>
               <button
                 type="button"
                 id="btn-select-odd"
                 class="btn-toggle-weeks small"
               >
-                Tuần Lẻ
+                Odd Weeks
               </button>
               <button
                 type="button"
                 id="btn-toggle-all"
                 class="btn-toggle-weeks"
               >
-                Chọn tất cả
+                Select all
               </button>
             </div>
           </label>
@@ -601,17 +594,17 @@
             type="text"
             id="week-range"
             readonly
-            placeholder="Các tuần được chọn sẽ hiện ở đây..."
+            placeholder="Selected weeks will appear here..."
             class="week-range-display"
           />
         </div>
 
         <div class="form-group">
-          <label for="course-notes">Ghi chú môn học:</label>
+          <label for="course-notes">Course notes:</label>
           <textarea
             id="course-notes"
             rows="3"
-            placeholder="Ghi chú, tài liệu tham khảo, link bài giảng..."
+            placeholder="Notes, reference materials, lecture links..."
           ></textarea>
         </div>
 
@@ -622,14 +615,14 @@
             class="btn-danger"
             style="display: none"
           >
-            Xóa
+            Delete
           </button>
           <div style="margin-left: auto">
             <button id="btn-cancel-sidebar" type="button" class="btn-secondary">
-              Hủy
+              Cancel
             </button>
             <button id="btn-save" type="button" class="btn-primary">
-              Lưu Lại
+              Save
             </button>
           </div>
         </div>
@@ -645,7 +638,7 @@
             color: #e74c3c;
           "
         >
-          Quản Lý Ngày Nghỉ
+          Holiday Management
         </h2>
         <div
           style="
@@ -656,19 +649,19 @@
           "
         >
           <div class="form-group">
-            <label>Tên kỳ nghỉ:</label>
+            <label>Holiday name:</label>
             <input
               type="text"
               id="holiday-name"
-              placeholder="VD: Tết Nguyên Đán"
+              placeholder="E.g: New Year"
             />
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
             <div class="form-group">
-              <label>Từ:</label><input type="date" id="holiday-start" />
+              <label>From:</label><input type="date" id="holiday-start" />
             </div>
             <div class="form-group">
-              <label>Đến:</label><input type="date" id="holiday-end" />
+              <label>To:</label><input type="date" id="holiday-end" />
             </div>
           </div>
           <button
@@ -677,17 +670,17 @@
             class="btn-primary"
             style="background-color: #e74c3c; width: 100%; margin-top: 10px"
           >
-            Thêm
+            Add
           </button>
         </div>
-        <h3>Danh sách đã lưu:</h3>
+        <h3>Saved list:</h3>
         <ul id="holiday-list" class="holiday-list-container"></ul>
         <div class="modal-actions">
           <button
             class="btn-secondary"
             onclick="this.closest('dialog').close()"
           >
-            Đóng
+            Close
           </button>
         </div>
       </form>
@@ -701,15 +694,15 @@
             padding-bottom: 10px;
           "
         >
-          Cấu hình Hệ thống
+          System Configuration
         </h2>
         <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px">
           <div class="form-group">
-            <label for="setting-start-date">Ngày bắt đầu kỳ:</label>
+            <label for="setting-start-date">Semester start date:</label>
             <input type="date" id="setting-start-date" required />
           </div>
           <div class="form-group">
-            <label for="setting-start-week">Tuần bắt đầu:</label>
+            <label for="setting-start-week">Starting week:</label>
             <input
               type="number"
               id="setting-start-week"
@@ -726,10 +719,10 @@
             type="button"
             onclick="this.closest('dialog').close()"
           >
-            Hủy
+            Cancel
           </button>
           <button id="btn-save-settings" value="default" class="btn-primary">
-            Lưu cấu hình
+            Save configuration
           </button>
         </div>
       </form>
@@ -739,44 +732,44 @@
     <dialog id="assignment-modal">
       <form method="dialog">
         <h2 style="border-bottom: 2px solid var(--color-primary); padding-bottom: var(--space-2); margin-bottom: var(--space-4);">
-          <span id="assignment-modal-title">Thêm Bài Tập Mới</span>
+          <span id="assignment-modal-title">Add New Assignment</span>
         </h2>
         <div class="assignment-form-content">
           <div class="form-group">
-            <label for="assignment-course">Môn học:</label>
+            <label for="assignment-course">Course:</label>
             <select id="assignment-course" required>
-              <option value="">-- Chọn môn học --</option>
+              <option value="">-- Select course --</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="assignment-title">Tên bài tập:</label>
-            <input type="text" id="assignment-title" placeholder="VD: Bài tập tuần 3" required />
+            <label for="assignment-title">Assignment title:</label>
+            <input type="text" id="assignment-title" placeholder="E.g: Week 3 homework" required />
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="assignment-deadline">Hạn nộp:</label>
+              <label for="assignment-deadline">Deadline:</label>
               <input type="datetime-local" id="assignment-deadline" required />
             </div>
             <div class="form-group">
-              <label for="assignment-priority">Độ ưu tiên:</label>
+              <label for="assignment-priority">Priority:</label>
               <select id="assignment-priority">
-                <option value="low">Thấp</option>
-                <option value="medium" selected>Trung bình</option>
-                <option value="high">Cao</option>
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label for="assignment-description">Mô tả:</label>
-            <textarea id="assignment-description" rows="2" placeholder="Nội dung chi tiết bài tập..."></textarea>
+            <label for="assignment-description">Description:</label>
+            <textarea id="assignment-description" rows="2" placeholder="Assignment details..."></textarea>
           </div>
         </div>
         <div class="modal-actions">
           <button value="cancel" class="btn-secondary" type="button" onclick="this.closest('dialog').close()">
-            Hủy
+            Cancel
           </button>
           <button id="btn-save-assignment" value="default" class="btn-primary">
-            Lưu Bài Tập
+            Save Assignment
           </button>
         </div>
       </form>
@@ -786,56 +779,56 @@
     <dialog id="exam-modal">
       <form method="dialog">
         <h2 style="border-bottom: 2px solid var(--color-primary); padding-bottom: var(--space-2); margin-bottom: var(--space-4);">
-          <span id="exam-modal-title">Thêm Lịch Thi Mới</span>
+          <span id="exam-modal-title">Add New Exam</span>
         </h2>
         <div class="exam-form-content">
           <div class="form-group">
-            <label for="exam-course">Môn học:</label>
+            <label for="exam-course">Course:</label>
             <select id="exam-course" required>
-              <option value="">-- Chọn môn học --</option>
+              <option value="">-- Select course --</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="exam-title">Loại thi:</label>
-            <input type="text" id="exam-title" placeholder="VD: Kiểm tra giữa kỳ, Thi cuối kỳ" required />
+            <label for="exam-title">Exam type:</label>
+            <input type="text" id="exam-title" placeholder="E.g: Midterm, Final exam" required />
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="exam-date">Ngày thi:</label>
+              <label for="exam-date">Exam date:</label>
               <input type="datetime-local" id="exam-date" required />
             </div>
             <div class="form-group">
-              <label for="exam-duration">Thời lượng (phút):</label>
+              <label for="exam-duration">Duration (minutes):</label>
               <input type="number" id="exam-duration" min="30" max="300" value="90" required />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="exam-room">Phòng thi:</label>
-              <input type="text" id="exam-room" placeholder="VD: A101" />
+              <label for="exam-room">Exam room:</label>
+              <input type="text" id="exam-room" placeholder="E.g: A101" />
             </div>
             <div class="form-group">
-              <label for="exam-format">Hình thức:</label>
+              <label for="exam-format">Format:</label>
               <select id="exam-format">
-                <option value="written">Tự luận</option>
-                <option value="test">Trắc nghiệm</option>
-                <option value="online">Trực tuyến</option>
-                <option value="practical">Thực hành</option>
-                <option value="other">Khác</option>
+                <option value="written">Written</option>
+                <option value="test">Multiple Choice</option>
+                <option value="online">Online</option>
+                <option value="practical">Practical</option>
+                <option value="other">Other</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label for="exam-notes">Ghi chú:</label>
-            <textarea id="exam-notes" rows="2" placeholder="Phạm vi, tài liệu được mang theo..."></textarea>
+            <label for="exam-notes">Notes:</label>
+            <textarea id="exam-notes" rows="2" placeholder="Scope, allowed materials..."></textarea>
           </div>
         </div>
         <div class="modal-actions">
           <button value="cancel" class="btn-secondary" type="button" onclick="this.closest('dialog').close()">
-            Hủy
+            Cancel
           </button>
           <button id="btn-save-exam" value="default" class="btn-primary">
-            Lưu Lịch Thi
+            Save Exam
           </button>
         </div>
       </form>
@@ -843,107 +836,65 @@
 
     <!-- Smart Note Modal -->
     <dialog id="note-modal">
-      <form method="dialog">
+      <form id="note-form">
         <div class="note-modal-header">
-          <h2 id="note-modal-title">📝 Tạo Ghi Chú Mới</h2>
-          <button type="button" id="btn-close-note-modal" class="btn-icon">✕</button>
+          <h2 id="note-modal-title">Create New Note</h2>
+          <button type="button" id="btn-close-note-modal" class="btn-icon">×</button>
         </div>
-        
-        <input type="hidden" id="note-id">
         
         <div class="note-form-content">
           <!-- Title -->
           <div class="form-group">
-            <label for="note-title">Tiêu đề:</label>
-            <input type="text" id="note-title" placeholder="Nhập tiêu đề ghi chú..." required>
+            <label for="note-title">Title:</label>
+            <input type="text" id="note-title" placeholder="Enter note title..." required>
+          </div>
+
+          <!-- Content -->
+          <div class="form-group">
+            <label for="note-content">Content:</label>
+            <textarea id="note-content" class="note-editor" rows="6" placeholder="Enter your note content here..."></textarea>
+            <div class="editor-footer">
+              <small id="note-char-count" class="form-hint">0 characters</small>
+            </div>
           </div>
 
           <!-- Tags -->
           <div class="form-group">
-            <label for="note-tags">Tags:</label>
-            <input type="text" id="note-tags" placeholder="#work #study #important (phân cách bằng dấu cách)">
-            <small class="form-hint">Ví dụ: #deadline #important #review</small>
+            <label for="note-tags">Tags (optional):</label>
+            <input type="text" id="note-tags" placeholder="#work #study #important">
           </div>
 
-          <!-- Color Label -->
-          <div class="form-group">
-            <label for="note-color">Màu nhãn:</label>
-            <div class="color-picker-inline">
-              <input type="color" id="note-color" value="#60a5fa">
-              <div class="color-presets">
-                <button type="button" class="color-preset" data-color="#ef4444" style="background: #ef4444;" title="Đỏ"></button>
-                <button type="button" class="color-preset" data-color="#f59e0b" style="background: #f59e0b;" title="Cam"></button>
-                <button type="button" class="color-preset" data-color="#10b981" style="background: #10b981;" title="Xanh lá"></button>
-                <button type="button" class="color-preset" data-color="#60a5fa" style="background: #60a5fa;" title="Xanh dương"></button>
-                <button type="button" class="color-preset" data-color="#8b5cf6" style="background: #8b5cf6;" title="Tím"></button>
-                <button type="button" class="color-preset" data-color="#ec4899" style="background: #ec4899;" title="Hồng"></button>
-              </div>
+          <!-- Color & Pin Row -->
+          <div class="form-row" style="display: flex; gap: 1rem; align-items: center;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="note-color">Color:</label>
+              <input type="color" id="note-color" value="#60a5fa" style="width: 50px; height: 32px;">
             </div>
+            <label class="checkbox-label" style="margin-left: auto;">
+              <input type="checkbox" id="note-pinned">
+              <span>Pin to top</span>
+            </label>
           </div>
 
           <!-- Note Type -->
           <div class="form-group">
-            <label>Loại ghi chú:</label>
-            <div class="note-type-selector">
-              <label class="radio-card">
+            <label>Type:</label>
+            <div style="display: flex; gap: 1rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                 <input type="radio" name="note-type" value="normal" checked>
-                <span class="radio-card-content">
-                  <span class="radio-card-icon">📄</span>
-                  <span class="radio-card-label">Ghi chú thường</span>
-                </span>
+                <span>Regular note</span>
               </label>
-              <label class="radio-card">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                 <input type="radio" name="note-type" value="todo">
-                <span class="radio-card-content">
-                  <span class="radio-card-icon">✓</span>
-                  <span class="radio-card-label">Todo List</span>
-                </span>
+                <span>Todo List</span>
               </label>
             </div>
-          </div>
-
-          <!-- Content Editor -->
-          <div class="form-group">
-            <div class="editor-toolbar">
-              <label>Nội dung:</label>
-              <div class="editor-actions">
-                <button type="button" class="btn-icon" id="btn-toggle-preview" title="Preview">👁️</button>
-                <button type="button" class="btn-icon" id="btn-format-bold" title="Bold (Ctrl+B)">B</button>
-                <button type="button" class="btn-icon" id="btn-format-italic" title="Italic (Ctrl+I)">I</button>
-                <button type="button" class="btn-icon" id="btn-format-strike" title="Strikethrough">S̶</button>
-                <button type="button" class="btn-icon" id="btn-insert-link" title="Insert Link">🔗</button>
-                <button type="button" class="btn-icon" id="btn-insert-checkbox" title="Insert Checkbox">☐</button>
-              </div>
-            </div>
-            <div class="editor-container">
-              <textarea id="note-content" class="note-editor" placeholder="Nhập nội dung...
-
-Hỗ trợ Markdown:
-**bold** *italic* ~~strikethrough~~
-- Bullet list
-[ ] Todo checkbox
-[x] Completed todo
-https://link.com (tự động link hóa)"></textarea>
-              <div id="note-preview" class="note-preview" style="display: none;"></div>
-            </div>
-            <div class="editor-footer">
-              <small id="note-char-count" class="form-hint">0 ký tự</small>
-              <small class="form-hint">Hỗ trợ Markdown & Auto-link</small>
-            </div>
-          </div>
-
-          <!-- Pin Option -->
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" id="note-pinned">
-              <span>📌 Ghim ghi chú này lên đầu</span>
-            </label>
           </div>
         </div>
 
         <div class="modal-actions">
-          <button type="button" id="btn-cancel-note" class="btn-secondary">Hủy</button>
-          <button type="submit" id="btn-save-note" class="btn-primary">💾 Lưu Ghi Chú</button>
+          <button type="button" id="btn-cancel-note" class="btn-secondary">Cancel</button>
+          <button type="button" id="btn-save-note" class="btn-primary">Save Note</button>
         </div>
       </form>
     </dialog>
@@ -953,7 +904,7 @@ https://link.com (tự động link hóa)"></textarea>
         <button
           class="btn-favorite"
           data-course-id=""
-          title="Thêm vào yêu thích"
+          title="Add to favorites"
         >
           ☆
         </button>
@@ -970,7 +921,7 @@ https://link.com (tự động link hóa)"></textarea>
           padding-bottom: 10px;
         "
       >
-        Nạp Dữ Liệu (Import JSON)
+        Import Data (JSON)
       </h2>
       <p
         style="
@@ -979,7 +930,7 @@ https://link.com (tự động link hóa)"></textarea>
           color: var(--color-text-gray);
         "
       >
-        Dán nội dung file JSON đã sao lưu vào ô bên dưới:
+        Paste the backed up JSON file content below:
       </p>
       <textarea
         id="import-area"
@@ -993,8 +944,8 @@ https://link.com (tự động link hóa)"></textarea>
         "
       ></textarea>
       <div class="modal-actions" style="margin-top: 15px">
-        <button id="btn-cancel-import" class="btn-secondary">Hủy</button>
-        <button id="btn-confirm-import" class="btn-primary">Xác Nhận</button>
+        <button id="btn-cancel-import" class="btn-secondary">Cancel</button>
+        <button id="btn-confirm-import" class="btn-primary">Confirm</button>
       </div>
     </dialog>
 
@@ -1004,35 +955,32 @@ https://link.com (tự động link hóa)"></textarea>
       </div>
       <div class="tooltip-body">
         <div class="tooltip-row">
-          <span class="tooltip-icon">#</span>
+          <span class="tooltip-label">Day:</span>
           <span id="detail-day"></span>
         </div>
         <div class="tooltip-row">
-          <span class="tooltip-icon">#</span>
+          <span class="tooltip-label">Period:</span>
           <span id="detail-period"></span>
         </div>
         <div class="tooltip-row">
-          <span class="tooltip-icon">#</span>
+          <span class="tooltip-label">Room:</span>
           <span id="detail-room"></span>
         </div>
         <div class="tooltip-row">
-          <span class="tooltip-icon">#</span>
+          <span class="tooltip-label">Instructor:</span>
           <span id="detail-teacher"></span>
         </div>
         <div class="tooltip-row">
-          <span class="tooltip-icon">#</span>
+          <span class="tooltip-label">Weeks:</span>
           <span id="detail-weeks"></span>
         </div>
         <div class="tooltip-row" id="detail-notes-row" style="display: none; flex-direction: column; align-items: flex-start;">
-          <div style="display: flex; align-items: center; margin-bottom: 4px;">
-            <span class="tooltip-icon">📝</span>
-            <strong style="font-size: 0.85rem;">Ghi chú:</strong>
-          </div>
-          <div id="detail-notes" style="font-style: italic; color: #555; font-size: 0.9rem; line-height: 1.5; word-break: break-word; padding-left: 24px;"></div>
+          <span class="tooltip-label" style="margin-bottom: 4px;">Notes:</span>
+          <div id="detail-notes" style="font-style: italic; color: var(--color-text-gray); font-size: 0.9rem; line-height: 1.5; word-break: break-word;"></div>
         </div>
       </div>
     </div>
 
-    <script type="module" src="./js/app.js"></script>
+    <script type="module" src="../src/scripts/app.js"></script>
   </body>
 </html>

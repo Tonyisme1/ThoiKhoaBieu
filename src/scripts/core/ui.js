@@ -1,6 +1,6 @@
 /**
  * UI MODULE
- * Chịu trách nhiệm thao tác DOM và Render giao diện.
+ * Responsible for DOM manipulation and UI rendering.
  */
 
 import {
@@ -14,7 +14,7 @@ import {
 // DOM Elements cache
 const gridBody = document.getElementById("timetable-grid");
 const gridHeader = document.querySelector(".grid-header");
-const weekListContainer = document.getElementById("week-list");
+const weekDropdownHeader = document.getElementById("week-dropdown-header");
 const cardTemplate = document.getElementById("course-card-template");
 const notesContainer = document.getElementById("notes-list");
 const weekCheckboxContainer = document.getElementById(
@@ -22,20 +22,20 @@ const weekCheckboxContainer = document.getElementById(
 );
 const weekRangeInput = document.getElementById("week-range");
 
-// --- 1. RENDER GRID HEADER (Thứ, Ngày) ---
+// --- 1. RENDER GRID HEADER (Day, Date) ---
 export function renderGridHeader(weekNumber) {
   if (!gridHeader) return;
 
-  gridHeader.innerHTML = ""; // Xóa header cũ
+  gridHeader.innerHTML = ""; // Clear old header
   const dates = getDatesForWeek(weekNumber);
-  const dayNames = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"];
+  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  // Cột đầu tiên (cố định)
+  // First column (fixed)
   const firstCell = document.createElement("div");
-  firstCell.innerHTML = `<span class=""></span> Tiết`;
+  firstCell.innerHTML = `<span class=""></span> Period`;
   gridHeader.appendChild(firstCell);
 
-  // Render 7 ngày trong tuần
+  // Render 7 days of the week
   dayNames.forEach((name, index) => {
     const cell = document.createElement("div");
     const isTodayCell = isToday(weekNumber, index);
@@ -47,36 +47,36 @@ export function renderGridHeader(weekNumber) {
 
     if (isTodayCell) {
       cell.classList.add("is-today");
-      cell.innerHTML += `<span class="today-badge">HÔM NAY</span>`;
+      cell.innerHTML += `<span class="today-badge">TODAY</span>`;
     }
 
     gridHeader.appendChild(cell);
   });
 }
 
-// --- 1. RENDER CẤU TRÚC LƯỚI (GRID SKELETON) ---
+// --- 1. RENDER GRID STRUCTURE (GRID SKELETON) ---
 export function initGridStructure() {
   gridBody.innerHTML = "";
 
-  // A. Render Dòng Nghỉ Trưa (The Lunch Break)
-  // CSS Grid: Đặt ở dòng 7 (sau tiết 6)
+  // A. Render Lunch Break Row
+  // CSS Grid: Position at row 7 (after period 6)
   const lunchDiv = document.createElement("div");
   lunchDiv.className = "lunch-break-row";
-  lunchDiv.innerHTML = `<span class="lunch-icon">Break</span> NGHỈ TRƯA <span class="lunch-time">12:05 - 12:35</span>`;
+  lunchDiv.innerHTML = `<span class="lunch-icon">Break</span> LUNCH BREAK <span class="lunch-time">12:05 - 12:35</span>`;
   lunchDiv.style.gridRow = "7 / 8";
   gridBody.appendChild(lunchDiv);
 
-  // B. Render 15 tiết học (Cột mốc thời gian)
+  // B. Render 15 periods (Time markers column)
   for (let i = 1; i <= 15; i++) {
     const slot = document.createElement("div");
     slot.className = "time-slot-marker";
     const time = getPeriodTime(i);
     slot.innerHTML = `
-      <span class="period-number">Tiết ${i}</span>
+      <span class="period-number">Period ${i}</span>
       <span class="period-time">${time}</span>
     `;
 
-    // Tính toán vị trí dòng: Nếu >= tiết 7 thì nhảy 1 dòng (nghỉ trưa)
+    // Calculate row position: If >= period 7, skip 1 row (lunch break)
     const rowPos = i < 7 ? i : i + 1;
 
     slot.style.gridRow = `${rowPos} / ${rowPos + 1}`;
@@ -84,90 +84,66 @@ export function initGridStructure() {
   }
 }
 
-// --- 2. RENDER TIMELINE (THANH TRƯỢT TUẦN) ---
+// --- 2. RENDER TIMELINE (WEEK DROPDOWN) ---
 export function renderWeekNavigation(totalWeeks, currentSelectedWeek) {
-  if (!weekListContainer) return;
-  weekListContainer.innerHTML = "";
+  if (!weekDropdownHeader) return;
+  weekDropdownHeader.innerHTML = "";
 
-  const fragment = document.createDocumentFragment();
-  const currentWeek = getCurrentWeek(); // Tuần hiện tại theo ngày thực
+  const currentWeek = getCurrentWeek(); // Current week based on real date
 
   for (let i = 1; i <= totalWeeks; i++) {
-    const realWeek = convertToRealWeek(i); // i=1 -> Tuần 22
-    const btn = document.createElement("button");
-    btn.className = "week-chip";
+    const realWeek = convertToRealWeek(i); // i=1 -> Week 22
+    const option = document.createElement("option");
+    option.value = realWeek;
 
-    // Đánh dấu tuần hiện tại (theo ngày thực)
+    // Mark current week (based on real date)
     if (realWeek === currentWeek) {
-      btn.classList.add("is-current");
+      option.textContent = `Week ${realWeek} (Current)`;
+    } else {
+      option.textContent = `Week ${realWeek}`;
     }
 
-    // Active tuần đang xem
+    // Set selected week
     if (realWeek === currentSelectedWeek) {
-      btn.classList.add("active");
-      // Auto scroll tới nút đang chọn
-      setTimeout(() => {
-        btn.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
-      }, 100);
+      option.selected = true;
     }
 
-    btn.textContent = `Tuần ${realWeek}`;
-    btn.dataset.week = realWeek;
-
-    fragment.appendChild(btn);
+    weekDropdownHeader.appendChild(option);
   }
-
-  weekListContainer.appendChild(fragment);
 }
 
-// Hàm cập nhật trạng thái Active trên Timeline
+// Update active state on Dropdown
 export function setActiveWeek(weekNumber) {
-  if (!weekListContainer) return;
-
-  const currentActive = weekListContainer.querySelector(".week-chip.active");
-  if (currentActive) currentActive.classList.remove("active");
-
-  const newActive = weekListContainer.querySelector(
-    `button[data-week="${weekNumber}"]`,
-  );
-  if (newActive) {
-    newActive.classList.add("active");
-    // Disable smooth scroll trên mobile
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    newActive.scrollIntoView({
-      behavior: isMobile ? "auto" : "smooth",
-      block: "nearest",
-      inline: "center",
-    });
+  if (weekDropdownHeader) {
+    weekDropdownHeader.value = weekNumber;
   }
 }
 
-// --- 3. RENDER LỊCH HỌC LÊN GRID ---
+// --- 3. RENDER SCHEDULE TO GRID ---
 export function renderSchedule(courses, selectedWeek) {
-  // Xóa các thẻ môn học cũ (giữ lại khung lưới)
+  // Remove old course cards (keep grid structure)
   const oldCards = gridBody.querySelectorAll(".course-card");
   oldCards.forEach((card) => card.remove());
 
   const fragment = document.createDocumentFragment();
 
   courses.forEach((course) => {
-    // Chỉ render nếu môn đó có học trong tuần này
+    // Only render if course is scheduled for this week
     if (!course.weeks || !course.weeks.includes(parseInt(selectedWeek))) return;
 
     const clone = cardTemplate.content.cloneNode(true);
     const card = clone.querySelector(".course-card");
 
-    // Gán ID vào dataset để Click-to-Edit
+    // Set ID to dataset for Click-to-Edit
     card.dataset.id = course.id;
     card.dataset.courseId = course.id;
 
-    // Tooltip chi tiết khi hover
-    const dayLabel = course.day === 8 ? "Chủ Nhật" : `Thứ ${course.day}`;
-    const periodLabel = `Tiết ${course.startPeriod}-${
+    // Detailed tooltip on hover
+    const dayLabel =
+      course.day === 8
+        ? "Sunday"
+        : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][course.day - 2];
+    const periodLabel = `Period ${course.startPeriod}-${
       course.startPeriod + course.periodCount - 1
     }`;
     const tooltip = document.createElement("div");
@@ -175,8 +151,8 @@ export function renderSchedule(courses, selectedWeek) {
     tooltip.innerHTML = `
       <div class="tooltip-name">${course.name}</div>
       <div class="tooltip-line">${dayLabel} • ${periodLabel}</div>
-      <div class="tooltip-line">Phòng: ${course.room || "?"}</div>
-      ${course.teacher ? `<div class="tooltip-line">GV: ${course.teacher}</div>` : ""}
+      <div class="tooltip-line">Room: ${course.room || "?"}</div>
+      ${course.teacher ? `<div class="tooltip-line">Instructor: ${course.teacher}</div>` : ""}
     `;
     card.appendChild(tooltip);
 
@@ -188,11 +164,11 @@ export function renderSchedule(courses, selectedWeek) {
 
     card.querySelector(".course-name").textContent = course.name;
 
-    // Hiển thị Phòng và Giảng viên (đơn sắc)
+    // Display Room and Instructor
     const roomP = card.querySelector(".course-room");
-    let roomText = `Phòng: ${course.room || "?"}`;
+    let roomText = `Room: ${course.room || "?"}`;
     if (course.teacher) {
-      roomText += ` · GV: ${course.teacher}`;
+      roomText += ` · Instructor: ${course.teacher}`;
     }
     roomP.textContent = roomText;
 
@@ -201,7 +177,7 @@ export function renderSchedule(courses, selectedWeek) {
     let rowStart = parseInt(course.startPeriod);
     let rowEnd = rowStart + parseInt(course.periodCount);
 
-    // Xử lý nhảy dòng nghỉ trưa
+    // Handle lunch break row skip
     if (rowStart >= 7) rowStart += 1;
     if (rowEnd > 7) rowEnd += 1;
 
@@ -239,7 +215,7 @@ export function renderSchedule(courses, selectedWeek) {
   }, 10);
 }
 
-// --- 4. RENDER GHI CHÚ & MÔN TỰ DO (Day = 0) ---
+// --- 4. RENDER NOTES & FREE COURSES (Day = 0) ---
 export function renderNotes(notes, containerId = "notes-list") {
   const notesContainer = document.getElementById(containerId);
   if (!notesContainer) return;
@@ -248,22 +224,22 @@ export function renderNotes(notes, containerId = "notes-list") {
   notes.forEach((note) => {
     const div = document.createElement("div");
     div.className = "note-card";
-    div.dataset.id = note.id; // Gán ID để Click-to-Edit
+    div.dataset.id = note.id; // Set ID for Click-to-Edit
     div.innerHTML = `
             <h4>${note.name}</h4>
-            <p><b>Tuần:</b> ${note.weekString || "Tự do"}</p>
-            <p><b>Phòng/Ghi chú:</b> ${note.room || "Không có"}</p>
+            <p><b>Week:</b> ${note.weekString || "Flexible"}</p>
+            <p><b>Room/Note:</b> ${note.room || "None"}</p>
         `;
     notesContainer.appendChild(div);
   });
 }
 
-// --- 5. RENDER BẢNG CHỌN TUẦN (CHECKBOXES TRONG MODAL) ---
+// --- 5. RENDER WEEK SELECTOR (CHECKBOXES IN MODAL) ---
 export function renderWeekSelector(activeWeeks = []) {
   if (!weekCheckboxContainer) return;
   weekCheckboxContainer.innerHTML = "";
 
-  // Cấu hình: Render từ tuần 22 đến 47
+  // Config: Render from week 22 to 47
   const START_WEEK = 22;
   const END_WEEK = 47;
 
@@ -273,38 +249,38 @@ export function renderWeekSelector(activeWeeks = []) {
     div.textContent = w;
     div.dataset.week = w;
 
-    // Nếu đang sửa và tuần này có trong data -> Active
+    // If editing and this week is in data -> Active
     if (activeWeeks.includes(w)) {
       div.classList.add("selected");
     }
 
-    // Sự kiện Click chọn/bỏ chọn
+    // Click event to select/deselect
     div.addEventListener("click", () => {
       div.classList.toggle("selected");
-      updateWeekInputDisplay(); // Cập nhật text input bên dưới
+      updateWeekInputDisplay(); // Update text input below
     });
 
     weekCheckboxContainer.appendChild(div);
   }
 
-  // Cập nhật text lần đầu
+  // Update text on first render
   updateWeekInputDisplay();
 }
 
 /**
- * Helper: Lấy danh sách tuần đang chọn từ UI và cập nhật vào Input Text
+ * Helper: Get selected weeks from UI and update Input Text
  */
 function updateWeekInputDisplay() {
   const selectedDivs = weekCheckboxContainer.querySelectorAll(
     ".week-checkbox.selected",
   );
 
-  // Convert NodeList -> Array số
+  // Convert NodeList -> Array of numbers
   const weeks = Array.from(selectedDivs).map((div) =>
     parseInt(div.dataset.week),
   );
 
-  // Hiển thị ra input (chỉ để xem)
+  // Display in input (read-only)
   if (weeks.length > 0) {
     weekRangeInput.value = weeks.join(", ");
   } else {
@@ -314,21 +290,21 @@ function updateWeekInputDisplay() {
   return weeks;
 }
 
-// Export hàm lấy dữ liệu để App Controller dùng
+// Export function to get data for App Controller
 export function getSelectedWeeksFromUI() {
   return updateWeekInputDisplay();
 }
-// --- 6. RENDER DANH SÁCH CHI TIẾT (TABLE VIEW) ---
+// --- 6. RENDER COURSE LIST TABLE (TABLE VIEW) ---
 export function renderCourseListTable(coursesToRender) {
   const tbody = document.getElementById("course-list-body");
   if (!tbody) return;
 
   tbody.innerHTML = "";
 
-  // Sắp xếp môn học: Theo Thứ (2->8) rồi đến Tiết bắt đầu
+  // Sort courses: By Day (2->8) then by Start Period
   const sortedCourses = [...coursesToRender].sort((a, b) => {
     if (a.day === b.day) return a.startPeriod - b.startPeriod;
-    // Đưa môn Tự do (day=0) xuống cuối, còn lại xếp theo thứ
+    // Move free courses (day=0) to end, others sorted by day
     if (a.day === 0) return 1;
     if (b.day === 0) return -1;
     return a.day - b.day;
@@ -336,21 +312,22 @@ export function renderCourseListTable(coursesToRender) {
 
   if (sortedCourses.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="7" style="padding:20px; color:#999;">Không tìm thấy môn học nào.</td></tr>';
+      '<tr><td colspan="7" style="padding:20px; color:#999;">No courses found.</td></tr>';
     return;
   }
 
   sortedCourses.forEach((course, index) => {
     const tr = document.createElement("tr");
 
-    // Xử lý hiển thị Thứ/Tiết
+    // Handle Day/Period display
     let scheduleText = "";
     if (course.day === 0) {
       scheduleText =
-        '<span style="color:#e74c3c; font-weight:bold;">Tự do / Ghi chú</span>';
+        '<span style="color:#e74c3c; font-weight:bold;">Flexible / Note</span>';
     } else {
-      const dayName = course.day === 8 ? "Chủ Nhật" : `Thứ ${course.day}`;
-      scheduleText = `${dayName} <br> <small>(Tiết ${course.startPeriod} - ${course.startPeriod + course.periodCount - 1})</small>`;
+      const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      const dayName = course.day === 8 ? "Sunday" : dayNames[course.day - 2];
+      scheduleText = `${dayName} <br> <small>(Period ${course.startPeriod} - ${course.startPeriod + course.periodCount - 1})</small>`;
     }
 
     tr.innerHTML = `
@@ -361,8 +338,8 @@ export function renderCourseListTable(coursesToRender) {
             <td>${course.teacher || ""}</td>
             <td><small>${course.weekString || "N/A"}</small></td>
             <td>
-              <button class="action-btn btn-edit-row" data-id="${course.id}" title="Sửa">Sửa</button>
-              <button class="action-btn btn-delete-row" data-id="${course.id}" title="Xóa">Xóa</button>
+              <button class="action-btn btn-edit-row" data-id="${course.id}" title="Edit">Edit</button>
+              <button class="action-btn btn-delete-row" data-id="${course.id}" title="Delete">Delete</button>
             </td>
         `;
 

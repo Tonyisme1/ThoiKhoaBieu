@@ -1,0 +1,248 @@
+/* Dashboard */
+/* --- DASHBOARD & ANALYTICS --- */
+
+.dashboard-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dashboard-subtitle {
+  color: var(--color-text-gray);
+  font-size: 0.95rem;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.dash-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+}
+
+.dash-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Dark mode dashboard cards */
+[data-theme="dark"] .dash-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+[data-theme="dark"] .dash-card:hover {
+  background: #253449;
+  border-color: #475569;
+}
+
+.dash-label {
+  color: var(--color-text-gray);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.dash-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  letter-spacing: -0.5px;
+}
+
+.dash-meta {
+  font-size: 0.9rem;
+  color: var(--color-text-gray);
+}
+
+.dashboard-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.chart-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Dark mode chart card */
+[data-theme="dark"] .chart-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.chart-hint {
+  color: var(--color-text-gray);
+  font-size: 0.85rem;
+}
+
+.bar-chart {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  align-items: end;
+  min-height: 160px;
+}
+
+/* Semester view: display weeks horizontally with scrolling */
+.bar-chart.semester-view {
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-surface);
+}
+
+.bar-chart.semester-view::-webkit-scrollbar {
+  height: 6px;
+}
+
+.bar-chart.semester-view::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-radius: 3px;
+}
+
+.bar-chart.semester-view::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+.bar-item {
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 90px;
+  transition: all var(--transition-fast);
+}
+
+.bar-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.bar-fill {
+  width: 65%;
+  background: var(--color-primary);
+  border-radius: 6px;
+  transition: height 0.3s ease;
+  min-height: 10px;
+  margin-bottom: 8px;
+}
+
+.bar-label {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--color-text-gray);
+}
+
+.bar-value {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  margin-bottom: 6px;
+}
+
+.holiday-mini-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.holiday-mini-list li {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-primary-soft);
+  color: var(--color-text-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.holiday-mini-list .holiday-weeks {
+  font-size: 0.85rem;
+  color: var(--color-text-gray);
+}
+
+/* Dark mode bar chart and holidays */
+[data-theme="dark"] .bar-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .bar-item:hover {
+  border-color: #60a5fa;
+  background: #253449;
+}
+
+[data-theme="dark"] .bar-value {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .bar-label {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .holiday-mini-list li {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .bar-chart.semester-view {
+  scrollbar-color: #60a5fa #1e293b;
+}
+
+[data-theme="dark"] .bar-chart.semester-view::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+[data-theme="dark"] .bar-chart.semester-view::-webkit-scrollbar-thumb {
+  background: #60a5fa;
+}
+

@@ -1,241 +1,420 @@
-# 📅 Thời Khóa Biểu - Smart Timetable Manager
+# 📚 Smart Timetable
 
-## 📖 Giới thiệu
+> A modern, comprehensive academic management system for university students. Track courses, assignments, exams, attendance, and notes - all in one beautiful application.
 
-Ứng dụng web quản lý thời khóa biểu hiện đại, đầy đủ tính năng cho sinh viên và giáo viên. Hỗ trợ đa tuần, điểm danh, ghi chú, dark mode và dashboard analytics chi tiết.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Made with Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red.svg)](https://github.com)
+[![No Build Tools](https://img.shields.io/badge/No%20Build%20Tools-Vanilla%20JS-yellow.svg)](https://github.com)
 
-## 🎯 Vấn đề được giải quyết
+## 🚀 Quick Start
 
-Quản lý lịch học trong môi trường giáo dục thường gặp nhiều khó khăn:
+### Option 1: Direct Open
 
-- Thời khóa biểu giấy dễ thất lạc, hư hỏng
-- Các app phức tạp đòi hỏi nhiều bước cài đặt
-- Khó theo dõi điểm danh và tiến độ học tập
-- Thiếu công cụ phân tích thống kê học kỳ
+1. Clone this repository
+2. Open `public/index.html` in your browser
+3. Start managing your academic life!
 
-**Giải pháp:** Một ứng dụng web đơn giản, không cần cài đặt, chạy trực tiếp trên trình duyệt với đầy đủ tính năng quản lý học tập chuyên nghiệp.
+### Option 2: Local Server (Recommended)
 
-## ✨ Tính năng chính
+```bash
+# Using npx serve
+npx serve -l 3001
 
-### 🗓️ Quản lý thời khóa biểu
-
-- **Lưới 15 tiết/ngày:** Hiển thị trực quan theo từng tuần
-- **Đa tuần linh hoạt:** Hỗ trợ cấu hình tuần bắt đầu tùy chỉnh
-- **Ghi chú môn học:** Thêm notes cho từng môn với tự động phát hiện link
-- **Color coding:** Phân biệt môn học bằng màu sắc
-- **Responsive design:** Tối ưu cho desktop, tablet và mobile
-
-### 🎨 Giao diện & Trải nghiệm
-
-- **Dark Mode:** Chuyển đổi theme mượt mà với View Transition API
-- **Tooltip chi tiết:** Hover để xem thông tin đầy đủ, có thể click link trong notes
-- **Mini Calendar:** Nhảy nhanh đến tuần bất kỳ
-- **Timeline Navigation:** Duyệt tuần bằng chips hoặc dropdown
-- **Search nhanh:** Tìm kiếm môn học theo tên/giáo viên/phòng học
-
-### 📊 Dashboard & Analytics
-
-- **Chế độ xem kép:**
-  - **Tuần hiện tại:** Thống kê chi tiết từng tuần
-  - **Toàn học kỳ:** Tổng quan toàn bộ học kỳ
-- **Thống kê tự động:**
-  - Tổng môn học & tiết học
-  - Lớp sắp tới (tìm kiếm toàn học kỳ)
-  - Tỷ lệ điểm danh
-  - Môn yêu thích
-- **Biểu đồ trực quan:**
-  - Phân bổ tiết học theo ngày/tuần
-  - Click tuần để xem chi tiết
-  - Danh sách ngày nghỉ
-
-### ✅ Điểm danh & Theo dõi
-
-- **Điểm danh chi tiết:** Đi học / Nghỉ / Đi muộn
-- **Timeline điểm danh:** Theo dõi lịch sử từng buổi học
-- **Thống kê tự động:** Tính toán chính xác theo giờ học thực tế
-- **Filter theo môn:** Lọc nhanh điểm danh theo môn học
-
-### 📝 Quản lý học tập
-
-- **Bài tập:** Thêm, sửa, xóa assignment với deadline
-- **Lịch thi:** Quản lý lịch thi cuối kỳ
-- **Ngày nghỉ:** Đánh dấu các tuần nghỉ lễ
-- **Ghi chú chung:** Notes riêng cho từng tab
-- **Yêu thích:** Đánh dấu môn quan trọng
-
-### 💾 Dữ liệu
-
-- **LocalStorage:** Lưu tự động mọi thay đổi
-- **Export/Import JSON:** Sao lưu và khôi phục dữ liệu
-- **Không cần server:** Chạy offline hoàn toàn
-
-## 🚀 Hướng dẫn sử dụng
-
-### Khởi động
-
-1. Mở file `index.html` trên trình duyệt (Chrome, Edge, Firefox)
-2. Không cần cài đặt hay server
-
-### Thêm môn học
-
-1. Click nút **"+ Thêm môn"**
-2. Điền thông tin: Tên môn, giáo viên, phòng học, thời gian
-3. Chọn tuần học (Tất cả / Chẵn / Lẻ / Tùy chọn)
-4. Chọn màu và thêm ghi chú (tùy chọn)
-5. Click **"Lưu"**
-
-### Xem thống kê
-
-1. Mở tab **"Dashboard"**
-2. Chọn chế độ xem:
-   - **Toàn học kỳ:** Xem tổng quan
-   - **Tuần hiện tại:** Xem chi tiết tuần
-3. Click vào cột tuần trong biểu đồ để xem tuần đó
-
-### Điểm danh
-
-1. Mở tab **"Điểm danh"**
-2. Click vào buổi học để đánh dấu: Đi / Nghỉ / Muộn
-3. Xem thống kê tổng hợp ở đầu trang
-
-### Tùy chỉnh
-
-- **Theme:** Click icon 🌙/☀️ ở header
-- **Tuần bắt đầu:** Vào tab Cài đặt → Chọn ngày bắt đầu
-- **Backup:** Export JSON để sao lưu
-
-## 📁 Cấu trúc dự án
-
-```
-Thoi_Khoa_Bieu-JS/
-├── index.html          # Giao diện chính
-├── README.md           # Tài liệu
-├── Lich_Hoc.json       # Dữ liệu mẫu (không sử dụng khi có LocalStorage)
-├── css/
-│   ├── main.css        # Import tổng hợp
-│   ├── variables.css   # Biến CSS & dark mode
-│   ├── layout.css      # Layout grid & responsive
-│   └── components.css  # Component styles
-└── js/
-    ├── app.js          # Logic chính & UI
-    ├── core.js         # Utils & data handling
-    └── ui.js           # UI helpers & rendering
+# Then open
+http://localhost:3001/public/index.html
 ```
 
-## 🎨 Công nghệ sử dụng
+### Demo
 
-- **HTML5** - Cấu trúc semantic
-- **CSS3** - Variables, Grid, Flexbox, Transitions
-- **JavaScript (Vanilla)** - Không dùng framework
-- **LocalStorage API** - Lưu trữ dữ liệu
-- **View Transition API** - Chuyển theme mượt mà
+🎯 [View Landing Page](public/landing.html) - Beautiful introduction to the app
 
-## 🔧 Tùy chỉnh dữ liệu
+## 📁 Project Structure
 
-### Định dạng JSON
-
-```json
-{
-  "courses": [
-    {
-      "id": 1234567890,
-      "name": "Lập trình Web",
-      "teacher": "Nguyễn Văn A",
-      "day": 2,
-      "room": "A101",
-      "startPeriod": 1,
-      "periodCount": 3,
-      "weeks": [1, 2, 3, 4],
-      "weekString": "1, 2, 3, 4",
-      "color": "#3b82f6",
-      "notes": "Link tài liệu: https://example.com"
-    }
-  ],
-  "holidays": [
-    {
-      "name": "Tết Nguyên Đán",
-      "weeks": [5, 6]
-    }
-  ],
-  "settings": {
-    "startDate": "2026-01-26",
-    "startWeek": 22,
-    "totalWeeks": 22,
-    "weekOffsetReal": 22
-  },
-  "theme": "light",
-  "attendance": {},
-  "assignments": [],
-  "exams": []
-}
+```
+📦 Smart-Timetable/
+├── 📂 public/                    # Public web assets
+│   ├── index.html               # Main application
+│   └── landing.html             # Landing page
+│
+├── 📂 src/                       # Source code
+│   ├── 📂 assets/css/           # Modular stylesheets
+│   │   ├── 📂 base/             # Foundation styles
+│   │   │   ├── variables.css    # CSS custom properties
+│   │   │   └── layout.css       # Layout & grid systems
+│   │   ├── 📂 components/       # Reusable components
+│   │   │   ├── buttons.css      # Button styles
+│   │   │   ├── cards.css        # Card components
+│   │   │   ├── forms.css        # Form elements
+│   │   │   ├── search.css       # Search functionality
+│   │   │   └── sidebar.css      # Sidebar panel
+│   │   ├── 📂 pages/            # Page-specific styles
+│   │   │   ├── dashboard.css    # Dashboard view
+│   │   │   ├── assignments.css  # Assignments page
+│   │   │   ├── exams.css        # Exams page
+│   │   │   ├── attendance.css   # Attendance tracker
+│   │   │   ├── notes.css        # Smart notes
+│   │   │   └── settings.css     # Settings page
+│   │   └── main.css             # Main CSS entry point
+│   │
+│   └── 📂 scripts/              # JavaScript modules
+│       ├── 📂 core/             # Core functionality
+│       │   ├── core.js          # Business logic
+│       │   └── ui.js            # UI rendering
+│       ├── 📂 modules/          # Feature modules
+│       │   ├── assignments.js   # Assignment management
+│       │   ├── exams.js         # Exam scheduling
+│       │   ├── attendance.js    # Attendance tracking
+│       │   ├── notes.js         # Notes core logic
+│       │   └── notes-ui.js      # Notes UI handlers
+│       └── app.js               # Main controller
+│
+├── 📂 data/                      # Data storage
+│   └── Lich_Hoc.json            # Course data
+│
+└── 📂 docs/                      # Documentation
+    └── (documentation files)
 ```
 
-### Các trường dữ liệu
+## ✨ Features
 
-#### Course
+### 📅 Smart Timetable
 
-- `id`: Unique ID (timestamp)
-- `name`: Tên môn học
-- `teacher`: Giáo viên
-- `day`: Thứ (0=Ghi chú, 1=T2, 2=T3,..., 7=CN)
-- `room`: Phòng học
-- `startPeriod`: Tiết bắt đầu (1-15)
-- `periodCount`: Số tiết
-- `weeks`: Mảng tuần học
-- `color`: Mã màu hex
-- `notes`: Ghi chú (tự động link hóa URL)
-- `isFavorite`: Đánh dấu yêu thích
+- Visual weekly schedule with color-coded courses
+- Course details on hover (room, instructor, weeks)
+- Week-by-week navigation
+- Semester and holiday management
 
-#### Settings
+### 📊 Analytics Dashboard
 
-- `startDate`: Ngày bắt đầu học kỳ (YYYY-MM-DD)
-- `startWeek`: Tuần bắt đầu
-- `totalWeeks`: Tổng số tuần học
-- `weekOffsetReal`: Offset tuần
+- Weekly workload statistics
+- Course distribution charts
+- Next class notifications
+- Attendance rates
+- Favorite courses tracking
 
-## ✅ Trạng thái dự án
+### 📝 Assignment Management
 
-- ✅ **Visual Design** - Gradients, responsive, modern UI
-- ✅ **Core Features** - CRUD môn học, multi-week support
-- ✅ **Interactions** - Search, calendar, favorites, tooltips
-- ✅ **Dashboard & Analytics** - Dual-view dashboard, charts
-- ✅ **Attendance System** - Điểm danh chi tiết với timeline
-- ✅ **Dark Mode** - Theme switching với transitions
-- ✅ **Data Management** - Export/import, localStorage
-- ✅ **Notes System** - Course notes với clickable links
-- ✅ **UI Polish** - Compact design, hover effects
+- Track homework and projects
+- Priority levels (Low, Medium, High)
+- Deadline tracking with overdue detection
+- Filter by status (Active, Completed, Overdue)
+- Course association
 
-## 🎯 Roadmap
+### 📖 Exam Scheduler
 
-### Đã hoàn thành
+- Comprehensive exam schedule
+- Exam format tracking (Written, Online, Practical)
+- Room and duration information
+- Countdown to exam dates
+- Preparation notes
 
-- [x] Thời khóa biểu đa tuần
-- [x] Dashboard analytics 2 chế độ
-- [x] Điểm danh tự động
-- [x] Dark mode
-- [x] Ghi chú môn học với link
-- [x] Tìm kiếm nhanh
-- [x] Mini calendar
-- [x] Export/Import
+### ✅ Attendance Tracker
 
-### Tính năng tiềm năng
+- Session-by-session attendance logging
+- Per-course attendance statistics
+- Overall attendance rate
+- Visual progress indicators
 
-- [ ] Thông báo lớp sắp tới (browser notification)
-- [ ] PWA support (cài đặt như app)
-- [ ] Sync multi-device (Firebase/Supabase)
-- [ ] Widget customization
-- [ ] GPA calculator
-- [ ] Study timer/Pomodoro
+### 🎓 Course Management
+
+- Full course database
+- Schedule information (day, period, room)
+- Instructor details
+- Week range selection
+- Personal notes per course
+- Color coding
+
+### 📌 Smart Notes
+
+- Rich text editor with markdown support
+- Todo list functionality
+- Tag system for organization
+- Color-coded notes
+- Pin important notes to top
+- Search and filter capabilities
+
+### ⚙️ Customizable Settings
+
+- Semester start date configuration
+- Week numbering system
+- Holiday management
+- Data import/export (JSON)
+- Theme customization
+
+### 🌙 Dark Mode
+
+- Beautiful dark theme
+- Instant theme switching
+- Persistent theme preference
+- Optimized for eye comfort
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+- **HTML5** - Semantic markup
+- **CSS3** - Modern styling with CSS Variables
+  - Modular architecture (14 CSS files)
+  - CSS Grid & Flexbox layouts
+  - Smooth transitions and animations
+- **JavaScript ES6+** - Pure vanilla JavaScript
+  - ES6 Modules for code organization
+  - No frameworks or libraries
+  - Event-driven architecture
+
+### Data & Storage
+
+- **LocalStorage** - Client-side data persistence
+- **JSON** - Data structure format
+- **Native Dialog API** - Modal management
+
+### Architecture
+
+- **Component-based** - Modular design pattern
+- **MVC-inspired** - Separation of concerns
+- **No build tools** - Direct browser execution
+- **Progressive Enhancement** - Works everywhere
+
+### Development
+
+- **No Dependencies** - Zero npm packages in production
+- **Modern Browser APIs** - Native features only
+- **Responsive Design** - Mobile-first approach
+
+## 📚 Documentation
+
+- [Project Structure](PROJECT_STRUCTURE.md) - Detailed folder organization
+- [Documentation](docs/README.md) - Full documentation
+- [Refactoring Notes](docs/REFACTORING.md) - Development history
+
+## 🎯 Development Guide
+
+### File Organization Principles
+
+#### CSS Modules
+
+```
+base/         → Foundation (variables, layout, resets)
+components/   → Reusable UI components (buttons, cards, forms)
+pages/        → Page-specific styles (dashboard, notes, etc.)
+```
+
+#### JavaScript Modules
+
+```
+core/         → Core business logic and UI rendering
+modules/      → Independent feature modules
+app.js        → Main application controller
+```
+
+### Adding a New Feature
+
+1. **Create CSS Module** (if needed)
+
+   ```css
+   /* src/assets/css/pages/my-feature.css */
+   .my-feature-container {
+     /* styles */
+   }
+   ```
+
+2. **Create JavaScript Module**
+
+   ```javascript
+   // src/scripts/modules/my-feature.js
+   export function initMyFeature() {
+     // feature logic
+   }
+   ```
+
+3. **Import in Main Files**
+
+   ```css
+   /* src/assets/css/main.css */
+   @import "pages/my-feature.css";
+   ```
+
+   ```javascript
+   // src/scripts/app.js
+   import { initMyFeature } from "./modules/my-feature.js";
+   ```
+
+4. **Initialize in App**
+   ```javascript
+   // In app.js init() function
+   initMyFeature();
+   ```
+
+### Code Style Guidelines
+
+- Use ES6+ features (modules, arrow functions, destructuring)
+- Follow modular architecture patterns
+- Keep functions small and focused
+- Use meaningful variable names
+- Comment complex logic
+- Maintain consistent formatting
+
+### CSS Best Practices
+
+- Use CSS Variables for theming
+- Follow BEM-like naming conventions
+- Keep specificity low
+- Mobile-first responsive design
+- Use modern CSS features (Grid, Flexbox)
+
+### Testing
+
+Open the app in your browser and test:
+
+- All CRUD operations work
+- Data persists after reload
+- Dark mode toggles correctly
+- Responsive design on different screen sizes
+- No console errors
+
+## 📦 Key Files
+
+| File                                | Purpose                                 |
+| ----------------------------------- | --------------------------------------- |
+| `public/index.html`                 | Main application entry point            |
+| `public/landing.html`               | Landing page for app introduction       |
+| `src/scripts/app.js`                | Application controller & initialization |
+| `src/scripts/core/core.js`          | Core business logic & data management   |
+| `src/scripts/core/ui.js`            | UI rendering & DOM manipulation         |
+| `src/assets/css/main.css`           | CSS entry point (imports all modules)   |
+| `src/assets/css/base/variables.css` | CSS custom properties & theme variables |
+| `data/Lich_Hoc.json`                | Sample course data structure            |
+
+## 🌟 Why Choose Smart Timetable?
+
+### 💯 Completely Free
+
+- 100% free and open source
+- No subscriptions or hidden costs
+- No account required
+- No data collection
+
+### 🔒 Privacy First
+
+- All data stored locally on your device
+- No servers, no tracking
+- Complete control over your information
+- Works completely offline after initial load
+
+### ⚡ Lightning Fast
+
+- No build process or bundling
+- Instant page loads
+- Smooth transitions
+- Optimized performance
+
+### 🎨 Beautiful Design
+
+- Modern, clean interface
+- Intuitive user experience
+- Consistent design language
+- Attention to detail
+
+### 🔧 Easy to Customize
+
+- Modular architecture
+- Well-commented code
+- Easy to extend
+- Clear separation of concerns
+
+### 📱 Cross-Platform
+
+- Works on desktop, tablet, and mobile
+- Responsive design
+- Touch-friendly interface
+- Progressive web app ready
+
+### 🚀 Developer Friendly
+
+- Clean, organized codebase
+- No complex build tools
+- Easy to understand
+- Great for learning
+
+## � Documentation
+
+- **Landing Page**: [public/landing.html](public/landing.html) - Visual introduction
+- **Project Structure**: Well-organized modular architecture
+- **Code Comments**: Comprehensive inline documentation
+- **This README**: Complete usage and development guide
+
+## 🤝 Contributing
+
+This is a personal educational project, but suggestions and feedback are welcome!
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+### Areas for Improvement
+
+- [ ] Add more chart types to dashboard
+- [ ] Implement data export to PDF
+- [ ] Add calendar view for assignments
+- [ ] Enhance note editor with rich formatting
+- [ ] Course scheduling conflicts detection
+- [ ] Study timer/pomodoro integration
+- [ ] Grade calculator module
+- [ ] PWA (Progressive Web App) support
+
+## 🐛 Known Issues
+
+Currently no known critical issues. If you find a bug, please open an issue!
 
 ## 📄 License
 
-MIT License - Tự do sử dụng và chỉnh sửa
+MIT License - Free to use for learning and personal projects.
 
-## 👤 Tác giả
+## 👤 Author
 
-Dự án cá nhân - Smart Timetable Manager
+Created with ❤️ by a student, for students.
+
+## 🙏 Acknowledgments
+
+- Built with vanilla JavaScript - proving frameworks aren't always necessary
+- Inspired by the need for simple, effective academic management
+- Thanks to the developer community for best practices and patterns
 
 ---
 
-**Phiên bản:** 2.0  
-**Cập nhật:** 2026-01-29
+## 💡 Tips & Tricks
+
+### Data Management
+
+- 💾 **Backup regularly**: Settings → Export JSON
+- 📤 **Transfer data**: Import JSON on new devices
+- 🔄 **Reset if needed**: Clear all data from Settings
+
+### Efficient Usage
+
+- ⌨️ **Quick navigation**: Use tab navigation between sections
+- 📌 **Pin notes**: Keep important information at the top
+- 🎯 **Set priorities**: Focus on high-priority assignments
+- 🎨 **Color code**: Use colors to organize visually
+- 🌙 **Dark mode**: Better for late-night study sessions
+
+### Customization
+
+- 📅 **Semester setup**: Configure dates in Settings
+- 🎊 **Holiday tracking**: Add breaks to your calendar
+- 🎨 **Course colors**: Customize for better visual distinction
+- 📝 **Note tags**: Organize notes with hashtags
+
+---
+
+**⭐ If you find this useful, give it a star on GitHub!**
+
+**📧 Questions or feedback?** Open an issue or contribute!
+
+---
+
+**Made with ❤️ for students | Smart Timetable © 2026**
