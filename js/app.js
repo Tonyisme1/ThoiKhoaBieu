@@ -1,6 +1,6 @@
-/**
+﻿/**
  * MAIN CONTROLLER
- * Điều phối luồng dữ liệu và sự kiện.
+ * Äiá»u phá»‘i luá»“ng dá»¯ liá»‡u vĂ  sá»± kiá»‡n.
  */
 
 import {
@@ -21,6 +21,7 @@ import {
   getSelectedWeeksFromUI,
   renderCourseListTable,
 } from "./ui.js";
+import { initNotesUI } from "./notes-ui.js";
 
 // --- STATE ---
 let appData = {
@@ -38,8 +39,8 @@ let appData = {
   theme: "light", // Add theme property
   generalNotes: "", // New property for general notes
 };
-let currentViewWeek = appData.settings.startWeek; // Tuần mặc định
-const TOTAL_WEEKS_RENDER = 26; // Render từ tuần 22 -> 47
+let currentViewWeek = appData.settings.startWeek; // Tuáº§n máº·c Ä‘á»‹nh
+const TOTAL_WEEKS_RENDER = 26; // Render tá»« tuáº§n 22 -> 47
 
 // --- DOM ELEMENTS ---
 const inputSidebar = document.getElementById("input-sidebar");
@@ -54,17 +55,17 @@ const btnDelete = document.getElementById("btn-delete");
 const btnSaveSettings = document.getElementById("btn-save-settings");
 const notesTextarea = document.getElementById("general-notes-textarea"); // New
 
-// --- 1. INIT (KHỞI TẠO) ---
+// --- 1. INIT (KHá»I Táº O) ---
 function init() {
   // Load Data
   const stored = localStorage.getItem("smartTimetableData");
   if (stored) {
     try {
       const parsedData = JSON.parse(stored);
-      // Merge: Giữ lại data cũ và thêm settings nếu có
+      // Merge: Giá»¯ láº¡i data cÅ© vĂ  thĂªm settings náº¿u cĂ³
       appData = { ...appData, ...parsedData };
 
-      // Patch logic: Nếu data cũ chưa có các key mới thì thêm vào
+      // Patch logic: Náº¿u data cÅ© chÆ°a cĂ³ cĂ¡c key má»›i thĂ¬ thĂªm vĂ o
       if (!appData.holidays) appData.holidays = [];
       if (!appData.assignments) appData.assignments = [];
       if (!appData.exams) appData.exams = [];
@@ -95,7 +96,7 @@ function init() {
 
   // Apply initial settings
   setSystemConfig(appData.settings.startDate, appData.settings.startWeek);
-  currentViewWeek = appData.settings.startWeek; // Cập nhật tuần hiện tại theo config
+  currentViewWeek = appData.settings.startWeek; // Cáº­p nháº­t tuáº§n hiá»‡n táº¡i theo config
 
   // Load initial notes
   if (notesTextarea) {
@@ -112,13 +113,12 @@ function init() {
   renderAssignments();
   renderExams();
   renderAttendance();
-  renderSmartNotes();
+  initNotesUI(appData, saveData);
 
   // Setup Events
   setupEventListeners();
-  setupNotesListeners();
 
-  // Setup tooltip hover behavior để giữ tooltip khi hover vào nó
+  // Setup tooltip hover behavior Ä‘á»ƒ giá»¯ tooltip khi hover vĂ o nĂ³
   const tooltip = document.getElementById("course-detail-tooltip");
   if (tooltip) {
     tooltip.addEventListener("mouseenter", cancelCloseDetail);
@@ -127,7 +127,7 @@ function init() {
 }
 
 /**
- * Gắn sự kiện cho card/bảng
+ * Gáº¯n sá»± kiá»‡n cho card/báº£ng
  */
 let detailModalTimeout = null;
 
@@ -184,7 +184,7 @@ function attachEditEvents() {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const id = parseFloat(btn.dataset.id);
-      if (confirm("Bạn chắc chắn muốn xóa môn này vĩnh viễn?")) {
+      if (confirm("Báº¡n cháº¯c cháº¯n muá»‘n xĂ³a mĂ´n nĂ y vÄ©nh viá»…n?")) {
         appData.courses = appData.courses.filter((c) => c.id !== id);
         saveAndRender();
       }
@@ -193,10 +193,10 @@ function attachEditEvents() {
 }
 
 /**
- * Render lại toàn bộ màn hình (Grid + Notes + Holiday Banner)
+ * Render láº¡i toĂ n bá»™ mĂ n hĂ¬nh (Grid + Notes + Holiday Banner)
  */
 function renderAllViews() {
-  // 1. Tách môn học vs Ghi chú
+  // 1. TĂ¡ch mĂ´n há»c vs Ghi chĂº
   const timedCourses = appData.courses.filter((c) => c.day !== 0);
   const noteCourses = appData.courses.filter((c) => c.day === 0);
 
@@ -206,13 +206,13 @@ function renderAllViews() {
   renderNotes(noteCourses);
   renderNotes(noteCourses, "notes-list-2"); // Render notes for notes tab
   renderCourseListTable(appData.courses);
-  // 3. Logic hiển thị thông báo ngày nghỉ
+  // 3. Logic hiá»ƒn thá»‹ thĂ´ng bĂ¡o ngĂ y nghá»‰
   checkAndDisplayHoliday(currentViewWeek);
 
   // 4. Update breadcrumb
   updateBreadcrumb(currentViewWeek);
 
-  // 5. Gắn sự kiện Click-to-Edit
+  // 5. Gáº¯n sá»± kiá»‡n Click-to-Edit
   attachEditEvents();
 
   // 6. Update favorite button states
@@ -221,33 +221,33 @@ function renderAllViews() {
   // 7. Render dashboard analytics
   renderDashboard(currentViewWeek);
 
-  // 8. Đồng bộ dropdown tuần
+  // 8. Äá»“ng bá»™ dropdown tuáº§n
   updateWeekDropdown(currentViewWeek);
   syncWeekDropdowns();
 }
 /**
- * Helper: Chuyển ngày từ VN (26/01/2026) sang Input (2026-01-26)
+ * Helper: Chuyá»ƒn ngĂ y tá»« VN (26/01/2026) sang Input (2026-01-26)
  */
 function convertDateToISO(dateStr) {
   if (!dateStr) return "";
-  // Nếu đã là dạng yyyy-mm-dd thì giữ nguyên
+  // Náº¿u Ä‘Ă£ lĂ  dáº¡ng yyyy-mm-dd thĂ¬ giá»¯ nguyĂªn
   if (dateStr.includes("-")) return dateStr;
 
-  // Nếu là dạng dd/mm/yyyy
+  // Náº¿u lĂ  dáº¡ng dd/mm/yyyy
   const parts = dateStr.split("/");
   if (parts.length === 3) {
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
   return "";
 }
-// --- 2. LOGIC NGÀY NGHỈ (HOLIDAY) ---
+// --- 2. LOGIC NGĂ€Y NGHá»ˆ (HOLIDAY) ---
 function checkAndDisplayHoliday(week) {
   if (!appData.holidays) return;
   const activeHolidays = appData.holidays.filter((h) => h.weeks.includes(week));
 
   if (activeHolidays.length > 0) {
     const names = activeHolidays.map((h) => h.name).join(" & ");
-    holidayBanner.textContent = `Lịch nghỉ: ${names}`;
+    holidayBanner.textContent = `Lá»‹ch nghá»‰: ${names}`;
     holidayBanner.style.display = "block";
   } else {
     holidayBanner.textContent = "";
@@ -261,7 +261,7 @@ function renderHolidayList() {
 
   if (appData.holidays.length === 0) {
     list.innerHTML =
-      '<li style="padding:10px; color:#999;">Chưa có dữ liệu.</li>';
+      '<li style="padding:10px; color:#999;">ChÆ°a cĂ³ dá»¯ liá»‡u.</li>';
     return;
   }
 
@@ -269,17 +269,17 @@ function renderHolidayList() {
     const li = document.createElement("li");
     li.className = "holiday-item";
     li.innerHTML = `
-            <div><strong>${h.name}</strong> <small>(${h.weeks.length} tuần)</small></div>
-            <button class="btn-remove-holiday" data-index="${index}">❌</button>
+            <div><strong>${h.name}</strong> <small>(${h.weeks.length} tuáº§n)</small></div>
+            <button class="btn-remove-holiday" data-index="${index}">âŒ</button>
         `;
     list.appendChild(li);
   });
 
-  // Gắn sự kiện xóa
+  // Gáº¯n sá»± kiá»‡n xĂ³a
   list.querySelectorAll(".btn-remove-holiday").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const idx = parseInt(e.target.dataset.index);
-      if (confirm("Xóa ngày nghỉ này?")) {
+      if (confirm("XĂ³a ngĂ y nghá»‰ nĂ y?")) {
         appData.holidays.splice(idx, 1);
         saveAndRender();
         renderHolidayList();
@@ -294,7 +294,7 @@ function renderHolidayList() {
 function updateBreadcrumb(week) {
   const weekNum = week;
 
-  // Dải ngày của tuần
+  // Dáº£i ngĂ y cá»§a tuáº§n
   const weekDates = getDatesForWeek(week);
   const rangeStr =
     weekDates && weekDates.length
@@ -304,7 +304,7 @@ function updateBreadcrumb(week) {
   const summaryWeek = document.getElementById("summary-week");
   const summaryRange = document.getElementById("summary-range");
 
-  if (summaryWeek) summaryWeek.textContent = `Tuần ${weekNum}`;
+  if (summaryWeek) summaryWeek.textContent = `Tuáº§n ${weekNum}`;
   if (summaryRange) summaryRange.textContent = rangeStr;
 }
 
@@ -324,7 +324,7 @@ function populateWeekDropdown(totalWeeks) {
     for (let w = start; w <= start + totalWeeks; w++) {
       const opt = document.createElement("option");
       opt.value = w;
-      opt.textContent = `Tuần ${w}`;
+      opt.textContent = `Tuáº§n ${w}`;
       dropdown.appendChild(opt);
     }
   });
@@ -343,7 +343,7 @@ function updateWeekDropdown(week) {
 }
 
 /**
- * Tính toán thống kê dashboard cho tuần hiện tại
+ * TĂ­nh toĂ¡n thá»‘ng kĂª dashboard cho tuáº§n hiá»‡n táº¡i
  */
 function getDashboardStats(week) {
   const coursesThisWeek = appData.courses.filter(
@@ -355,18 +355,18 @@ function getDashboardStats(week) {
     (sum, c) => sum + Number(c.periodCount || 0),
     0,
   );
-  const hours = Math.round((totalPeriods * 50) / 60); // giả định 50 phút/tiết
+  const hours = Math.round((totalPeriods * 50) / 60); // giáº£ Ä‘á»‹nh 50 phĂºt/tiáº¿t
 
   const favoritesCount = appData.favorites ? appData.favorites.length : 0;
 
-  // Ngày nghỉ trong settings
+  // NgĂ y nghá»‰ trong settings
   const holidays = appData.holidays || [];
   const holidayWeeks = new Set();
   holidays.forEach((holiday) => {
     holiday.weeks.forEach((w) => holidayWeeks.add(w));
   });
 
-  // Lớp sắp tới - TÌM TRONG TẤT CẢ CÁC TUẦN
+  // Lá»›p sáº¯p tá»›i - TĂŒM TRONG Táº¤T Cáº¢ CĂC TUáº¦N
   const now = new Date();
   const currentWeek = getRealWeekFromDate(now);
 
@@ -386,7 +386,7 @@ function getDashboardStats(week) {
       if (sessionDateISO) {
         const sessionDate = new Date(sessionDateISO + "T00:00:00");
 
-        // Tính giờ bắt đầu buổi học
+        // TĂ­nh giá» báº¯t Ä‘áº§u buá»•i há»c
         const startTime = getPeriodTime(course.startPeriod);
         if (startTime) {
           const [hours, minutes] = startTime
@@ -396,7 +396,7 @@ function getDashboardStats(week) {
           const sessionStartDateTime = new Date(sessionDate);
           sessionStartDateTime.setHours(hours, minutes, 0, 0);
 
-          // Chỉ lấy lớp chưa bắt đầu
+          // Chá»‰ láº¥y lá»›p chÆ°a báº¯t Ä‘áº§u
           if (sessionStartDateTime > now) {
             const timeDiff = sessionStartDateTime - now;
             if (timeDiff < minTimeDiff) {
@@ -414,13 +414,14 @@ function getDashboardStats(week) {
     });
   });
 
-  let nextTitle = "—";
-  let nextMeta = "Chưa có lịch";
+  let nextTitle = "â€”";
+  let nextMeta = "ChÆ°a cĂ³ lá»‹ch";
 
   if (upcomingClass) {
     const sessionDate = upcomingClass.sessionDate;
     const dayOfWeek = sessionDate.getDay();
-    const dayLabel = dayOfWeek === 0 ? "Chủ Nhật" : `Thứ ${dayOfWeek + 1}`;
+    const dayLabel =
+      dayOfWeek === 0 ? "Chá»§ Nháº­t" : `Thá»© ${dayOfWeek + 1}`;
 
     // Format date
     const day = sessionDate.getDate();
@@ -433,19 +434,19 @@ function getDashboardStats(week) {
 
     let timeInfo = "";
     if (daysUntil > 0) {
-      timeInfo = `${daysUntil} ngày nữa`;
+      timeInfo = `${daysUntil} ngĂ y ná»¯a`;
     } else if (hoursUntil > 0) {
-      timeInfo = `${hoursUntil} giờ nữa`;
+      timeInfo = `${hoursUntil} giá» ná»¯a`;
     } else {
       const minutesUntil = Math.floor(minTimeDiff / (1000 * 60));
-      timeInfo = `${minutesUntil} phút nữa`;
+      timeInfo = `${minutesUntil} phĂºt ná»¯a`;
     }
 
     nextTitle = upcomingClass.name;
-    nextMeta = `${dayLabel} ${dateStr}, Tiết ${upcomingClass.startPeriod} - ${upcomingClass.room || "?"} • ${timeInfo}`;
+    nextMeta = `${dayLabel} ${dateStr}, Tiáº¿t ${upcomingClass.startPeriod} - ${upcomingClass.room || "?"} â€¢ ${timeInfo}`;
   }
 
-  // Tải tuần theo ngày (để vẽ bar chart)
+  // Táº£i tuáº§n theo ngĂ y (Ä‘á»ƒ váº½ bar chart)
   const normalizeDay = (d) => {
     const n = parseInt(d);
     if (isNaN(n)) return 0;
@@ -456,7 +457,7 @@ function getDashboardStats(week) {
   };
 
   const loadByDay = Array(7).fill(0);
-  const dayIndex = { 2: 0, 3: 1, 4: 2, 5: 3, 6: 4, 7: 5, 8: 6 }; // Thứ 2..CN
+  const dayIndex = { 2: 0, 3: 1, 4: 2, 5: 3, 6: 4, 7: 5, 8: 6 }; // Thá»© 2..CN
   coursesThisWeek.forEach((c) => {
     const idx = dayIndex[normalizeDay(c.day)] ?? 0;
     loadByDay[idx] += Number(c.periodCount || 0);
@@ -484,15 +485,15 @@ function getSemesterStats() {
   const allCourses = appData.courses;
   const weeklyData = [];
 
-  // Sử dụng constant TOTAL_WEEKS_RENDER và startWeek từ settings
+  // Sá»­ dá»¥ng constant TOTAL_WEEKS_RENDER vĂ  startWeek tá»« settings
   const totalWeeks = TOTAL_WEEKS_RENDER;
   const startWeek = appData.settings.startWeek || 22;
 
-  // Tính tổng tiết theo lịch thực tế (periodCount × số tuần)
+  // TĂ­nh tá»•ng tiáº¿t theo lá»‹ch thá»±c táº¿ (periodCount Ă— sá»‘ tuáº§n)
   let totalPeriods = 0;
   allCourses.forEach((course) => {
     if (course.day !== 0 && course.weeks && Array.isArray(course.weeks)) {
-      // Số tiết mỗi buổi × số tuần có lịch
+      // Sá»‘ tiáº¿t má»—i buá»•i Ă— sá»‘ tuáº§n cĂ³ lá»‹ch
       const periodsPerSession = course.periodCount || 0;
       totalPeriods += periodsPerSession * course.weeks.length;
     }
@@ -512,17 +513,17 @@ function getSemesterStats() {
   }
 
   const hours = Math.round(totalPeriods * 1.67);
-  // Đếm tất cả môn trong danh sách (không phân biệt tuần)
+  // Äáº¿m táº¥t cáº£ mĂ´n trong danh sĂ¡ch (khĂ´ng phĂ¢n biá»‡t tuáº§n)
   const totalCourses = allCourses.length;
   const favoritesCount = allCourses.filter((c) => c.isFavorite).length;
   const attendanceStats = calculateTotalAttendanceStats();
 
-  // Tính tổng buổi học theo lịch (không phải buổi đã điểm danh)
+  // TĂ­nh tá»•ng buá»•i há»c theo lá»‹ch (khĂ´ng pháº£i buá»•i Ä‘Ă£ Ä‘iá»ƒm danh)
   let totalScheduledSessions = 0;
   allCourses.forEach((course) => {
-    // Chỉ đếm môn có thời gian (không phải ghi chú)
+    // Chá»‰ Ä‘áº¿m mĂ´n cĂ³ thá»i gian (khĂ´ng pháº£i ghi chĂº)
     if (course.day !== 0 && course.weeks && Array.isArray(course.weeks)) {
-      // Mỗi môn có 1 buổi/tuần, nhân với số tuần có lịch
+      // Má»—i mĂ´n cĂ³ 1 buá»•i/tuáº§n, nhĂ¢n vá»›i sá»‘ tuáº§n cĂ³ lá»‹ch
       totalScheduledSessions += course.weeks.length;
     }
   });
@@ -564,29 +565,31 @@ function renderWeekDashboard(week) {
   const chartTitle = document.getElementById("chart-title-load");
   const chartHint = document.getElementById("chart-hint-load");
 
-  if (elLabelCourses) elLabelCourses.textContent = "Môn trong tuần";
-  if (elMetaCourses) elMetaCourses.textContent = "Tất cả môn có lịch tuần này";
-  if (chartTitle) chartTitle.textContent = "Biểu đồ tải tuần";
-  if (chartHint) chartHint.textContent = "Số tiết theo ngày";
+  if (elLabelCourses) elLabelCourses.textContent = "MĂ´n trong tuáº§n";
+  if (elMetaCourses)
+    elMetaCourses.textContent = "Táº¥t cáº£ mĂ´n cĂ³ lá»‹ch tuáº§n nĂ y";
+  if (chartTitle) chartTitle.textContent = "Biá»ƒu Ä‘á»“ táº£i tuáº§n";
+  if (chartHint) chartHint.textContent = "Sá»‘ tiáº¿t theo ngĂ y";
 
   if (elCourses) elCourses.textContent = stats.totalCourses;
   if (elPeriods) elPeriods.textContent = stats.totalPeriods;
-  if (elHours) elHours.textContent = `≈ ${stats.hours} giờ`;
+  if (elHours) elHours.textContent = `â‰ˆ ${stats.hours} giá»`;
   if (elFav) elFav.textContent = stats.favoritesCount;
   if (elNextTitle) elNextTitle.textContent = stats.nextTitle;
   if (elNextMeta) elNextMeta.textContent = stats.nextMeta;
 
-  // Hiển thị lại card "Lớp sắp tới" trong chế độ tuần
+  // Hiá»ƒn thá»‹ láº¡i card "Lá»›p sáº¯p tá»›i" trong cháº¿ Ä‘á»™ tuáº§n
   const cardNextClass = document.getElementById("card-next-class");
   if (cardNextClass) cardNextClass.style.display = "";
 
-  // Khôi phục label attendance cho chế độ tuần
+  // KhĂ´i phá»¥c label attendance cho cháº¿ Ä‘á»™ tuáº§n
   const cardAttendance = document.getElementById("card-attendance");
   const elAttendanceLabel = cardAttendance?.querySelector(".dash-label");
   const elAttendanceMeta = cardAttendance?.querySelector(".dash-meta");
 
-  if (elAttendanceLabel) elAttendanceLabel.textContent = "Điểm danh";
-  if (elAttendanceMeta) elAttendanceMeta.textContent = "Đã đi / Tổng buổi";
+  if (elAttendanceLabel) elAttendanceLabel.textContent = "Äiá»ƒm danh";
+  if (elAttendanceMeta)
+    elAttendanceMeta.textContent = "ÄĂ£ Ä‘i / Tá»•ng buá»•i";
 
   // Attendance stats
   if (elAttendance) {
@@ -630,13 +633,13 @@ function renderWeekDashboard(week) {
     holidayList.innerHTML = "";
     if (!stats.holidays.length) {
       holidayList.innerHTML =
-        '<li style="padding:10px; color: var(--color-text-gray);">Không có lịch nghỉ</li>';
+        '<li style="padding:10px; color: var(--color-text-gray);">KhĂ´ng cĂ³ lá»‹ch nghá»‰</li>';
     } else {
       stats.holidays.forEach((h) => {
         const li = document.createElement("li");
         li.innerHTML = `
           <span>${h.name}</span>
-          <span class="holiday-weeks">Tuần: ${h.weeks.join(", ")}</span>
+          <span class="holiday-weeks">Tuáº§n: ${h.weeks.join(", ")}</span>
         `;
         holidayList.appendChild(li);
       });
@@ -659,27 +662,29 @@ function renderSemesterDashboard() {
   const chartTitle = document.getElementById("chart-title-load");
   const chartHint = document.getElementById("chart-hint-load");
 
-  if (elLabelCourses) elLabelCourses.textContent = "Tổng môn học";
-  if (elMetaCourses) elMetaCourses.textContent = "Tất cả môn trong danh sách";
-  if (chartTitle) chartTitle.textContent = "Phân bổ theo tuần";
-  if (chartHint) chartHint.textContent = "Số tiết mỗi tuần";
+  if (elLabelCourses) elLabelCourses.textContent = "Tá»•ng mĂ´n há»c";
+  if (elMetaCourses)
+    elMetaCourses.textContent = "Táº¥t cáº£ mĂ´n trong danh sĂ¡ch";
+  if (chartTitle) chartTitle.textContent = "PhĂ¢n bá»• theo tuáº§n";
+  if (chartHint) chartHint.textContent = "Sá»‘ tiáº¿t má»—i tuáº§n";
 
   if (elCourses) elCourses.textContent = stats.totalCourses;
   if (elPeriods) elPeriods.textContent = stats.totalPeriods;
-  if (elHours) elHours.textContent = `≈ ${stats.hours} giờ`;
+  if (elHours) elHours.textContent = `â‰ˆ ${stats.hours} giá»`;
   if (elFav) elFav.textContent = stats.favoritesCount;
 
-  // Ẩn card "Lớp sắp tới" trong chế độ toàn học kỳ
+  // áº¨n card "Lá»›p sáº¯p tá»›i" trong cháº¿ Ä‘á»™ toĂ n há»c ká»³
   const cardNextClass = document.getElementById("card-next-class");
   if (cardNextClass) cardNextClass.style.display = "none";
 
-  // Hiển thị tổng buổi học theo lịch thay vì buổi đã điểm danh
+  // Hiá»ƒn thá»‹ tá»•ng buá»•i há»c theo lá»‹ch thay vĂ¬ buá»•i Ä‘Ă£ Ä‘iá»ƒm danh
   const cardAttendance = document.getElementById("card-attendance");
   const elAttendanceLabel = cardAttendance?.querySelector(".dash-label");
   const elAttendanceMeta = cardAttendance?.querySelector(".dash-meta");
 
-  if (elAttendanceLabel) elAttendanceLabel.textContent = "Tổng buổi học";
-  if (elAttendanceMeta) elAttendanceMeta.textContent = "Theo lịch toàn học kỳ";
+  if (elAttendanceLabel) elAttendanceLabel.textContent = "Tá»•ng buá»•i há»c";
+  if (elAttendanceMeta)
+    elAttendanceMeta.textContent = "Theo lá»‹ch toĂ n há»c ká»³";
   if (elAttendance) {
     elAttendance.textContent = stats.totalScheduledSessions;
   }
@@ -696,7 +701,7 @@ function renderSemesterDashboard() {
       const item = document.createElement("div");
       item.className = "bar-item";
       item.style.cursor = "pointer";
-      item.title = `Tuần ${weekData.week}: ${weekData.periods} tiết`;
+      item.title = `Tuáº§n ${weekData.week}: ${weekData.periods} tiáº¿t`;
 
       const fill = document.createElement("div");
       fill.className = "bar-fill";
@@ -708,7 +713,7 @@ function renderSemesterDashboard() {
 
       const label = document.createElement("div");
       label.className = "bar-label";
-      // Hiển thị số tuần thực luôn
+      // Hiá»ƒn thá»‹ sá»‘ tuáº§n thá»±c luĂ´n
       label.textContent = `T${weekData.week}`;
 
       item.appendChild(fill);
@@ -735,13 +740,13 @@ function renderSemesterDashboard() {
     const allHolidays = appData.holidays || [];
     if (!allHolidays.length) {
       holidayList.innerHTML =
-        '<li style="padding:10px; color: var(--color-text-gray);">Không có lịch nghỉ</li>';
+        '<li style="padding:10px; color: var(--color-text-gray);">KhĂ´ng cĂ³ lá»‹ch nghá»‰</li>';
     } else {
       allHolidays.forEach((h) => {
         const li = document.createElement("li");
         li.innerHTML = `
           <span>${h.name}</span>
-          <span class="holiday-weeks">Tuần: ${h.weeks.join(", ")}</span>
+          <span class="holiday-weeks">Tuáº§n: ${h.weeks.join(", ")}</span>
         `;
         holidayList.appendChild(li);
       });
@@ -767,7 +772,7 @@ function renderCalendar(date) {
   if (!calendarGrid) return;
 
   calendarGrid.innerHTML = "";
-  monthYear.textContent = `Tháng ${month + 1}, ${year}`;
+  monthYear.textContent = `ThĂ¡ng ${month + 1}, ${year}`;
 
   let currentDate = new Date(startDate);
   const today = new Date();
@@ -861,7 +866,7 @@ function performSearch(query) {
   });
 
   if (results.length === 0) {
-    searchResults.innerHTML = `<div class="search-result-item" style="cursor: default;">Không tìm thấy kết quả</div>`;
+    searchResults.innerHTML = `<div class="search-result-item" style="cursor: default;">KhĂ´ng tĂ¬m tháº¥y káº¿t quáº£</div>`;
     searchResults.style.display = "block";
     return;
   }
@@ -873,9 +878,9 @@ function performSearch(query) {
     <div class="search-result-item" data-course-id="${course.id}">
       <div>
         <div class="search-result-name">${course.name}</div>
-        <div class="search-result-meta">GV: ${course.teacher} | Phòng: ${course.room}</div>
+        <div class="search-result-meta">GV: ${course.teacher} | PhĂ²ng: ${course.room}</div>
       </div>
-      <div class="search-result-badge">Tuần ${course.weeks[0] || "?"}</div>
+      <div class="search-result-badge">Tuáº§n ${course.weeks[0] || "?"}</div>
     </div>
   `,
     )
@@ -929,10 +934,10 @@ function updateFavoriteButtons() {
     const courseId = parseInt(btn.dataset.courseId);
     if (appData.favorites.includes(courseId)) {
       btn.classList.add("active");
-      btn.textContent = "★";
+      btn.textContent = "â˜…";
     } else {
       btn.classList.remove("active");
-      btn.textContent = "☆";
+      btn.textContent = "â˜†";
     }
   });
 }
@@ -949,17 +954,17 @@ function closeSidebar() {
 function openSidebarToAdd() {
   inputSidebar.querySelector("form").reset();
   editIdInput.value = "";
-  modalTitle.textContent = "Thêm Môn Học Mới";
-  btnSave.textContent = "Lưu Môn Học";
+  modalTitle.textContent = "ThĂªm MĂ´n Há»c Má»›i";
+  btnSave.textContent = "LÆ°u MĂ´n Há»c";
   btnDelete.style.display = "none";
 
-  // Render bảng chọn tuần trống
+  // Render báº£ng chá»n tuáº§n trá»‘ng
   renderWeekSelector([]);
   openSidebar();
 }
 
 function openSidebarToEdit(course) {
-  // 1. Điền các thông tin cơ bản
+  // 1. Äiá»n cĂ¡c thĂ´ng tin cÆ¡ báº£n
   document.getElementById("subject-name").value = course.name;
   document.getElementById("day-select").value = course.day;
   document.getElementById("room-name").value = course.room || "";
@@ -969,11 +974,11 @@ function openSidebarToEdit(course) {
   document.getElementById("week-range").value = course.weekString || "";
   document.getElementById("course-color").value = course.color || "#3b82f6"; // Load color
 
-  // Load notes nếu có
+  // Load notes náº¿u cĂ³
   const notesTextarea = document.getElementById("course-notes");
   if (notesTextarea) notesTextarea.value = course.notes || "";
 
-  // 2. XỬ LÝ NGÀY THÁNG
+  // 2. Xá»¬ LĂ NGĂ€Y THĂNG
   const startDateInput = document.getElementById("start-date-picker");
   const endDateInput = document.getElementById("end-date-picker");
 
@@ -990,11 +995,11 @@ function openSidebarToEdit(course) {
 
   // 3. Setup Edit Mode
   editIdInput.value = course.id;
-  modalTitle.textContent = "Sửa Môn Học";
-  btnSave.textContent = "Cập Nhật";
+  modalTitle.textContent = "Sá»­a MĂ´n Há»c";
+  btnSave.textContent = "Cáº­p Nháº­t";
   btnDelete.style.display = "block";
 
-  // 4. Render bảng tuần
+  // 4. Render báº£ng tuáº§n
   renderWeekSelector(course.weeks);
 
   openSidebar();
@@ -1007,14 +1012,14 @@ function showCourseDetails(course, targetElement) {
 
   const dayLabel =
     course.day === 0
-      ? "Tự do / Ghi chú"
+      ? "Tá»± do / Ghi chĂº"
       : course.day === 8
-        ? "Chủ Nhật"
-        : `Thứ ${course.day}`;
+        ? "Chá»§ Nháº­t"
+        : `Thá»© ${course.day}`;
   const periodLabel =
     course.day === 0
       ? ""
-      : `Tiết ${course.startPeriod}-${
+      : `Tiáº¿t ${course.startPeriod}-${
           course.startPeriod + course.periodCount - 1
         }`;
   const room = course.room || "?";
@@ -1023,7 +1028,7 @@ function showCourseDetails(course, targetElement) {
     course.weekString ||
     (course.weeks && course.weeks.length
       ? course.weeks.join(", ")
-      : "Không có");
+      : "KhĂ´ng cĂ³");
 
   const setText = (id, value) => {
     const el = document.getElementById(id);
@@ -1037,7 +1042,7 @@ function showCourseDetails(course, targetElement) {
   setText("detail-teacher", teacher);
   setText("detail-weeks", weeks);
 
-  // Hiển thị notes nếu có - chuyển links thành clickable
+  // Hiá»ƒn thá»‹ notes náº¿u cĂ³ - chuyá»ƒn links thĂ nh clickable
   const notesRow = document.getElementById("detail-notes-row");
   const notesEl = document.getElementById("detail-notes");
   if (course.notes && course.notes.trim()) {
@@ -1105,7 +1110,7 @@ function saveData() {
   localStorage.setItem("smartTimetableData", JSON.stringify(appData));
 }
 
-// --- 4. EVENT LISTENERS (XỬ LÝ SỰ KIỆN) ---
+// --- 4. EVENT LISTENERS (Xá»¬ LĂ Sá»° KIá»†N) ---
 function setupEventListeners() {
   // DASHBOARD VIEW SELECT
   const dashboardViewSelect = document.getElementById("dashboard-view-select");
@@ -1141,7 +1146,7 @@ function setupEventListeners() {
     btnPrevMonth.addEventListener("click", () => {
       const monthYear = document.getElementById("calendar-month-year");
       const currentText = monthYear.textContent;
-      const match = currentText.match(/Tháng (\d+), (\d+)/);
+      const match = currentText.match(/ThĂ¡ng (\d+), (\d+)/);
       if (match) {
         let month = parseInt(match[1]) - 1;
         let year = parseInt(match[2]);
@@ -1159,7 +1164,7 @@ function setupEventListeners() {
     btnNextMonth.addEventListener("click", () => {
       const monthYear = document.getElementById("calendar-month-year");
       const currentText = monthYear.textContent;
-      const match = currentText.match(/Tháng (\d+), (\d+)/);
+      const match = currentText.match(/ThĂ¡ng (\d+), (\d+)/);
       if (match) {
         let month = parseInt(match[1]) + 1;
         let year = parseInt(match[2]);
@@ -1334,7 +1339,7 @@ function setupEventListeners() {
     }
   });
 
-  // Nút Chọn Tất Cả (Trong Sidebar)
+  // NĂºt Chá»n Táº¥t Cáº£ (Trong Sidebar)
   const btnToggleAll = document.getElementById("btn-toggle-all");
   if (btnToggleAll) {
     btnToggleAll.addEventListener("click", () => {
@@ -1353,7 +1358,7 @@ function setupEventListeners() {
     });
   }
 
-  // Nút Chọn Tuần Chẵn/Lẻ
+  // NĂºt Chá»n Tuáº§n Cháºµn/Láº»
   const btnSelectEven = document.getElementById("btn-select-even");
   if (btnSelectEven) {
     btnSelectEven.addEventListener("click", () => {
@@ -1384,21 +1389,21 @@ function setupEventListeners() {
     });
   }
 
-  // Nút SAVE
+  // NĂºt SAVE
   btnSave.addEventListener("click", (e) => {
     e.preventDefault();
 
     // --- VALIDATION LOGIC ---
     const name = document.getElementById("subject-name").value.trim();
     if (!name) {
-      alert("Tên môn học không được để trống!");
+      alert("TĂªn mĂ´n há»c khĂ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng!");
       return;
     }
 
     const weeks = getSelectedWeeksFromUI();
     const day = parseInt(document.getElementById("day-select").value);
     if (day !== 0 && weeks.length === 0) {
-      alert("Vui lòng chọn ít nhất một tuần học cho môn này!");
+      alert("Vui lĂ²ng chá»n Ă­t nháº¥t má»™t tuáº§n há»c cho mĂ´n nĂ y!");
       return;
     }
 
@@ -1449,7 +1454,7 @@ function setupEventListeners() {
     for (const existingCourse of appData.courses) {
       if (isCollision(formCourse, existingCourse)) {
         alert(
-          `Lịch bị trùng!\n\nMôn "${formCourse.name}" trùng lịch với môn "${existingCourse.name}" vào cùng thời gian, cùng ngày.`,
+          `Lá»‹ch bá»‹ trĂ¹ng!\n\nMĂ´n "${formCourse.name}" trĂ¹ng lá»‹ch vá»›i mĂ´n "${existingCourse.name}" vĂ o cĂ¹ng thá»i gian, cĂ¹ng ngĂ y.`,
         );
         return;
       }
@@ -1467,9 +1472,9 @@ function setupEventListeners() {
     closeSidebar();
   });
 
-  // Nút DELETE
+  // NĂºt DELETE
   btnDelete.addEventListener("click", () => {
-    if (confirm("Chắc chắn xóa môn này?")) {
+    if (confirm("Cháº¯c cháº¯n xĂ³a mĂ´n nĂ y?")) {
       appData.courses = appData.courses.filter(
         (c) => c.id != editIdInput.value,
       );
@@ -1488,7 +1493,7 @@ function setupEventListeners() {
       const eWeek = getRealWeekFromDate(dEnd.value);
 
       if (sWeek && eWeek) {
-        // Tự động tick các checkbox trong Modal
+        // Tá»± Ä‘á»™ng tick cĂ¡c checkbox trong Modal
         const boxes = document.querySelectorAll(".week-checkbox");
         boxes.forEach((box) => {
           const w = parseInt(box.dataset.week);
@@ -1510,7 +1515,7 @@ function setupEventListeners() {
     btnSaveNotes.addEventListener("click", () => {
       appData.generalNotes = notesTextarea.value;
       saveData();
-      alert("✅ Ghi chú đã được lưu!");
+      alert("âœ… Ghi chĂº Ä‘Ă£ Ä‘Æ°á»£c lÆ°u!");
     });
   }
 
@@ -1523,7 +1528,7 @@ function setupEventListeners() {
     });
   }
 
-  // Mở Settings Modal
+  // Má»Ÿ Settings Modal
   const btnSettings = document.getElementById("btn-settings");
   if (btnSettings) {
     btnSettings.addEventListener("click", () => {
@@ -1535,7 +1540,7 @@ function setupEventListeners() {
     });
   }
 
-  // Lưu Settings
+  // LÆ°u Settings
   if (btnSaveSettings) {
     btnSaveSettings.addEventListener("click", () => {
       const newStartDate = document.getElementById("setting-start-date").value;
@@ -1546,13 +1551,13 @@ function setupEventListeners() {
       if (newStartDate && newStartWeek) {
         appData.settings.startDate = newStartDate;
         appData.settings.startWeek = newStartWeek;
-        setSystemConfig(newStartDate, newStartWeek); // Áp dụng cấu hình mới
-        currentViewWeek = newStartWeek; // Đặt lại tuần hiển thị về tuần bắt đầu
-        saveAndRender(); // Lưu và render lại toàn bộ
+        setSystemConfig(newStartDate, newStartWeek); // Ăp dá»¥ng cáº¥u hĂ¬nh má»›i
+        currentViewWeek = newStartWeek; // Äáº·t láº¡i tuáº§n hiá»ƒn thá»‹ vá» tuáº§n báº¯t Ä‘áº§u
+        saveAndRender(); // LÆ°u vĂ  render láº¡i toĂ n bá»™
         settingsModal.close();
-        alert("Cấu hình hệ thống đã được lưu!");
+        alert("Cáº¥u hĂ¬nh há»‡ thá»‘ng Ä‘Ă£ Ä‘Æ°á»£c lÆ°u!");
       } else {
-        alert("Vui lòng nhập đầy đủ ngày và tuần bắt đầu!");
+        alert("Vui lĂ²ng nháº­p Ä‘áº§y Ä‘á»§ ngĂ y vĂ  tuáº§n báº¯t Ä‘áº§u!");
       }
     });
   }
@@ -1578,7 +1583,7 @@ function setupEventListeners() {
         // Reset form
         document.getElementById("holiday-name").value = "";
       } else {
-        alert("Thông tin ngày không hợp lệ (Ngoài học kỳ)!");
+        alert("ThĂ´ng tin ngĂ y khĂ´ng há»£p lá»‡ (NgoĂ i há»c ká»³)!");
       }
     });
   }
@@ -1590,7 +1595,7 @@ function setupEventListeners() {
       const json = JSON.stringify(appData, null, 2);
       navigator.clipboard
         .writeText(json)
-        .then(() => alert("Đã copy dữ liệu vào Clipboard!"));
+        .then(() => alert("ÄĂ£ copy dá»¯ liá»‡u vĂ o Clipboard!"));
     });
   }
 
@@ -1619,26 +1624,30 @@ function setupEventListeners() {
           const parsed = JSON.parse(raw);
 
           if (!parsed) {
-            throw new Error("JSON rỗng hoặc không hợp lệ.");
+            throw new Error("JSON rá»—ng hoáº·c khĂ´ng há»£p lá»‡.");
           }
 
-          // Case A (Format cũ): JSON là một Mảng
+          // Case A (Format cÅ©): JSON lĂ  má»™t Máº£ng
           if (Array.isArray(parsed)) {
             appData.courses = parsed;
-            alert("Import thành công! (Dữ liệu môn học đã được nạp)");
+            alert(
+              "Import thĂ nh cĂ´ng! (Dá»¯ liá»‡u mĂ´n há»c Ä‘Ă£ Ä‘Æ°á»£c náº¡p)",
+            );
           }
-          // Case B (Format mới): JSON là một Object
+          // Case B (Format má»›i): JSON lĂ  má»™t Object
           else if (typeof parsed === "object" && parsed.courses) {
-            // Cập nhật toàn bộ, đảm bảo các key không thiếu
+            // Cáº­p nháº­t toĂ n bá»™, Ä‘áº£m báº£o cĂ¡c key khĂ´ng thiáº¿u
             appData = {
               settings: { startDate: "2026-01-26", startWeek: 22 },
               holidays: [],
               generalNotes: "",
               ...parsed,
             };
-            alert("Import thành công! (Toàn bộ dữ liệu đã được nạp)");
+            alert(
+              "Import thĂ nh cĂ´ng! (ToĂ n bá»™ dá»¯ liá»‡u Ä‘Ă£ Ä‘Æ°á»£c náº¡p)",
+            );
           } else {
-            throw new Error("Định dạng JSON không được hỗ trợ.");
+            throw new Error("Äá»‹nh dáº¡ng JSON khĂ´ng Ä‘Æ°á»£c há»— trá»£.");
           }
 
           setSystemConfig(
@@ -1649,10 +1658,10 @@ function setupEventListeners() {
           saveAndRender();
           importModal.close();
         } catch (e) {
-          alert(`Lỗi format JSON!\n\nChi tiết: ${e.message}`);
+          alert(`Lá»—i format JSON!\n\nChi tiáº¿t: ${e.message}`);
         }
       } else {
-        alert("Vui lòng dán dữ liệu vào ô trống.");
+        alert("Vui lĂ²ng dĂ¡n dá»¯ liá»‡u vĂ o Ă´ trá»‘ng.");
       }
     });
   }
@@ -1746,7 +1755,7 @@ function renderHolidayListSettings() {
 
   if (!appData.holidays || appData.holidays.length === 0) {
     container.innerHTML =
-      '<p style="color: var(--color-text-gray); padding: 12px; text-align: center;">Chưa có lịch nghỉ</p>';
+      '<p style="color: var(--color-text-gray); padding: 12px; text-align: center;">ChÆ°a cĂ³ lá»‹ch nghá»‰</p>';
     return;
   }
 
@@ -1755,8 +1764,8 @@ function renderHolidayListSettings() {
     item.className = "holiday-item";
     item.innerHTML = `
       <span class="holiday-item-name">${holiday.name}</span>
-      <span class="holiday-item-weeks">Tuần: ${holiday.weeks.join(", ")}</span>
-      <button class="btn-delete-holiday" data-index="${index}">×</button>
+      <span class="holiday-item-weeks">Tuáº§n: ${holiday.weeks.join(", ")}</span>
+      <button class="btn-delete-holiday" data-index="${index}">Ă—</button>
     `;
     container.appendChild(item);
   });
@@ -1765,7 +1774,7 @@ function renderHolidayListSettings() {
   container.querySelectorAll(".btn-delete-holiday").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const index = parseInt(e.target.dataset.index);
-      if (confirm("Xóa ngày nghỉ này?")) {
+      if (confirm("XĂ³a ngĂ y nghá»‰ nĂ y?")) {
         appData.holidays.splice(index, 1);
         saveAndRender();
         renderHolidayListSettings();
@@ -1790,9 +1799,9 @@ function setupSettingsListeners() {
         setSystemConfig(startDate, startWeek);
         currentViewWeek = startWeek;
         saveAndRender();
-        alert("Cài đặt kỳ học đã được lưu!");
+        alert("CĂ i Ä‘áº·t ká»³ há»c Ä‘Ă£ Ä‘Æ°á»£c lÆ°u!");
       } else {
-        alert("Vui lòng nhập đầy đủ thông tin!");
+        alert("Vui lĂ²ng nháº­p Ä‘áº§y Ä‘á»§ thĂ´ng tin!");
       }
     });
   }
@@ -1838,10 +1847,10 @@ function setupSettingsListeners() {
     btnClearData.addEventListener("click", () => {
       if (
         confirm(
-          "BẠN CHẮC CHẮN MUỐN XÓA TOÀN BỘ DỮ LIỆU?\n\nHành động này KHÔNG THỂ HOÀN TÁC!",
+          "Báº N CHáº®C CHáº®N MUá»N XĂ“A TOĂ€N Bá»˜ Dá»® LIá»†U?\n\nHĂ nh Ä‘á»™ng nĂ y KHĂ”NG THá»‚ HOĂ€N TĂC!",
         )
       ) {
-        if (confirm("Xác nhận lần cuối: XÓA TẤT CẢ dữ liệu?")) {
+        if (confirm("XĂ¡c nháº­n láº§n cuá»‘i: XĂ“A Táº¤T Cáº¢ dá»¯ liá»‡u?")) {
           localStorage.removeItem("smartTimetableData");
           location.reload();
         }
@@ -1913,7 +1922,7 @@ function openAssignmentModal(assignmentId = null) {
   const prioritySelect = document.getElementById("assignment-priority");
 
   // Populate course dropdown
-  courseSelect.innerHTML = '<option value="">-- Chọn môn học --</option>';
+  courseSelect.innerHTML = '<option value="">-- Chá»n mĂ´n há»c --</option>';
   appData.courses.forEach((course) => {
     const option = document.createElement("option");
     option.value = course.id;
@@ -1925,7 +1934,7 @@ function openAssignmentModal(assignmentId = null) {
   if (assignmentId) {
     const assignment = appData.assignments.find((a) => a.id === assignmentId);
     if (assignment) {
-      modalTitle.textContent = "Chỉnh Sửa Bài Tập";
+      modalTitle.textContent = "Chá»‰nh Sá»­a BĂ i Táº­p";
       courseSelect.value = assignment.courseId;
       titleInput.value = assignment.title;
       descInput.value = assignment.description || "";
@@ -1934,7 +1943,7 @@ function openAssignmentModal(assignmentId = null) {
       modal.dataset.editId = assignmentId;
     }
   } else {
-    modalTitle.textContent = "Thêm Bài Tập Mới";
+    modalTitle.textContent = "ThĂªm BĂ i Táº­p Má»›i";
     titleInput.value = "";
     descInput.value = "";
     deadlineInput.value = "";
@@ -1956,7 +1965,7 @@ function saveAssignment() {
   const priority = document.getElementById("assignment-priority").value;
 
   if (!courseId || !title || !deadline) {
-    alert("Vui lòng điền đầy đủ thông tin bài tập!");
+    alert("Vui lĂ²ng Ä‘iá»n Ä‘áº§y Ä‘á»§ thĂ´ng tin bĂ i táº­p!");
     return;
   }
 
@@ -1996,7 +2005,7 @@ function saveAssignment() {
 }
 
 function deleteAssignment(id) {
-  if (confirm("Bạn có chắc muốn xóa bài tập này?")) {
+  if (confirm("Báº¡n cĂ³ cháº¯c muá»‘n xĂ³a bĂ i táº­p nĂ y?")) {
     appData.assignments = appData.assignments.filter((a) => a.id !== id);
     saveData();
     renderAssignments();
@@ -2050,7 +2059,8 @@ function renderAssignments() {
 
   // Render assignments
   if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state">Chưa có bài tập nào</div>';
+    container.innerHTML =
+      '<div class="empty-state">ChÆ°a cĂ³ bĂ i táº­p nĂ o</div>';
     return;
   }
 
@@ -2078,31 +2088,31 @@ function createAssignmentCard(assignment) {
 
   if (assignment.completed) {
     deadlineClass = "deadline-completed";
-    deadlineText = "Hoàn thành";
+    deadlineText = "HoĂ n thĂ nh";
   } else if (diffDays < 0) {
     deadlineClass = "deadline-overdue";
-    deadlineText = `Quá hạn ${Math.abs(diffDays)} ngày`;
+    deadlineText = `QuĂ¡ háº¡n ${Math.abs(diffDays)} ngĂ y`;
   } else if (diffDays === 0) {
     deadlineClass = "deadline-today";
-    deadlineText = "Hôm nay";
+    deadlineText = "HĂ´m nay";
   } else if (diffDays === 1) {
     deadlineClass = "deadline-tomorrow";
-    deadlineText = "Ngày mai";
+    deadlineText = "NgĂ y mai";
   } else if (diffDays <= 3) {
     deadlineClass = "deadline-urgent";
-    deadlineText = `Còn ${diffDays} ngày`;
+    deadlineText = `CĂ²n ${diffDays} ngĂ y`;
   } else if (diffDays <= 7) {
     deadlineClass = "deadline-soon";
-    deadlineText = `Còn ${diffDays} ngày`;
+    deadlineText = `CĂ²n ${diffDays} ngĂ y`;
   } else {
     deadlineClass = "deadline-normal";
-    deadlineText = `Còn ${diffDays} ngày`;
+    deadlineText = `CĂ²n ${diffDays} ngĂ y`;
   }
 
   const priorityLabels = {
     high: "Cao",
-    medium: "Trung bình",
-    low: "Thấp",
+    medium: "Trung bĂ¬nh",
+    low: "Tháº¥p",
   };
 
   card.innerHTML = `
@@ -2126,16 +2136,16 @@ function createAssignmentCard(assignment) {
     ${assignment.description ? `<div class="assignment-description">${assignment.description}</div>` : ""}
     <div class="assignment-footer">
       <div class="assignment-deadline-full">
-        Hạn nộp: ${formatDeadline(deadline)}
+        Háº¡n ná»™p: ${formatDeadline(deadline)}
       </div>
       <div class="assignment-actions">
-        <button class="btn-icon" onclick="window.openAssignmentModal('${assignment.id}')" title="Chỉnh sửa">
+        <button class="btn-icon" onclick="window.openAssignmentModal('${assignment.id}')" title="Chá»‰nh sá»­a">
           <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
         </button>
-        <button class="btn-icon" onclick="window.deleteAssignment('${assignment.id}')" title="Xóa">
+        <button class="btn-icon" onclick="window.deleteAssignment('${assignment.id}')" title="XĂ³a">
           <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -2222,7 +2232,7 @@ function openExamModal(examId = null) {
   const notesInput = document.getElementById("exam-notes");
 
   // Populate course dropdown
-  courseSelect.innerHTML = '<option value="">-- Chọn môn học --</option>';
+  courseSelect.innerHTML = '<option value="">-- Chá»n mĂ´n há»c --</option>';
   appData.courses.forEach((course) => {
     const option = document.createElement("option");
     option.value = course.id;
@@ -2234,7 +2244,7 @@ function openExamModal(examId = null) {
   if (examId) {
     const exam = appData.exams.find((e) => e.id === examId);
     if (exam) {
-      modalTitle.textContent = "Chỉnh Sửa Lịch Thi";
+      modalTitle.textContent = "Chá»‰nh Sá»­a Lá»‹ch Thi";
       courseSelect.value = exam.courseId;
       titleInput.value = exam.title;
       dateInput.value = exam.date;
@@ -2245,7 +2255,7 @@ function openExamModal(examId = null) {
       modal.dataset.editId = examId;
     }
   } else {
-    modalTitle.textContent = "Thêm Lịch Thi Mới";
+    modalTitle.textContent = "ThĂªm Lá»‹ch Thi Má»›i";
     titleInput.value = "";
     dateInput.value = "";
     durationInput.value = "90";
@@ -2269,7 +2279,7 @@ function saveExam() {
   const notes = document.getElementById("exam-notes").value.trim();
 
   if (!courseId || !title || !date) {
-    alert("Vui lòng điền đầy đủ thông tin lịch thi!");
+    alert("Vui lĂ²ng Ä‘iá»n Ä‘áº§y Ä‘á»§ thĂ´ng tin lá»‹ch thi!");
     return;
   }
 
@@ -2313,7 +2323,7 @@ function saveExam() {
 }
 
 function deleteExam(id) {
-  if (confirm("Bạn có chắc muốn xóa lịch thi này?")) {
+  if (confirm("Báº¡n cĂ³ cháº¯c muá»‘n xĂ³a lá»‹ch thi nĂ y?")) {
     appData.exams = appData.exams.filter((e) => e.id !== id);
     saveData();
     renderExams();
@@ -2358,7 +2368,8 @@ function renderExams() {
 
   // Render exams
   if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state">Chưa có lịch thi nào</div>';
+    container.innerHTML =
+      '<div class="empty-state">ChÆ°a cĂ³ lá»‹ch thi nĂ o</div>';
     return;
   }
 
@@ -2386,33 +2397,33 @@ function createExamCard(exam) {
 
   if (exam.completed) {
     dateClass = "exam-completed";
-    dateText = "Đã thi";
+    dateText = "ÄĂ£ thi";
   } else if (diffDays < 0) {
     dateClass = "exam-passed";
-    dateText = `Đã qua ${Math.abs(diffDays)} ngày`;
+    dateText = `ÄĂ£ qua ${Math.abs(diffDays)} ngĂ y`;
   } else if (diffDays === 0) {
     dateClass = "exam-today";
-    dateText = "Hôm nay";
+    dateText = "HĂ´m nay";
   } else if (diffDays === 1) {
     dateClass = "exam-tomorrow";
-    dateText = "Ngày mai";
+    dateText = "NgĂ y mai";
   } else if (diffDays <= 3) {
     dateClass = "exam-urgent";
-    dateText = `Còn ${diffDays} ngày`;
+    dateText = `CĂ²n ${diffDays} ngĂ y`;
   } else if (diffDays <= 7) {
     dateClass = "exam-soon";
-    dateText = `Còn ${diffDays} ngày`;
+    dateText = `CĂ²n ${diffDays} ngĂ y`;
   } else {
     dateClass = "exam-normal";
-    dateText = `Còn ${diffDays} ngày`;
+    dateText = `CĂ²n ${diffDays} ngĂ y`;
   }
 
   const formatLabels = {
-    written: "Tự luận",
-    test: "Trắc nghiệm",
-    online: "Trực tuyến",
-    practical: "Thực hành",
-    other: "Khác",
+    written: "Tá»± luáº­n",
+    test: "Tráº¯c nghiá»‡m",
+    online: "Trá»±c tuyáº¿n",
+    practical: "Thá»±c hĂ nh",
+    other: "KhĂ¡c",
   };
 
   card.innerHTML = `
@@ -2446,7 +2457,7 @@ function createExamCard(exam) {
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        <span>${exam.duration} phút</span>
+        <span>${exam.duration} phĂºt</span>
       </div>
       ${
         exam.room
@@ -2456,7 +2467,7 @@ function createExamCard(exam) {
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
-        <span>Phòng ${exam.room}</span>
+        <span>PhĂ²ng ${exam.room}</span>
       </div>
       `
           : ""
@@ -2465,13 +2476,13 @@ function createExamCard(exam) {
     ${exam.notes ? `<div class="exam-notes">${exam.notes}</div>` : ""}
     <div class="exam-footer">
       <div class="exam-actions">
-        <button class="btn-icon" onclick="window.openExamModal('${exam.id}')" title="Chỉnh sửa">
+        <button class="btn-icon" onclick="window.openExamModal('${exam.id}')" title="Chá»‰nh sá»­a">
           <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
         </button>
-        <button class="btn-icon" onclick="window.deleteExam('${exam.id}')" title="Xóa">
+        <button class="btn-icon" onclick="window.deleteExam('${exam.id}')" title="XĂ³a">
           <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -2490,7 +2501,15 @@ function formatExamDate(date) {
   const year = date.getFullYear();
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
-  const weekdays = ["CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+  const weekdays = [
+    "CN",
+    "Thá»© 2",
+    "Thá»© 3",
+    "Thá»© 4",
+    "Thá»© 5",
+    "Thá»© 6",
+    "Thá»© 7",
+  ];
   const weekday = weekdays[date.getDay()];
   return `${weekday}, ${day}/${month}/${year} - ${hours}:${minutes}`;
 }
@@ -2572,7 +2591,8 @@ function renderAttendance() {
 
   // Render courses
   if (courses.length === 0) {
-    container.innerHTML = '<div class="empty-state">Chưa có môn học nào</div>';
+    container.innerHTML =
+      '<div class="empty-state">ChÆ°a cĂ³ mĂ´n há»c nĂ o</div>';
     return;
   }
 
@@ -2595,13 +2615,13 @@ function createAttendanceCourseCard(course, weekFilter) {
   // Calculate attendance stats for this course
   const stats = calculateCourseAttendanceStats(course.id, sessions);
 
-  // Hiển thị khác nhau theo filter
+  // Hiá»ƒn thá»‹ khĂ¡c nhau theo filter
   let displayText = "";
   if (weekFilter === "current") {
-    // Tuần hiện tại: 0/0 hoặc 1/1
+    // Tuáº§n hiá»‡n táº¡i: 0/0 hoáº·c 1/1
     displayText = `${stats.attended}/${stats.total}`;
   } else {
-    // Tất cả tuần: 1/15
+    // Táº¥t cáº£ tuáº§n: 1/15
     displayText = `${stats.attended}/${totalPlanned}`;
   }
 
@@ -2612,14 +2632,14 @@ function createAttendanceCourseCard(course, weekFilter) {
         <p>${course.room} - ${course.teacher}</p>
       </div>
       <div class="attendance-course-stats">
-        <span class="attendance-stat">${displayText} buổi</span>
+        <span class="attendance-stat">${displayText} buá»•i</span>
         <span class="attendance-rate-badge ${stats.rate >= 80 ? "high" : stats.rate >= 50 ? "medium" : "low"}">
-          Đi ${stats.rate}%
+          Äi ${stats.rate}%
         </span>
       </div>
     </div>
     <div class="attendance-sessions">
-      ${sessions.length > 0 ? sessions.map((session) => createSessionElement(course.id, session)).join("") : '<div class="empty-state">Chưa có buổi học nào</div>'}
+      ${sessions.length > 0 ? sessions.map((session) => createSessionElement(course.id, session)).join("") : '<div class="empty-state">ChÆ°a cĂ³ buá»•i há»c nĂ o</div>'}
     </div>
   `;
 
@@ -2628,7 +2648,7 @@ function createAttendanceCourseCard(course, weekFilter) {
 
 function getCourseSessions(course, weekFilter) {
   const sessions = [];
-  const allSessions = []; // Tổng số buổi dự kiến
+  const allSessions = []; // Tá»•ng sá»‘ buá»•i dá»± kiáº¿n
   const now = new Date();
   const currentWeek = getRealWeekFromDate(now);
 
@@ -2645,7 +2665,7 @@ function getCourseSessions(course, weekFilter) {
     holiday.weeks.forEach((w) => holidayWeeks.add(w));
   });
 
-  // Tính tổng buổi dự kiến (không kể lễ)
+  // TĂ­nh tá»•ng buá»•i dá»± kiáº¿n (khĂ´ng ká»ƒ lá»…)
   course.weeks.forEach((week) => {
     if (!holidayWeeks.has(week)) {
       allSessions.push(week);
@@ -2663,23 +2683,23 @@ function getCourseSessions(course, weekFilter) {
     const sessionDateISO = dates[course.day - 2]; // day: 2=Monday, 3=Tuesday, etc.
 
     if (sessionDateISO) {
-      // Parse ISO date chính xác (YYYY-MM-DD)
+      // Parse ISO date chĂ­nh xĂ¡c (YYYY-MM-DD)
       const sessionDate = new Date(sessionDateISO + "T00:00:00");
 
-      // Tính giờ kết thúc buổi học (tiết cuối + 50 phút)
+      // TĂ­nh giá» káº¿t thĂºc buá»•i há»c (tiáº¿t cuá»‘i + 50 phĂºt)
       const endPeriod = course.startPeriod + course.periodCount - 1;
       const endTime = getPeriodTime(endPeriod);
 
       if (endTime) {
-        // Parse giờ kết thúc (format: "07h00")
+        // Parse giá» káº¿t thĂºc (format: "07h00")
         const [hours, minutes] = endTime
           .replace("h", ":")
           .split(":")
           .map(Number);
         const sessionEndDateTime = new Date(sessionDate);
-        sessionEndDateTime.setHours(hours, minutes + 50, 0, 0); // +50 phút cho tiết học
+        sessionEndDateTime.setHours(hours, minutes + 50, 0, 0); // +50 phĂºt cho tiáº¿t há»c
 
-        // Chỉ hiển thị các buổi ĐÃ KẾT THÚC
+        // Chá»‰ hiá»ƒn thá»‹ cĂ¡c buá»•i ÄĂƒ Káº¾T THĂC
         if (now >= sessionEndDateTime) {
           sessions.push({
             date: sessionDateISO,
@@ -2694,7 +2714,7 @@ function getCourseSessions(course, weekFilter) {
   return {
     sessions: sessions.sort((a, b) => new Date(b.date) - new Date(a.date)),
     totalPlanned:
-      weekFilter === "current" ? sessions.length : allSessions.length, // Nếu tuần hiện tại thì chỉ tính buổi đã qua
+      weekFilter === "current" ? sessions.length : allSessions.length, // Náº¿u tuáº§n hiá»‡n táº¡i thĂ¬ chá»‰ tĂ­nh buá»•i Ä‘Ă£ qua
   };
 }
 
@@ -2703,10 +2723,10 @@ function createSessionElement(courseId, session) {
   const status = attendanceRecord?.status || "unmarked";
 
   const statusLabels = {
-    present: "Đã đi",
-    absent: "Vắng",
-    late: "Đi muộn",
-    unmarked: "Chưa đánh dấu",
+    present: "ÄĂ£ Ä‘i",
+    absent: "Váº¯ng",
+    late: "Äi muá»™n",
+    unmarked: "ChÆ°a Ä‘Ă¡nh dáº¥u",
   };
 
   return `
@@ -2720,7 +2740,7 @@ function createSessionElement(courseId, session) {
           <button 
             class="status-btn ${status === "present" ? "active" : ""}" 
             onclick="window.markAttendance('${courseId}', '${session.date}', 'present')"
-            title="Đã đi"
+            title="ÄĂ£ Ä‘i"
           >
             <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="20 6 9 17 4 12"></polyline>
@@ -2729,7 +2749,7 @@ function createSessionElement(courseId, session) {
           <button 
             class="status-btn ${status === "late" ? "active" : ""}" 
             onclick="window.markAttendance('${courseId}', '${session.date}', 'late')"
-            title="Đi muộn"
+            title="Äi muá»™n"
           >
             <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
@@ -2739,7 +2759,7 @@ function createSessionElement(courseId, session) {
           <button 
             class="status-btn ${status === "absent" ? "active" : ""}" 
             onclick="window.markAttendance('${courseId}', '${session.date}', 'absent')"
-            title="Vắng"
+            title="Váº¯ng"
           >
             <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -2827,20 +2847,20 @@ function updateAttendanceStats() {
       if (sessionDateISO) {
         const sessionDate = new Date(sessionDateISO + "T00:00:00");
 
-        // Tính giờ kết thúc buổi học (tiết cuối + 50 phút)
+        // TĂ­nh giá» káº¿t thĂºc buá»•i há»c (tiáº¿t cuá»‘i + 50 phĂºt)
         const endPeriod = course.startPeriod + course.periodCount - 1;
         const endTime = getPeriodTime(endPeriod);
 
         if (endTime) {
-          // Parse giờ kết thúc (format: "07h00")
+          // Parse giá» káº¿t thĂºc (format: "07h00")
           const [hours, minutes] = endTime
             .replace("h", ":")
             .split(":")
             .map(Number);
           const sessionEndDateTime = new Date(sessionDate);
-          sessionEndDateTime.setHours(hours, minutes + 50, 0, 0); // +50 phút cho tiết học
+          sessionEndDateTime.setHours(hours, minutes + 50, 0, 0); // +50 phĂºt cho tiáº¿t há»c
 
-          // Chỉ tính buổi học đã kết thúc
+          // Chá»‰ tĂ­nh buá»•i há»c Ä‘Ă£ káº¿t thĂºc
           if (now >= sessionEndDateTime) {
             totalSessions++;
 
@@ -2895,20 +2915,20 @@ function calculateTotalAttendanceStats() {
       if (sessionDateISO) {
         const sessionDate = new Date(sessionDateISO + "T00:00:00");
 
-        // Tính giờ kết thúc buổi học (tiết cuối + 50 phút)
+        // TĂ­nh giá» káº¿t thĂºc buá»•i há»c (tiáº¿t cuá»‘i + 50 phĂºt)
         const endPeriod = course.startPeriod + course.periodCount - 1;
         const endTime = getPeriodTime(endPeriod);
 
         if (endTime) {
-          // Parse giờ kết thúc (format: "07h00")
+          // Parse giá» káº¿t thĂºc (format: "07h00")
           const [hours, minutes] = endTime
             .replace("h", ":")
             .split(":")
             .map(Number);
           const sessionEndDateTime = new Date(sessionDate);
-          sessionEndDateTime.setHours(hours, minutes + 50, 0, 0); // +50 phút cho tiết học
+          sessionEndDateTime.setHours(hours, minutes + 50, 0, 0); // +50 phĂºt cho tiáº¿t há»c
 
-          // Chỉ tính buổi học đã kết thúc
+          // Chá»‰ tĂ­nh buá»•i há»c Ä‘Ă£ káº¿t thĂºc
           if (now >= sessionEndDateTime) {
             totalSessions++;
 
@@ -2923,594 +2943,6 @@ function calculateTotalAttendanceStats() {
   });
 
   return { total: totalSessions, attended: attendedSessions };
-}
-
-// ========================================
-// SMART NOTES SYSTEM
-// ========================================
-
-/**
- * Render markdown to HTML
- */
-function renderMarkdown(text) {
-  if (!text) return "";
-
-  let html = text;
-
-  // Headers
-  html = html.replace(/^### (.*$)/gim, "<h3>$1</h3>");
-  html = html.replace(/^## (.*$)/gim, "<h2>$1</h2>");
-  html = html.replace(/^# (.*$)/gim, "<h1>$1</h1>");
-
-  // Bold
-  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-
-  // Italic
-  html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
-
-  // Strikethrough
-  html = html.replace(/~~(.+?)~~/g, "<del>$1</del>");
-
-  // Links (auto-detect URLs)
-  html = html.replace(
-    /(https?:\/\/[^\s]+)/g,
-    '<a href="$1" target="_blank">$1</a>',
-  );
-
-  // Todo checkboxes
-  html = html.replace(
-    /\[x\]\s(.+)/gi,
-    '<div class="todo-item completed"><input type="checkbox" class="todo-checkbox" checked disabled> <span>$1</span></div>',
-  );
-  html = html.replace(
-    /\[ \]\s(.+)/g,
-    '<div class="todo-item"><input type="checkbox" class="todo-checkbox" disabled> <span>$1</span></div>',
-  );
-
-  // Bullet lists
-  html = html.replace(/^\- (.+)$/gim, "<li>$1</li>");
-  html = html.replace(/(<li>.*<\/li>)/s, "<ul>$1</ul>");
-
-  // Line breaks
-  html = html.replace(/\n/g, "<br>");
-
-  return html;
-}
-
-/**
- * Parse tags from string
- */
-function parseTags(tagString) {
-  if (!tagString) return [];
-  return tagString
-    .split(/\s+/)
-    .filter((t) => t.startsWith("#"))
-    .map((t) => t.toLowerCase());
-}
-
-/**
- * Calculate todo progress
- */
-function calculateTodoProgress(content) {
-  const totalMatch = content.match(/\[[ x]\]/gi);
-  const completedMatch = content.match(/\[x\]/gi);
-
-  const total = totalMatch ? totalMatch.length : 0;
-  const completed = completedMatch ? completedMatch.length : 0;
-
-  return {
-    total,
-    completed,
-    percentage: total > 0 ? (completed / total) * 100 : 0,
-  };
-}
-
-/**
- * Render smart notes grid
- */
-function renderSmartNotes(filterType = "all", searchQuery = "") {
-  const container = document.getElementById("smart-notes-list");
-  const emptyState = document.getElementById("notes-empty-state");
-
-  if (!container) return;
-
-  let notes = [...appData.smartNotes];
-
-  // Apply filter
-  if (filterType === "pinned") {
-    notes = notes.filter((n) => n.pinned);
-  } else if (filterType === "todos") {
-    notes = notes.filter((n) => n.type === "todo");
-  } else if (filterType === "normal") {
-    notes = notes.filter((n) => n.type === "normal");
-  }
-
-  // Apply search
-  if (searchQuery) {
-    const query = searchQuery.toLowerCase();
-    notes = notes.filter(
-      (n) =>
-        n.title.toLowerCase().includes(query) ||
-        n.content.toLowerCase().includes(query) ||
-        n.tags.some((t) => t.includes(query)),
-    );
-  }
-
-  // Sort: pinned first, then by updatedAt
-  notes.sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return new Date(b.updatedAt) - new Date(a.updatedAt);
-  });
-
-  // Render
-  container.innerHTML = "";
-
-  if (notes.length === 0) {
-    if (emptyState) emptyState.style.display = "block";
-    return;
-  }
-
-  if (emptyState) emptyState.style.display = "none";
-
-  notes.forEach((note) => {
-    const card = createNoteCard(note);
-    container.appendChild(card);
-  });
-
-  updateNotesStats();
-}
-
-/**
- * Create note card element
- */
-function createNoteCard(note) {
-  const card = document.createElement("div");
-  card.className = "note-card";
-  card.dataset.id = note.id;
-  card.style.setProperty("--note-color", note.color || "#60a5fa");
-
-  // Header
-  const header = document.createElement("div");
-  header.className = "note-card-header";
-
-  const title = document.createElement("h4");
-  title.className = "note-title";
-  title.textContent = note.title;
-
-  const actions = document.createElement("div");
-  actions.className = "note-actions";
-
-  if (note.pinned) {
-    const pinIndicator = document.createElement("span");
-    pinIndicator.className = "note-pinned-indicator";
-    pinIndicator.textContent = "📌";
-    header.appendChild(pinIndicator);
-  }
-
-  const editBtn = document.createElement("button");
-  editBtn.className = "note-action-btn";
-  editBtn.textContent = "✏️";
-  editBtn.title = "Chỉnh sửa";
-  editBtn.onclick = (e) => {
-    e.stopPropagation();
-    openNoteModal(note);
-  };
-
-  const deleteBtn = document.createElement("button");
-  deleteBtn.className = "note-action-btn";
-  deleteBtn.textContent = "🗑️";
-  deleteBtn.title = "Xóa";
-  deleteBtn.onclick = (e) => {
-    e.stopPropagation();
-    deleteNote(note.id);
-  };
-
-  actions.appendChild(editBtn);
-  actions.appendChild(deleteBtn);
-
-  header.appendChild(title);
-  header.appendChild(actions);
-  card.appendChild(header);
-
-  // Tags
-  if (note.tags.length > 0) {
-    const tagsContainer = document.createElement("div");
-    tagsContainer.className = "note-tags";
-    note.tags.forEach((tag) => {
-      const tagEl = document.createElement("span");
-      tagEl.className = "note-tag";
-      tagEl.textContent = tag;
-      tagsContainer.appendChild(tagEl);
-    });
-    card.appendChild(tagsContainer);
-  }
-
-  // Todo progress
-  if (note.type === "todo") {
-    const progress = calculateTodoProgress(note.content);
-    const progressContainer = document.createElement("div");
-    progressContainer.className = "note-todo-progress";
-
-    const progressBar = document.createElement("div");
-    progressBar.className = "note-progress-bar";
-
-    const progressFill = document.createElement("div");
-    progressFill.className = "note-progress-fill";
-    progressFill.style.width = `${progress.percentage}%`;
-
-    progressBar.appendChild(progressFill);
-
-    const progressText = document.createElement("span");
-    progressText.className = "note-progress-text";
-    progressText.textContent = `${progress.completed}/${progress.total}`;
-
-    progressContainer.appendChild(progressBar);
-    progressContainer.appendChild(progressText);
-    card.appendChild(progressContainer);
-  }
-
-  // Content preview
-  const content = document.createElement("div");
-  content.className = "note-content-preview rendered-markdown";
-  content.innerHTML = renderMarkdown(note.content);
-  card.appendChild(content);
-
-  // Footer
-  const footer = document.createElement("div");
-  footer.className = "note-footer";
-
-  const meta = document.createElement("div");
-  meta.className = "note-meta";
-
-  const typeBadge = document.createElement("span");
-  typeBadge.className = "note-type-badge";
-  typeBadge.innerHTML =
-    note.type === "todo" ? "<span>✓</span> Todo" : "<span>📄</span> Ghi chú";
-  meta.appendChild(typeBadge);
-
-  const timestamp = document.createElement("span");
-  timestamp.textContent = formatNoteDate(note.updatedAt);
-  meta.appendChild(timestamp);
-
-  footer.appendChild(meta);
-  card.appendChild(footer);
-
-  // Click to expand/view
-  card.onclick = () => {
-    openNoteModal(note);
-  };
-
-  return card;
-}
-
-/**
- * Format note date
- */
-function formatNoteDate(dateString) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diff = now - date;
-
-  const minutes = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-
-  if (minutes < 1) return "Vừa xong";
-  if (minutes < 60) return `${minutes} phút trước`;
-  if (hours < 24) return `${hours} giờ trước`;
-  if (days < 7) return `${days} ngày trước`;
-
-  return date.toLocaleDateString("vi-VN");
-}
-
-/**
- * Update notes stats
- */
-function updateNotesStats() {
-  const totalEl = document.getElementById("total-notes-count");
-  const pinnedEl = document.getElementById("pinned-notes-count");
-  const todoEl = document.getElementById("todo-notes-count");
-  const completedEl = document.getElementById("completed-todos-count");
-
-  if (totalEl) totalEl.textContent = appData.smartNotes.length;
-  if (pinnedEl)
-    pinnedEl.textContent = appData.smartNotes.filter((n) => n.pinned).length;
-  if (todoEl)
-    todoEl.textContent = appData.smartNotes.filter(
-      (n) => n.type === "todo",
-    ).length;
-
-  // Calculate completed todos
-  let totalCompleted = 0;
-  appData.smartNotes
-    .filter((n) => n.type === "todo")
-    .forEach((n) => {
-      const progress = calculateTodoProgress(n.content);
-      if (progress.percentage === 100) totalCompleted++;
-    });
-
-  if (completedEl) completedEl.textContent = totalCompleted;
-}
-
-/**
- * Open note modal for create/edit
- */
-function openNoteModal(note = null) {
-  const modal = document.getElementById("note-modal");
-  const title = document.getElementById("note-modal-title");
-  const form = modal.querySelector("form");
-
-  if (!modal) return;
-
-  // Reset form
-  form.reset();
-  document.getElementById("note-preview").style.display = "none";
-  document.getElementById("note-content").style.display = "block";
-
-  if (note) {
-    // Edit mode
-    title.textContent = "✏️ Chỉnh Sửa Ghi Chú";
-    document.getElementById("note-id").value = note.id;
-    document.getElementById("note-title").value = note.title;
-    document.getElementById("note-tags").value = note.tags.join(" ");
-    document.getElementById("note-color").value = note.color || "#60a5fa";
-    document.getElementById("note-content").value = note.content;
-    document.getElementById("note-pinned").checked = note.pinned;
-
-    const typeRadio = document.querySelector(
-      `input[name="note-type"][value="${note.type}"]`,
-    );
-    if (typeRadio) typeRadio.checked = true;
-  } else {
-    // Create mode
-    title.textContent = "📝 Tạo Ghi Chú Mới";
-    document.getElementById("note-id").value = "";
-    document.getElementById("note-color").value = "#60a5fa";
-  }
-
-  updateCharCount();
-  modal.showModal();
-}
-
-/**
- * Close note modal
- */
-function closeNoteModal() {
-  const modal = document.getElementById("note-modal");
-  if (modal) modal.close();
-}
-
-/**
- * Save note
- */
-function saveNote(e) {
-  e.preventDefault();
-
-  const id = document.getElementById("note-id").value;
-  const title = document.getElementById("note-title").value.trim();
-  const tagsInput = document.getElementById("note-tags").value.trim();
-  const color = document.getElementById("note-color").value;
-  const content = document.getElementById("note-content").value.trim();
-  const pinned = document.getElementById("note-pinned").checked;
-  const type = document.querySelector('input[name="note-type"]:checked').value;
-
-  if (!title || !content) {
-    alert("Vui lòng nhập tiêu đề và nội dung!");
-    return;
-  }
-
-  const tags = parseTags(tagsInput);
-  const now = new Date().toISOString();
-
-  if (id) {
-    // Update existing note
-    const index = appData.smartNotes.findIndex((n) => n.id == id);
-    if (index !== -1) {
-      appData.smartNotes[index] = {
-        ...appData.smartNotes[index],
-        title,
-        content,
-        type,
-        tags,
-        color,
-        pinned,
-        updatedAt: now,
-      };
-    }
-  } else {
-    // Create new note
-    const newNote = {
-      id: Date.now(),
-      title,
-      content,
-      type,
-      tags,
-      color,
-      pinned,
-      createdAt: now,
-      updatedAt: now,
-    };
-    appData.smartNotes.push(newNote);
-  }
-
-  saveData();
-  renderSmartNotes();
-  closeNoteModal();
-}
-
-/**
- * Delete note
- */
-function deleteNote(id) {
-  if (!confirm("Bạn có chắc muốn xóa ghi chú này?")) return;
-
-  appData.smartNotes = appData.smartNotes.filter((n) => n.id != id);
-  saveData();
-  renderSmartNotes();
-}
-
-/**
- * Toggle preview mode
- */
-function togglePreview() {
-  const editor = document.getElementById("note-content");
-  const preview = document.getElementById("note-preview");
-  const btn = document.getElementById("btn-toggle-preview");
-
-  if (!editor || !preview) return;
-
-  if (preview.style.display === "none") {
-    // Show preview
-    preview.innerHTML = renderMarkdown(editor.value);
-    preview.style.display = "block";
-    editor.style.display = "none";
-    btn.classList.add("active");
-  } else {
-    // Show editor
-    preview.style.display = "none";
-    editor.style.display = "block";
-    btn.classList.remove("active");
-  }
-}
-
-/**
- * Insert markdown formatting
- */
-function insertMarkdown(before, after = "") {
-  const editor = document.getElementById("note-content");
-  if (!editor) return;
-
-  const start = editor.selectionStart;
-  const end = editor.selectionEnd;
-  const text = editor.value;
-  const selectedText = text.substring(start, end);
-
-  const newText =
-    text.substring(0, start) +
-    before +
-    selectedText +
-    after +
-    text.substring(end);
-
-  editor.value = newText;
-  editor.focus();
-  editor.selectionStart = start + before.length;
-  editor.selectionEnd = start + before.length + selectedText.length;
-
-  updateCharCount();
-}
-
-/**
- * Update character count
- */
-function updateCharCount() {
-  const editor = document.getElementById("note-content");
-  const counter = document.getElementById("note-char-count");
-  if (editor && counter) {
-    counter.textContent = `${editor.value.length} ký tự`;
-  }
-}
-
-/**
- * Setup notes event listeners
- */
-function setupNotesListeners() {
-  // Add note button
-  const btnAddNote = document.getElementById("btn-add-note");
-  if (btnAddNote) {
-    btnAddNote.addEventListener("click", () => openNoteModal());
-  }
-
-  // Close modal buttons
-  const btnCloseModal = document.getElementById("btn-close-note-modal");
-  const btnCancelNote = document.getElementById("btn-cancel-note");
-
-  if (btnCloseModal) {
-    btnCloseModal.addEventListener("click", closeNoteModal);
-  }
-  if (btnCancelNote) {
-    btnCancelNote.addEventListener("click", closeNoteModal);
-  }
-
-  // Save note
-  const noteForm = document.querySelector("#note-modal form");
-  if (noteForm) {
-    noteForm.addEventListener("submit", saveNote);
-  }
-
-  // Search
-  const searchInput = document.getElementById("notes-search");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      const filterSelect = document.getElementById("notes-filter");
-      const filterType = filterSelect ? filterSelect.value : "all";
-      renderSmartNotes(filterType, e.target.value);
-    });
-  }
-
-  // Filter
-  const filterSelect = document.getElementById("notes-filter");
-  if (filterSelect) {
-    filterSelect.addEventListener("change", (e) => {
-      const searchInput = document.getElementById("notes-search");
-      const searchQuery = searchInput ? searchInput.value : "";
-      renderSmartNotes(e.target.value, searchQuery);
-    });
-  }
-
-  // Editor toolbar
-  const btnBold = document.getElementById("btn-format-bold");
-  const btnItalic = document.getElementById("btn-format-italic");
-  const btnStrike = document.getElementById("btn-format-strike");
-  const btnLink = document.getElementById("btn-insert-link");
-  const btnCheckbox = document.getElementById("btn-insert-checkbox");
-  const btnPreview = document.getElementById("btn-toggle-preview");
-
-  if (btnBold)
-    btnBold.addEventListener("click", () => insertMarkdown("**", "**"));
-  if (btnItalic)
-    btnItalic.addEventListener("click", () => insertMarkdown("*", "*"));
-  if (btnStrike)
-    btnStrike.addEventListener("click", () => insertMarkdown("~~", "~~"));
-  if (btnLink)
-    btnLink.addEventListener("click", () => {
-      const url = prompt("Nhập URL:");
-      if (url) insertMarkdown(`[`, `](${url})`);
-    });
-  if (btnCheckbox)
-    btnCheckbox.addEventListener("click", () => insertMarkdown("[ ] "));
-  if (btnPreview) btnPreview.addEventListener("click", togglePreview);
-
-  // Color presets
-  document.querySelectorAll(".color-preset").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const color = btn.dataset.color;
-      const colorInput = document.getElementById("note-color");
-      if (colorInput) colorInput.value = color;
-    });
-  });
-
-  // Character count
-  const noteContent = document.getElementById("note-content");
-  if (noteContent) {
-    noteContent.addEventListener("input", updateCharCount);
-  }
-
-  // Keyboard shortcuts
-  if (noteContent) {
-    noteContent.addEventListener("keydown", (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        if (e.key === "b") {
-          e.preventDefault();
-          insertMarkdown("**", "**");
-        } else if (e.key === "i") {
-          e.preventDefault();
-          insertMarkdown("*", "*");
-        }
-      }
-    });
-  }
 }
 
 document.addEventListener("DOMContentLoaded", init);

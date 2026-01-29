@@ -1,0 +1,692 @@
+/**
+ * SMART NOTES STYLES
+ * Giao diện hệ thống ghi chú thông minh
+ */
+
+/* ============= NOTES HEADER ============= */
+
+.notes-header-section {
+  margin-bottom: 1.5rem;
+}
+
+.notes-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.notes-header-top h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.notes-search-box {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.notes-search-box input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.notes-search-box::before {
+  content: "🔍";
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ============= NOTES STATS ============= */
+
+.notes-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.notes-stat-card {
+  padding: 1rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+}
+
+.notes-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.notes-stat-card .stat-label {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.notes-stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ============= NOTES FILTERS ============= */
+
+.notes-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.notes-filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notes-filter-btn:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.notes-filter-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* ============= NOTES GRID ============= */
+
+.smart-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.notes-empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notes-empty-state span {
+  font-size: 3rem;
+}
+
+/* ============= NOTE CARD ============= */
+
+.note-card {
+  background: var(--color-background);
+  border: 2px solid var(--note-color, var(--color-border));
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.note-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.note-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.note-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.note-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.note-card:hover .note-actions {
+  opacity: 1;
+}
+
+.note-action-btn {
+  padding: 0.25rem 0.5rem;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.875rem;
+}
+
+.note-action-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.note-pinned-indicator {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  font-size: 1rem;
+}
+
+/* ============= NOTE TAGS ============= */
+
+.note-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.note-tag {
+  padding: 0.25rem 0.5rem;
+  background: var(--note-color);
+  color: white;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ============= NOTE CONTENT ============= */
+
+.note-content-preview {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+/* ============= NOTE TODO PROGRESS ============= */
+
+.note-todo-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.note-progress-bar {
+  flex: 1;
+  height: 0.5rem;
+  background: var(--color-border);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.note-progress-fill {
+  height: 100%;
+  background: var(--note-color);
+  transition: width 0.3s;
+}
+
+.note-progress-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* ============= NOTE FOOTER ============= */
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.note-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.note-type-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}
+
+/* ============= NOTE MODAL ============= */
+
+.note-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  background: var(--color-background);
+  border-radius: 1rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.note-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.note-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.close-modal-btn {
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+  color: var(--color-text-primary);
+}
+
+.note-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.note-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.note-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+.note-form-group input[type="text"],
+.note-form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: inherit;
+}
+
+.note-form-group textarea {
+  resize: vertical;
+  min-height: 200px;
+  font-family: "Courier New", monospace;
+}
+
+/* ============= EDITOR TOOLBAR ============= */
+
+.editor-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--color-border);
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.editor-toolbar-btn {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--color-text-primary);
+}
+
+.editor-toolbar-btn:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* ============= EDITOR MODES ============= */
+
+.editor-modes {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--color-border);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.editor-mode-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--color-text-secondary);
+}
+
+.editor-mode-btn.active {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* ============= NOTE PREVIEW ============= */
+
+.note-preview-pane {
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  min-height: 200px;
+  background: var(--color-background);
+}
+
+.rendered-markdown h1,
+.rendered-markdown h2,
+.rendered-markdown h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.rendered-markdown h1 {
+  font-size: 1.5rem;
+}
+.rendered-markdown h2 {
+  font-size: 1.25rem;
+}
+.rendered-markdown h3 {
+  font-size: 1.125rem;
+}
+
+.rendered-markdown ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.rendered-markdown li {
+  margin: 0.25rem 0;
+}
+
+.rendered-markdown a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.rendered-markdown strong {
+  font-weight: 700;
+}
+
+.rendered-markdown em {
+  font-style: italic;
+}
+
+.rendered-markdown del {
+  text-decoration: line-through;
+}
+
+/* ============= TODO ITEMS ============= */
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.25rem 0;
+  border-radius: 0.375rem;
+  background: var(--color-border);
+}
+
+.todo-item.completed {
+  opacity: 0.6;
+}
+
+.todo-item.completed span {
+  text-decoration: line-through;
+}
+
+.todo-checkbox {
+  margin-top: 0.25rem;
+  cursor: pointer;
+}
+
+/* ============= COLOR PICKER ============= */
+
+.color-picker-inline {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  border-color: var(--color-text-primary);
+}
+
+.color-option.active {
+  border-color: var(--color-text-primary);
+  box-shadow: 0 0 0 2px var(--color-background);
+}
+
+/* ============= RADIO CARDS ============= */
+
+.radio-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.radio-card {
+  position: relative;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.radio-card:hover {
+  border-color: var(--color-primary);
+}
+
+.radio-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.radio-card input[type="radio"]:checked + label {
+  color: var(--color-primary);
+}
+
+.radio-card input[type="radio"]:checked ~ * {
+  border-color: var(--color-primary);
+}
+
+.radio-card.active {
+  border-color: var(--color-primary);
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.radio-card-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-text-primary);
+}
+
+.radio-card-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* ============= MODAL FOOTER ============= */
+
+.note-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  gap: 1rem;
+}
+
+.note-char-count {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.note-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* ============= CHECKBOX STYLE ============= */
+
+.pinned-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.pinned-checkbox input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+/* ============= DARK MODE ============= */
+
+[data-theme="dark"] .note-card {
+  background: #1e293b;
+}
+
+[data-theme="dark"] .note-action-btn {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .note-action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .todo-item {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============= RESPONSIVE ============= */
+
+@media (max-width: 768px) {
+  .smart-notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-header-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notes-search-box {
+    max-width: none;
+  }
+
+  .notes-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .note-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .editor-toolbar {
+    gap: 0.25rem;
+  }
+
+  .editor-toolbar-btn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .radio-cards {
+    grid-template-columns: 1fr;
+  }
+}
