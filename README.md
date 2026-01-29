@@ -8,11 +8,9 @@
 
 ## 🌐 Live Demo
 
-**🎯 [View Landing Page](https://your-username.github.io/smart-timetable/public/landing.html)**
+**🎯 [View Landing Page](https://tonyisme1.github.io/ThoiKhoaBieu/public/landing.html)**
 
-**📱 [Launch App](https://your-username.github.io/smart-timetable/public/index.html)**
-
-> Replace `your-username` with your GitHub username after deploying
+**📱 [Launch App](https://tonyisme1.github.io/ThoiKhoaBieu/public/index.html)**
 
 ## 🚀 Quick Start
 
@@ -37,7 +35,7 @@ http://localhost:3001/public/index.html
 1. Fork this repository
 2. Go to Settings → Pages
 3. Select `main` branch as source
-4. Your site will be live at `https://your-username.github.io/smart-timetable/public/index.html`
+4. Your site will be live at `https://your-username.github.io/ThoiKhoaBieu/public/index.html`
 
 ## 📁 Project Structure
 
