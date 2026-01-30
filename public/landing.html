@@ -3,24 +3,81 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Timetable - Manage Your Academic Life</title>
+    <title>Smart Timetable - Modern Academic Management</title>
+    <meta
+      name="description"
+      content="The most beautiful and intelligent way to manage your university schedule, assignments, and academic life."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      :root {
-        --primary: #2563eb;
-        --primary-dark: #1d4ed8;
-        --primary-light: #dbeafe;
-        --accent: #f59e0b;
-        --text-dark: #1f2937;
-        --text-gray: #6b7280;
-        --bg-white: #ffffff;
-        --bg-light: #f9fafb;
-        --border: #e5e7eb;
-      }
-
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+      }
+
+      :root {
+        /* Colors - Light Theme */
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-tertiary: #94a3b8;
+        --border-color: #e2e8f0;
+
+        /* Gradients */
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-tertiary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-xl:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+        /* Spacing */
+        --spacing-xs: 0.5rem;
+        --spacing-sm: 1rem;
+        --spacing-md: 1.5rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 3rem;
+        --spacing-2xl: 4rem;
+
+        /* Border Radius */
+        --radius-sm: 0.5rem;
+        --radius-md: 1rem;
+        --radius-lg: 1.5rem;
+        --radius-xl: 2rem;
+        --radius-full: 9999px;
+      }
+
+      [data-theme="dark"] {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-tertiary: #64748b;
+        --border-color: #334155;
+      }
+
+      html {
+        scroll-behavior: smooth;
       }
 
       body {
@@ -30,340 +87,246 @@
           BlinkMacSystemFont,
           "Segoe UI",
           sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
         line-height: 1.6;
-        color: var(--text-dark);
         overflow-x: hidden;
+        transition:
+          background 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Animated Background */
+      .bg-gradient-animated {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.03;
+        background:
+          radial-gradient(
+            circle at 20% 50%,
+            rgba(102, 126, 234, 0.4) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(245, 147, 251, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 20%,
+            rgba(67, 233, 123, 0.3) 0%,
+            transparent 50%
+          );
+        animation: meshAnimation 20s ease infinite;
+      }
+
+      @keyframes meshAnimation {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        33% {
+          transform: translate(30px, -50px) scale(1.1);
+        }
+        66% {
+          transform: translate(-30px, 30px) scale(0.9);
+        }
+      }
+
+      /* Navigation */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      [data-theme="dark"] .navbar {
+        background: rgba(15, 23, 42, 0.7);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .navbar.scrolled {
+        box-shadow: var(--shadow-lg);
+      }
+
+      .navbar-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 900;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 2.5rem;
+        align-items: center;
+        list-style: none;
+      }
+
+      .nav-menu a {
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+        position: relative;
+      }
+
+      .nav-menu a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-primary);
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-menu a:hover {
+        color: var(--text-primary);
+      }
+
+      .nav-menu a:hover::after {
+        width: 100%;
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        border-radius: var(--radius-sm);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1) rotate(15deg);
+      }
+
+      .btn-nav {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-nav:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
       }
 
       /* Hero Section */
       .hero {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 4rem 2rem;
-        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8rem 2rem 4rem;
         position: relative;
         overflow: hidden;
       }
 
-      .hero::before {
-        content: "";
+      .hero-grid {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="40" fill="white" opacity="0.05"/></svg>');
-        background-size: 100px 100px;
-        animation: float 20s linear infinite;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.5;
       }
 
-      @keyframes float {
-        from {
-          transform: translateY(0);
-        }
-        to {
-          transform: translateY(-100px);
-        }
+      [data-theme="dark"] .hero-grid {
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
       }
 
       .hero-content {
-        max-width: 800px;
+        max-width: 1400px;
         margin: 0 auto;
+        text-align: center;
         position: relative;
         z-index: 1;
       }
 
-      .hero h1 {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .hero p {
-        font-size: 1.25rem;
-        margin-bottom: 2rem;
-        opacity: 0.95;
-      }
-
-      .cta-buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        padding: 1rem 2rem;
-        border-radius: 8px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s;
-        display: inline-block;
-        font-size: 1rem;
-      }
-
-      .btn-primary {
-        background: white;
-        color: var(--primary);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-      }
-
-      .btn-secondary {
-        background: transparent;
-        color: white;
-        border: 2px solid white;
-      }
-
-      .btn-secondary:hover {
-        background: white;
-        color: var(--primary);
-      }
-
-      /* Features Section */
-      .section {
-        padding: 4rem 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .section-header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
-
-      .section-header h2 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: var(--text-dark);
-      }
-
-      .section-header p {
-        font-size: 1.1rem;
-        color: var(--text-gray);
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-      }
-
-      .feature-card {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s;
-        border: 1px solid var(--border);
-      }
-
-      .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      }
-
-      .feature-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .feature-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: 0.75rem;
-        color: var(--text-dark);
-      }
-
-      .feature-card p {
-        color: var(--text-gray);
-        line-height: 1.7;
-      }
-
-      /* Screenshot Section */
-      .bg-light {
-        background: var(--bg-light);
-      }
-
-      .screenshot-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-      }
-
-      .screenshot-item {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
-      }
-
-      .screenshot-item:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-      }
-
-      .screenshot-placeholder {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 3rem;
-      }
-
-      .screenshot-caption {
-        padding: 1.5rem;
-      }
-
-      .screenshot-caption h4 {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-        color: var(--text-dark);
-      }
-
-      .screenshot-caption p {
-        color: var(--text-gray);
-        font-size: 0.95rem;
-      }
-
-      /* Benefits Section */
-      .benefits-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-      }
-
-      .benefit-item {
-        display: flex;
-        gap: 1rem;
-        align-items: start;
-        padding: 1.5rem;
-        background: white;
-        border-radius: 8px;
-        border-left: 4px solid var(--primary);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-      }
-
-      .benefit-check {
-        color: var(--primary);
-        font-size: 1.5rem;
-        font-weight: bold;
-      }
-
-      .benefit-content h4 {
-        font-size: 1.1rem;
-        margin-bottom: 0.25rem;
-        color: var(--text-dark);
-      }
-
-      .benefit-content p {
-        color: var(--text-gray);
-        font-size: 0.9rem;
-      }
-
-      /* Tech Stack */
-      .tech-stack {
-        display: flex;
-        gap: 2rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 2rem;
-      }
-
-      .tech-item {
-        display: flex;
-        flex-direction: column;
+      .hero-badge {
+        display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 1.5rem;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        min-width: 150px;
-        transition: all 0.3s;
-      }
-
-      .tech-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-      }
-
-      .tech-icon {
-        font-size: 2.5rem;
-      }
-
-      .tech-name {
+        background: rgba(102, 126, 234, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-size: 0.875rem;
         font-weight: 600;
-        color: var(--text-dark);
-      }
-
-      /* CTA Section */
-      .cta-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        text-align: center;
-        padding: 4rem 2rem;
-      }
-
-      .cta-section h2 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .cta-section p {
-        font-size: 1.2rem;
+        color: #667eea;
         margin-bottom: 2rem;
-        opacity: 0.95;
+        animation: fadeInUp 0.6s ease-out;
       }
 
-      /* Footer */
-      .footer {
-        background: var(--text-dark);
-        color: white;
-        text-align: center;
-        padding: 2rem;
+      .hero h1 {
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.03em;
+        animation: fadeInUp 0.6s ease-out 0.1s backwards;
       }
 
-      .footer p {
-        opacity: 0.8;
+      .hero h1 .gradient-text {
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
       }
 
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero h1 {
-          font-size: 2rem;
-        }
-
-        .hero p {
-          font-size: 1rem;
-        }
-
-        .section-header h2 {
-          font-size: 1.75rem;
-        }
-
-        .features-grid,
-        .screenshot-grid,
-        .benefits-list {
-          grid-template-columns: 1fr;
-        }
-
-        .tech-stack {
-          gap: 1rem;
-        }
+      .hero-subtitle {
+        font-size: clamp(1.125rem, 2vw, 1.5rem);
+        color: var(--text-secondary);
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        line-height: 1.7;
+        animation: fadeInUp 0.6s ease-out 0.2s backwards;
       }
 
-      /* Animations */
+      .hero-cta {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 0.6s ease-out 0.3s backwards;
+      }
+
       @keyframes fadeInUp {
         from {
           opacity: 0;
@@ -375,294 +338,978 @@
         }
       }
 
-      .feature-card,
-      .screenshot-item,
-      .benefit-item {
-        animation: fadeInUp 0.6s ease-out;
+      .btn {
+        padding: 1rem 2rem;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        font-size: 1.05rem;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      /* Stats Section */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 4rem auto 0;
+        padding: 0 2rem;
+      }
+
+      .stat-card {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      .stat-number {
+        font-size: 3rem;
+        font-weight: 900;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+      }
+
+      /* Container */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 6rem 2rem;
+      }
+
+      .section-header {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 4rem;
+      }
+
+      .section-badge {
+        display: inline-block;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .section-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+      }
+
+      .section-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+      }
+
+      /* Bento Grid Features */
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 1.5rem;
+        margin-top: 4rem;
+      }
+
+      .bento-item {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: 2.5rem;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .bento-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+
+      .bento-item:hover::before {
+        opacity: 0.03;
+      }
+
+      .bento-item:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-2xl);
+        border-color: rgba(102, 126, 234, 0.3);
+      }
+
+      .bento-large {
+        grid-column: span 8;
+      }
+
+      .bento-medium {
+        grid-column: span 4;
+      }
+
+      .bento-small {
+        grid-column: span 6;
+      }
+
+      .bento-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--radius-md);
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        position: relative;
+        z-index: 1;
+      }
+
+      .bento-item:nth-child(2) .bento-icon {
+        background: var(--gradient-secondary);
+        box-shadow: 0 8px 24px rgba(240, 147, 251, 0.25);
+      }
+
+      .bento-item:nth-child(3) .bento-icon {
+        background: var(--gradient-tertiary);
+        box-shadow: 0 8px 24px rgba(79, 172, 254, 0.25);
+      }
+
+      .bento-item:nth-child(4) .bento-icon {
+        background: var(--gradient-success);
+        box-shadow: 0 8px 24px rgba(67, 233, 123, 0.25);
+      }
+
+      .bento-item:nth-child(5) .bento-icon {
+        background: var(--gradient-warning);
+        box-shadow: 0 8px 24px rgba(250, 112, 154, 0.25);
+      }
+
+      .bento-item:nth-child(6) .bento-icon {
+        background: var(--gradient-secondary);
+        box-shadow: 0 8px 24px rgba(240, 147, 251, 0.25);
+      }
+
+      .bento-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .bento-description {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Features Grid */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+      }
+
+      .feature-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: 2.5rem;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+
+      .feature-card:hover::before {
+        opacity: 0.03;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: var(--shadow-2xl);
+        border-color: rgba(102, 126, 234, 0.3);
+      }
+
+      .feature-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius-md);
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        z-index: 1;
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 16px 48px rgba(102, 126, 234, 0.4);
+      }
+
+      .feature-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .feature-description {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Screenshots */
+      .screenshots-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+      }
+
+      .screenshot-card {
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .screenshot-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-2xl);
+      }
+
+      .screenshot-image {
+        width: 100%;
+        height: 300px;
+        background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+      }
+
+      .screenshot-content {
+        padding: 2rem;
+      }
+
+      .screenshot-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .screenshot-description {
+        color: var(--text-secondary);
+      }
+
+      /* CTA Section */
+      .cta-section {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 6rem 2rem;
+        text-align: center;
+        border-radius: var(--radius-xl);
+        margin: 6rem 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-section::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        animation: float 20s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-50px, -50px) scale(1.1);
+        }
+      }
+
+      .cta-content {
+        position: relative;
+        z-index: 1;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .cta-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+      }
+
+      .cta-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.95;
+        margin-bottom: 2.5rem;
+        line-height: 1.7;
+      }
+
+      .btn-white {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-white:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border-color);
+        padding: 4rem 2rem 2rem;
+      }
+
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      .footer-section h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 0.75rem;
+      }
+
+      .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: var(--text-primary);
+      }
+
+      .footer-bottom {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+        text-align: center;
+        color: var(--text-tertiary);
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .bento-large,
+        .bento-medium,
+        .bento-small {
+          grid-column: span 12;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .navbar-container {
+          padding: 1rem;
+        }
+
+        .nav-menu {
+          display: none;
+        }
+
+        .hero {
+          padding: 6rem 1rem 3rem;
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .screenshots-grid,
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-cta {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      /* Scroll Animation Classes */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
       }
     </style>
   </head>
   <body>
+    <div class="bg-gradient-animated"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">Smart Timetable</div>
+        <ul class="nav-menu">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#screenshots">Screenshots</a></li>
+          <li><a href="#about">About</a></li>
+          <li>
+            <button
+              class="theme-toggle"
+              onclick="toggleTheme()"
+              aria-label="Toggle theme"
+            >
+              <span class="theme-icon">🌙</span>
+            </button>
+          </li>
+          <li><a href="index.html" class="btn-nav">Launch App</a></li>
+        </ul>
+      </div>
+    </nav>
+
     <!-- Hero Section -->
     <section class="hero">
+      <div class="hero-grid"></div>
       <div class="hero-content">
-        <h1>📚 Smart Timetable</h1>
-        <p>
-          Your all-in-one academic management system. Organize courses, track
-          assignments, manage exams, and stay on top of your university life.
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path
+              d="M8 0L10.4 5.6L16 6.4L12 10.4L13.2 16L8 13.2L2.8 16L4 10.4L0 6.4L5.6 5.6L8 0Z"
+            />
+          </svg>
+          <span>Modern Academic Management</span>
+        </div>
+
+        <h1>
+          Manage Your<br />
+          <span class="gradient-text">Academic Life</span><br />
+          Beautifully
+        </h1>
+
+        <p class="hero-subtitle">
+          The most intelligent and beautiful way to organize your university
+          schedule, track assignments, manage notes, and never miss a deadline
+          again.
         </p>
-        <div class="cta-buttons">
-          <a href="index.html" class="btn btn-primary">Launch App →</a>
-          <a href="https://github.com/Tonyisme1/ThoiKhoaBieu?tab=readme-ov-file#-t%C3%A1c-gi%E1%BA%A3" class="btn btn-secondary"
-            >View on GitHub</a
+
+        <div class="hero-cta">
+          <a href="index.html" class="btn btn-primary">
+            Get Started Free
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M10 3L8.59 4.41L13.17 9H3V11H13.17L8.59 15.59L10 17L17 10L10 3Z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://github.com/Tonyisme1/ThoiKhoaBieu"
+            class="btn btn-secondary"
           >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.165 20 14.418 20 10c0-5.523-4.477-10-10-10z"
+              />
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card fade-in">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Free & Open Source</div>
+          </div>
+          <div class="stat-card fade-in">
+            <div class="stat-number">0kb</div>
+            <div class="stat-label">No Dependencies</div>
+          </div>
+          <div class="stat-card fade-in">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Unlimited Notes</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="section">
+    <!-- Bento Grid Features -->
+    <section class="container" id="features">
       <div class="section-header">
-        <h2>✨ Powerful Features</h2>
-        <p>
-          Everything you need to manage your academic life in one beautiful
-          application
+        <div class="section-badge">FEATURES</div>
+        <h2 class="section-title">Everything You Need</h2>
+        <p class="section-subtitle">
+          Powerful features designed to make your academic life easier and more
+          organized.
         </p>
       </div>
+
+      <div class="bento-grid">
+        <div class="bento-item bento-large fade-in">
+          <div class="bento-icon">📅</div>
+          <h3 class="bento-title">Smart Timetable Management</h3>
+          <p class="bento-description">
+            Beautiful color-coded schedule view with automatic conflict
+            detection. See your entire week at a glance with customizable themes
+            and layouts. Never double-book yourself again.
+          </p>
+        </div>
+
+        <div class="bento-item bento-medium fade-in">
+          <div class="bento-icon">✅</div>
+          <h3 class="bento-title">Task Tracking</h3>
+          <p class="bento-description">
+            Keep track of assignments, projects, and deadlines with smart
+            reminders.
+          </p>
+        </div>
+
+        <div class="bento-item bento-small fade-in">
+          <div class="bento-icon">📊</div>
+          <h3 class="bento-title">Performance Analytics</h3>
+          <p class="bento-description">
+            Track attendance, grades, and study patterns with beautiful
+            visualizations.
+          </p>
+        </div>
+
+        <div class="bento-item bento-small fade-in">
+          <div class="bento-icon">📝</div>
+          <h3 class="bento-title">Smart Notes</h3>
+          <p class="bento-description">
+            Markdown support, tags, search, and organization for all your study
+            notes.
+          </p>
+        </div>
+
+        <div class="bento-item bento-medium fade-in">
+          <div class="bento-icon">🔔</div>
+          <h3 class="bento-title">Reminders</h3>
+          <p class="bento-description">
+            Never miss a class or deadline with intelligent notification system.
+          </p>
+        </div>
+
+        <div class="bento-item bento-large fade-in">
+          <div class="bento-icon">🎨</div>
+          <h3 class="bento-title">Customizable Themes</h3>
+          <p class="bento-description">
+            Light and dark modes with beautiful color schemes. Customize
+            everything from colors to layouts to make it truly yours. Your
+            schedule, your style.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section class="container" id="screenshots">
+      <div class="section-header">
+        <div class="section-badge">SCREENSHOTS</div>
+        <h2 class="section-title">Beautiful & Intuitive</h2>
+        <p class="section-subtitle">
+          Designed with attention to detail and user experience in mind.
+        </p>
+      </div>
+
+      <div class="screenshots-grid">
+        <div class="screenshot-card fade-in">
+          <div class="screenshot-image">📅</div>
+          <div class="screenshot-content">
+            <h3 class="screenshot-title">Timetable View</h3>
+            <p class="screenshot-description">
+              Clean, color-coded schedule with easy navigation between weeks and
+              semesters.
+            </p>
+          </div>
+        </div>
+
+        <div class="screenshot-card fade-in">
+          <div class="screenshot-image">📝</div>
+          <div class="screenshot-content">
+            <h3 class="screenshot-title">Notes Dashboard</h3>
+            <p class="screenshot-description">
+              Organize your study notes with tags, markdown, and powerful
+              search.
+            </p>
+          </div>
+        </div>
+
+        <div class="screenshot-card fade-in">
+          <div class="screenshot-image">📊</div>
+          <div class="screenshot-content">
+            <h3 class="screenshot-title">Analytics</h3>
+            <p class="screenshot-description">
+              Track your attendance, grades, and study progress with beautiful
+              charts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Features -->
+    <section class="container" id="about">
+      <div class="section-header">
+        <div class="section-badge">WHY CHOOSE US</div>
+        <h2 class="section-title">Built for Students</h2>
+        <p class="section-subtitle">
+          Everything you need to succeed academically, all in one place.
+        </p>
+      </div>
+
       <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">📅</div>
-          <h3>Smart Timetable</h3>
-          <p>
-            Visualize your weekly schedule with an intuitive grid interface.
-            Color-coded courses, room details, and instructor information at a
-            glance.
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Lightning Fast</h3>
+          <p class="feature-description">
+            Built with vanilla JavaScript for instant loading and smooth
+            performance. No frameworks, no bloat, just pure speed.
           </p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Analytics Dashboard</h3>
-          <p>
-            Get insights into your academic week with smart statistics, workload
-            visualization, and upcoming class notifications.
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">Privacy First</h3>
+          <p class="feature-description">
+            All your data stays on your device. No accounts, no servers, no
+            tracking. Your academic life is yours alone.
           </p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h3>Assignment Tracker</h3>
-          <p>
-            Never miss a deadline again. Track homework, projects, and
-            submissions with priority levels, due dates, and completion status.
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">📱</div>
+          <h3 class="feature-title">Fully Responsive</h3>
+          <p class="feature-description">
+            Works beautifully on desktop, tablet, and mobile. Access your
+            schedule anywhere, anytime.
           </p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📖</div>
-          <h3>Exam Schedule</h3>
-          <p>
-            Prepare for exams with organized schedule management. Track exam
-            dates, formats, rooms, and preparation notes.
+
+        <div class="feature-card fade-in">
+          <div class="feature-icon">💾</div>
+          <h3 class="feature-title">Offline Ready</h3>
+          <p class="feature-description">
+            Works completely offline using LocalStorage. No internet required
+            after the first load.
           </p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">✅</div>
-          <h3>Attendance Monitor</h3>
-          <p>
-            Keep track of your class attendance. View statistics per course,
-            identify patterns, and maintain your academic standing.
-          </p>
-        </div>
-        <div class="feature-card">
+
+        <div class="feature-card fade-in">
           <div class="feature-icon">🎓</div>
-          <h3>Course Management</h3>
-          <p>
-            Comprehensive course database with instructor details, schedules,
-            rooms, and personal notes for each subject.
+          <h3 class="feature-title">Student Focused</h3>
+          <p class="feature-description">
+            Designed by students, for students. Every feature is crafted to
+            solve real academic challenges.
           </p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📌</div>
-          <h3>Smart Notes</h3>
-          <p>
-            Rich note-taking with markdown support, todo lists, tags, color
-            coding, and pin-to-top functionality.
-          </p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚙️</div>
-          <h3>Customizable Settings</h3>
-          <p>
-            Configure semester dates, holidays, week numbering system, and
-            personalize the app to match your academic calendar.
-          </p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🌙</div>
-          <h3>Dark Mode</h3>
-          <p>
-            Easy on the eyes with a beautiful dark theme. Switch between light
-            and dark modes instantly.
-          </p>
-        </div>
-      </div>
-    </section>
 
-    <!-- Screenshots Section -->
-    <section class="section bg-light">
-      <div class="section-header">
-        <h2>📸 Beautiful Interface</h2>
-        <p>Clean, modern design that makes academic management enjoyable</p>
-      </div>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <div class="screenshot-placeholder">📊</div>
-          <div class="screenshot-caption">
-            <h4>Dashboard Overview</h4>
-            <p>
-              See your week at a glance with statistics, charts, and upcoming
-              classes
-            </p>
-          </div>
-        </div>
-        <div class="screenshot-item">
-          <div class="screenshot-placeholder">📅</div>
-          <div class="screenshot-caption">
-            <h4>Weekly Timetable</h4>
-            <p>
-              Color-coded schedule grid with all your course details organized
-              beautifully
-            </p>
-          </div>
-        </div>
-        <div class="screenshot-item">
-          <div class="screenshot-placeholder">📝</div>
-          <div class="screenshot-caption">
-            <h4>Assignments & Tasks</h4>
-            <p>
-              Track all your assignments with priorities, deadlines, and
-              completion status
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2>🌟 Why Choose Smart Timetable?</h2>
-        <p>
-          Built with students in mind, designed for simplicity and efficiency
-        </p>
-      </div>
-      <div class="benefits-list">
-        <div class="benefit-item">
-          <div class="benefit-check">✓</div>
-          <div class="benefit-content">
-            <h4>100% Free & Open Source</h4>
-            <p>
-              No subscriptions, no hidden costs. Use it forever, completely
-              free.
-            </p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-check">✓</div>
-          <div class="benefit-content">
-            <h4>Works Offline</h4>
-            <p>
-              All data stored locally. No internet required after initial load.
-            </p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-check">✓</div>
-          <div class="benefit-content">
-            <h4>Privacy First</h4>
-            <p>Your data stays on your device. No servers, no tracking.</p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-check">✓</div>
-          <div class="benefit-content">
-            <h4>Lightning Fast</h4>
-            <p>
-              No build tools, no frameworks. Pure vanilla JavaScript
-              performance.
-            </p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-check">✓</div>
-          <div class="benefit-content">
-            <h4>Easy to Customize</h4>
-            <p>
-              Modular architecture makes it simple to add features or modify.
-            </p>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-check">✓</div>
-          <div class="benefit-content">
-            <h4>Mobile Responsive</h4>
-            <p>Works perfectly on desktop, tablet, and mobile devices.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tech Stack Section -->
-    <section class="section bg-light">
-      <div class="section-header">
-        <h2>🛠️ Built With Modern Technology</h2>
-        <p>Simple, powerful, and maintainable architecture</p>
-      </div>
-      <div class="tech-stack">
-        <div class="tech-item">
-          <div class="tech-icon">📄</div>
-          <div class="tech-name">HTML5</div>
-        </div>
-        <div class="tech-item">
-          <div class="tech-icon">🎨</div>
-          <div class="tech-name">CSS3</div>
-        </div>
-        <div class="tech-item">
-          <div class="tech-icon">⚡</div>
-          <div class="tech-name">JavaScript ES6+</div>
-        </div>
-        <div class="tech-item">
-          <div class="tech-icon">📦</div>
-          <div class="tech-name">LocalStorage</div>
-        </div>
-        <div class="tech-item">
-          <div class="tech-icon">🧩</div>
-          <div class="tech-name">Modular Architecture</div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🆓</div>
+          <h3 class="feature-title">Forever Free</h3>
+          <p class="feature-description">
+            Completely free and open source. No premium tiers, no subscriptions,
+            no hidden costs. Ever.
+          </p>
         </div>
       </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta-section">
-      <h2>Ready to Get Organized?</h2>
-      <p>Start managing your academic life smarter, not harder.</p>
-      <div class="cta-buttons">
-        <a href="index.html" class="btn btn-primary">Get Started Now →</a>
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to Get Organized?</h2>
+        <p class="cta-subtitle">
+          Join thousands of students who are already managing their academic
+          life smarter, not harder.
+        </p>
+        <a href="index.html" class="btn btn-white">
+          Start Your Journey
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M10 3L8.59 4.41L13.17 9H3V11H13.17L8.59 15.59L10 17L17 10L10 3Z"
+            />
+          </svg>
+        </a>
       </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-      <p>Made with ❤️ for students | Smart Timetable © 2026</p>
-      <p style="margin-top: 0.5rem; font-size: 0.9rem">
-        Open source project for educational purposes
-      </p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Smart Timetable</h3>
+          <p style="color: var(--text-secondary); margin-top: 0.5rem">
+            Modern academic management for the modern student.
+          </p>
+        </div>
+
+        <div class="footer-section">
+          <h3>Product</h3>
+          <ul class="footer-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="index.html">Launch App</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul class="footer-links">
+            <li>
+              <a href="https://github.com/Tonyisme1/ThoiKhoaBieu">GitHub</a>
+            </li>
+            <li>
+              <a href="https://github.com/Tonyisme1/ThoiKhoaBieu#readme"
+                >Documentation</a
+              >
+            </li>
+            <li>
+              <a href="https://github.com/Tonyisme1/ThoiKhoaBieu/issues"
+                >Support</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li>
+              <a
+                href="https://github.com/Tonyisme1/ThoiKhoaBieu/blob/main/LICENSE"
+                >License</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>Made with ❤️ by students, for students | © 2026 Smart Timetable</p>
+        <p style="margin-top: 0.5rem">
+          Open source project for educational purposes
+        </p>
+      </div>
     </footer>
 
     <script>
-      // Simple scroll animation
+      // Theme Toggle
+      function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", newTheme);
+
+        const icon = document.querySelector(".theme-icon");
+        icon.textContent = newTheme === "dark" ? "☀️" : "🌙";
+
+        localStorage.setItem("theme", newTheme);
+      }
+
+      // Load saved theme
+      const savedTheme = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      document.querySelector(".theme-icon").textContent =
+        savedTheme === "dark" ? "☀️" : "🌙";
+
+      // Navbar scroll effect
+      let lastScroll = 0;
+      const navbar = document.querySelector(".navbar");
+
+      window.addEventListener("scroll", () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 100) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+
+        lastScroll = currentScroll;
+      });
+
+      // Intersection Observer for animations
       const observerOptions = {
         threshold: 0.1,
-        rootMargin: "0px 0px -100px 0px",
+        rootMargin: "0px 0px -50px 0px",
       };
 
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+        entries.forEach((entry, index) => {
           if (entry.isIntersecting) {
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
+            setTimeout(() => {
+              entry.target.classList.add("visible");
+            }, index * 100);
           }
         });
       }, observerOptions);
 
-      // Observe all animated elements
-      document
-        .querySelectorAll(".feature-card, .screenshot-item, .benefit-item")
-        .forEach((el) => {
-          el.style.opacity = "0";
-          el.style.transform = "translateY(30px)";
-          el.style.transition =
-            "opacity 0.6s ease-out, transform 0.6s ease-out";
-          observer.observe(el);
+      // Observe all fade-in elements
+      document.querySelectorAll(".fade-in").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
         });
+      });
+
+      // Add parallax effect to hero
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const heroContent = document.querySelector(".hero-content");
+        if (heroContent && scrolled < window.innerHeight) {
+          heroContent.style.transform = `translateY(${scrolled * 0.4}px)`;
+          heroContent.style.opacity = 1 - scrolled / 600;
+        }
+      });
+
+      // Add hover effect to cards
+      const cards = document.querySelectorAll(
+        ".bento-item, .feature-card, .screenshot-card",
+      );
+      cards.forEach((card) => {
+        card.addEventListener("mousemove", (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "";
+        });
+      });
     </script>
   </body>
 </html>
