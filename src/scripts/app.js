@@ -31,6 +31,10 @@ import {
   checkAndDisplayHoliday,
   renderHolidayList,
 } from "./modules/holidays.js";
+import { initMobileMenu } from "./modules/mobile-menu.js";
+import { initWeekSlider, setSelectedWeek } from "./modules/week-slider.js";
+import { initHeaderTabs, syncWithTab } from "./modules/header-tabs.js";
+import toast from "./modules/toast.js";
 
 // --- STATE ---
 let appData = {
@@ -124,6 +128,20 @@ function init() {
   initDashboard(appData);
   initHolidays(appData, saveData);
 
+  // Initialize mobile menu
+  initMobileMenu();
+
+  // Initialize header tabs for desktop
+  initHeaderTabs((tabName) => {
+    switchToTab(tabName);
+  });
+
+  // Initialize week slider
+  initWeekSlider(TOTAL_WEEKS_RENDER, currentViewWeek, (weekNum) => {
+    currentViewWeek = weekNum;
+    renderAllViews();
+  });
+
   // Render Data
   renderAllViews();
 
@@ -196,9 +214,15 @@ function attachEditEvents() {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const id = parseFloat(btn.dataset.id);
-      if (confirm("Are you sure you want to delete this course permanently?")) {
+      const course = appData.courses.find((c) => c.id === id);
+      if (
+        confirm(
+          `Delete "${course?.name || "this course"}"?\nThis action cannot be undone.`,
+        )
+      ) {
         appData.courses = appData.courses.filter((c) => c.id !== id);
         saveAndRender();
+        toast.success("Deleted", "Course removed successfully");
       }
     });
   });
@@ -248,101 +272,6 @@ function convertDateToISO(dateStr) {
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
   return dateStr;
-}
-
-function toggleCalendar() {
-  const calendar = document.getElementById("mini-calendar");
-  const btn = document.getElementById("btn-toggle-calendar");
-  if (calendar.style.display === "block") {
-    closeCalendar();
-  } else {
-    calendar.style.display = "block";
-    btn.classList.add("active");
-    renderCalendar(new Date());
-  }
-}
-
-function closeCalendar() {
-  const calendar = document.getElementById("mini-calendar");
-  const btn = document.getElementById("btn-toggle-calendar");
-  calendar.style.display = "none";
-  btn.classList.remove("active");
-}
-
-function renderCalendar(date) {
-  const monthYear = document.getElementById("calendar-month-year");
-  const daysContainer = document.getElementById("calendar-days");
-  if (!monthYear || !daysContainer) return;
-
-  const month = date.getMonth();
-  const year = date.getFullYear();
-  monthYear.textContent = `${getMonthName(month)} ${year}`;
-
-  // Get first day of month and number of days
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  // Adjust for Monday start (0 = Monday, 6 = Sunday)
-  const startDay = firstDay === 0 ? 6 : firstDay - 1;
-
-  daysContainer.innerHTML = "";
-
-  // Empty cells for days before first of month
-  for (let i = 0; i < startDay; i++) {
-    const emptyDay = document.createElement("div");
-    emptyDay.className = "calendar-day empty";
-    daysContainer.appendChild(emptyDay);
-  }
-
-  // Days of the month
-  const today = new Date();
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dayEl = document.createElement("div");
-    dayEl.className = "calendar-day";
-    dayEl.textContent = day;
-
-    // Highlight today
-    if (
-      day === today.getDate() &&
-      month === today.getMonth() &&
-      year === today.getFullYear()
-    ) {
-      dayEl.classList.add("today");
-    }
-
-    // Click to navigate to that week
-    dayEl.addEventListener("click", () => {
-      const clickedDate = new Date(year, month, day);
-      const isoDate = clickedDate.toISOString().split("T")[0];
-      const week = getRealWeekFromDate(isoDate);
-      if (week) {
-        currentViewWeek = week;
-        setActiveWeek(week);
-        renderAllViews();
-        closeCalendar();
-      }
-    });
-
-    daysContainer.appendChild(dayEl);
-  }
-}
-
-function getMonthName(month) {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  return months[month];
 }
 
 /**
@@ -596,12 +525,86 @@ function closeCourseDetails() {
 }
 
 function saveAndRender() {
-  localStorage.setItem("smartTimetableData", JSON.stringify(appData));
-  renderAllViews();
+  try {
+    localStorage.setItem("smartTimetableData", JSON.stringify(appData));
+    renderAllViews();
+  } catch (error) {
+    console.error("Error saving data:", error);
+    toast.error("Save Failed", "Could not save data. Storage might be full.");
+  }
 }
 
 function saveData() {
-  localStorage.setItem("smartTimetableData", JSON.stringify(appData));
+  try {
+    localStorage.setItem("smartTimetableData", JSON.stringify(appData));
+    return true;
+  } catch (error) {
+    console.error("Error saving data:", error);
+    toast.error("Save Failed", "Could not save data. Storage might be full.");
+    return false;
+  }
+}
+
+// --- TAB SWITCHING FUNCTION (GLOBAL) ---
+function switchToTab(targetTab) {
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+  const sidebarBtns = document.querySelectorAll(".sidebar-btn");
+  const headerTabBtns = document.querySelectorAll(".header-tab");
+
+  // Remove active class from all tabs and contents
+  tabBtns.forEach((b) => b.classList.remove("active"));
+  sidebarBtns.forEach((b) => b.classList.remove("active"));
+  headerTabBtns.forEach((b) => b.classList.remove("active"));
+  tabContents.forEach((c) => c.classList.remove("active"));
+
+  // Add active class to target tab
+  const targetBtn = document.querySelector(`.tab-btn[data-tab="${targetTab}"]`);
+  if (targetBtn) {
+    targetBtn.classList.add("active");
+  }
+
+  const targetSidebarBtn = document.querySelector(
+    `.sidebar-btn[data-tab="${targetTab}"]`,
+  );
+  if (targetSidebarBtn) {
+    targetSidebarBtn.classList.add("active");
+  }
+
+  // Sync header tabs (desktop)
+  const targetHeaderTab = document.querySelector(
+    `.header-tab[data-tab="${targetTab}"]`,
+  );
+  if (targetHeaderTab) {
+    targetHeaderTab.classList.add("active");
+  }
+
+  const targetContent = document.getElementById(`tab-${targetTab}`);
+  if (targetContent) {
+    targetContent.classList.add("active");
+  }
+
+  // Sync week sliders when switching between dashboard and timetable
+  if (targetTab === "timetable" || targetTab === "dashboard") {
+    setSelectedWeek(currentViewWeek);
+  }
+
+  // Load settings tab data
+  if (targetTab === "settings") {
+    loadSettingsTab();
+  }
+
+  // Update mobile menu active state
+  const mobileMenuItems = document.querySelectorAll(
+    ".mobile-menu-item[data-tab]",
+  );
+  mobileMenuItems.forEach((item) => {
+    if (item.dataset.tab === targetTab) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
 }
 
 // --- 2. EVENT LISTENERS (EVENT HANDLING) ---
@@ -627,98 +630,7 @@ function setupEventListeners() {
     });
   }
 
-  // MINI CALENDAR EVENTS
-  const btnToggleCalendar = document.getElementById("btn-toggle-calendar");
-  const btnPrevMonth = document.getElementById("btn-prev-month");
-  const btnNextMonth = document.getElementById("btn-next-month");
-
-  if (btnToggleCalendar) {
-    btnToggleCalendar.addEventListener("click", toggleCalendar);
-  }
-
-  if (btnPrevMonth) {
-    btnPrevMonth.addEventListener("click", () => {
-      const monthYear = document.getElementById("calendar-month-year");
-      const currentText = monthYear.textContent;
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      const parts = currentText.split(" ");
-      if (parts.length === 2) {
-        let monthIndex = months.indexOf(parts[0]);
-        let year = parseInt(parts[1]);
-        if (monthIndex > 0) {
-          monthIndex--;
-        } else {
-          monthIndex = 11;
-          year--;
-        }
-        const newDate = new Date(year, monthIndex);
-        renderCalendar(newDate);
-      }
-    });
-  }
-
-  if (btnNextMonth) {
-    btnNextMonth.addEventListener("click", () => {
-      const monthYear = document.getElementById("calendar-month-year");
-      const currentText = monthYear.textContent;
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      const parts = currentText.split(" ");
-      if (parts.length === 2) {
-        let monthIndex = months.indexOf(parts[0]);
-        let year = parseInt(parts[1]);
-        if (monthIndex < 11) {
-          monthIndex++;
-        } else {
-          monthIndex = 0;
-          year++;
-        }
-        const newDate = new Date(year, monthIndex);
-        renderCalendar(newDate);
-      }
-    });
-  }
-
-  // Close calendar when clicking outside
-  document.addEventListener("click", (e) => {
-    const calendar = document.getElementById("mini-calendar");
-    const btn = document.getElementById("btn-toggle-calendar");
-    if (
-      calendar &&
-      btn &&
-      !calendar.contains(e.target) &&
-      !btn.contains(e.target)
-    ) {
-      if (calendar.style.display === "block") {
-        closeCalendar();
-      }
-    }
-  });
+  // Mini calendar removed - feature not in use
 
   // QUICK SEARCH FUNCTIONALITY
   const searchInput = document.getElementById("search-input");
@@ -780,63 +692,9 @@ function setupEventListeners() {
     });
   }
 
-  // A. TIMELINE NAVIGATION
-  const weekList = document.getElementById("week-list");
-  if (weekList) {
-    weekList.addEventListener("click", (e) => {
-      if (e.target.classList.contains("week-chip")) {
-        const w = parseInt(e.target.dataset.week);
-        currentViewWeek = w;
-        setActiveWeek(w);
-        renderAllViews();
-      }
-    });
-  }
-
-  const btnPrevWeek = document.getElementById("btn-prev-week");
-  if (btnPrevWeek) {
-    btnPrevWeek.addEventListener("click", () => {
-      if (currentViewWeek > 22) {
-        currentViewWeek--;
-        setActiveWeek(currentViewWeek);
-        renderAllViews();
-      }
-    });
-  }
-
-  const btnNextWeek = document.getElementById("btn-next-week");
-  if (btnNextWeek) {
-    btnNextWeek.addEventListener("click", () => {
-      if (currentViewWeek < 22 + TOTAL_WEEKS_RENDER) {
-        currentViewWeek++;
-        setActiveWeek(currentViewWeek);
-        renderAllViews();
-      }
-    });
-  }
-
-  // Timetable tab week navigation
-  const btnPrevWeek2 = document.getElementById("btn-prev-week-2");
-  if (btnPrevWeek2) {
-    btnPrevWeek2.addEventListener("click", () => {
-      if (currentViewWeek > 22) {
-        currentViewWeek--;
-        setActiveWeek(currentViewWeek);
-        renderAllViews();
-      }
-    });
-  }
-
-  const btnNextWeek2 = document.getElementById("btn-next-week-2");
-  if (btnNextWeek2) {
-    btnNextWeek2.addEventListener("click", () => {
-      if (currentViewWeek < 22 + TOTAL_WEEKS_RENDER) {
-        currentViewWeek++;
-        setActiveWeek(currentViewWeek);
-        renderAllViews();
-      }
-    });
-  }
+  // A. TIMELINE NAVIGATION - Week slider handles this now
+  // The week slider module handles navigation via initWeekSlider callback
+  // Arrow buttons in week slider are for sliding visible weeks, not changing selected week
 
   // B. SIDEBAR ACTIONS
   const btnOpenInput = document.getElementById("btn-open-input");
@@ -1189,34 +1047,37 @@ function setupEventListeners() {
   }
 
   // TAB NAVIGATION
+  // Desktop tab navigation (old horizontal tabs - if still exists)
   const tabBtns = document.querySelectorAll(".tab-btn");
-  const tabContents = document.querySelectorAll(".tab-content");
-
   tabBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       const targetTab = btn.dataset.tab;
-
-      // Remove active class from all tabs and contents
-      tabBtns.forEach((b) => b.classList.remove("active"));
-      tabContents.forEach((c) => c.classList.remove("active"));
-
-      // Add active class to clicked tab and corresponding content
-      btn.classList.add("active");
-      const targetContent = document.getElementById(`tab-${targetTab}`);
-      if (targetContent) {
-        targetContent.classList.add("active");
-      }
-
-      // Sync week dropdowns
-      if (targetTab === "timetable") {
-        syncWeekDropdowns();
-      }
-
-      // Load settings tab data
-      if (targetTab === "settings") {
-        loadSettingsTab();
-      }
+      switchToTab(targetTab);
     });
+  });
+
+  // Desktop header tabs navigation
+  const headerTabBtns = document.querySelectorAll(".header-tab");
+  headerTabBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetTab = btn.dataset.tab;
+      switchToTab(targetTab);
+    });
+  });
+
+  // Desktop sidebar navigation
+  const sidebarBtns = document.querySelectorAll(".sidebar-btn");
+  sidebarBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetTab = btn.dataset.tab;
+      switchToTab(targetTab);
+    });
+  });
+
+  // Listen for mobile menu tab switches
+  document.addEventListener("mobile-tab-switch", (e) => {
+    const { tabId } = e.detail;
+    switchToTab(tabId);
   });
 
   // Sync week dropdown 2 with main dropdown
@@ -1237,14 +1098,8 @@ function setupEventListeners() {
 }
 
 function syncWeekDropdowns() {
-  const weekDropdownHeader = document.getElementById("week-dropdown-header");
-  const weekDropdown2 = document.getElementById("week-dropdown-2");
-
-  if (weekDropdownHeader && weekDropdown2) {
-    // Sync second dropdown with header dropdown
-    weekDropdown2.innerHTML = weekDropdownHeader.innerHTML;
-    weekDropdown2.value = weekDropdownHeader.value;
-  }
+  // Sync week sliders
+  setSelectedWeek(currentViewWeek);
 }
 
 // SETTINGS TAB FUNCTIONS

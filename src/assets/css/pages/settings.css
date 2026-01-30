@@ -101,6 +101,26 @@
   border-color: #ef4444;
 }
 
+/* Dark mode holiday management */
+[data-theme="dark"] .holiday-item-name {
+  color: var(--color-text-dark);
+}
+
+[data-theme="dark"] .holiday-item-weeks {
+  color: var(--color-text-gray);
+}
+
+[data-theme="dark"] .btn-delete-holiday {
+  color: var(--color-text-gray);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .btn-delete-holiday:hover {
+  background: var(--color-danger);
+  color: white;
+  border-color: var(--color-danger);
+}
+
 .theme-selector {
   display: flex;
   gap: 16px;
@@ -191,20 +211,20 @@
 
 /* Dark mode week checkboxes */
 [data-theme="dark"] .week-checkbox {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #94a3b8;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-gray);
 }
 
 [data-theme="dark"] .week-checkbox:hover {
-  background: #253449;
-  border-color: #60a5fa;
-  color: #60a5fa;
+  background: var(--color-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 [data-theme="dark"] .week-checkbox.selected {
-  background-color: #3b82f6;
-  border-color: #60a5fa;
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary);
   color: white;
 }
 
@@ -244,4 +264,3 @@
   opacity: 1;
   color: var(--color-danger);
 }
-

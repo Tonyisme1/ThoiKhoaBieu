@@ -23,13 +23,14 @@
 
 /* Dark mode sidebar */
 [data-theme="dark"] .input-sidebar {
-  background-color: #1e293b;
+  background-color: var(--color-surface);
   box-shadow: -8px 0 30px rgba(0, 0, 0, 0.7);
+  color: var(--color-text-dark);
 }
 
 [data-theme="dark"] .sidebar-title {
-  color: #60a5fa;
-  border-bottom: 2px solid #334155;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-border);
 }
 
 .input-sidebar form {
@@ -214,4 +215,3 @@ dialog .modal-actions button.btn-secondary {
   padding: 0 16px;
   margin-bottom: 16px;
 }
-

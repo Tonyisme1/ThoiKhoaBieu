@@ -48,6 +48,9 @@ export function renderGridHeader(weekNumber) {
     if (isTodayCell) {
       cell.classList.add("is-today");
       cell.innerHTML += `<span class="today-badge">TODAY</span>`;
+      console.log(
+        `✅ Today found: Week ${weekNumber}, ${name} (index ${index}), Date: ${dates[index]}`,
+      );
     }
 
     gridHeader.appendChild(cell);
@@ -85,38 +88,19 @@ export function initGridStructure() {
 }
 
 // --- 2. RENDER TIMELINE (WEEK DROPDOWN) ---
+// NOTE: This function is now deprecated - week slider module handles week navigation
 export function renderWeekNavigation(totalWeeks, currentSelectedWeek) {
-  if (!weekDropdownHeader) return;
-  weekDropdownHeader.innerHTML = "";
-
-  const currentWeek = getCurrentWeek(); // Current week based on real date
-
-  for (let i = 1; i <= totalWeeks; i++) {
-    const realWeek = convertToRealWeek(i); // i=1 -> Week 22
-    const option = document.createElement("option");
-    option.value = realWeek;
-
-    // Mark current week (based on real date)
-    if (realWeek === currentWeek) {
-      option.textContent = `Week ${realWeek} (Current)`;
-    } else {
-      option.textContent = `Week ${realWeek}`;
-    }
-
-    // Set selected week
-    if (realWeek === currentSelectedWeek) {
-      option.selected = true;
-    }
-
-    weekDropdownHeader.appendChild(option);
-  }
+  // Week slider now handles this - see week-slider.js module
+  // Keeping function signature for backward compatibility
+  return;
 }
 
 // Update active state on Dropdown
+// NOTE: Week slider now handles this - see week-slider.js module
 export function setActiveWeek(weekNumber) {
-  if (weekDropdownHeader) {
-    weekDropdownHeader.value = weekNumber;
-  }
+  // Week slider module handles week state now
+  // Keeping function signature for backward compatibility
+  return;
 }
 
 // --- 3. RENDER SCHEDULE TO GRID ---

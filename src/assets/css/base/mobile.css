@@ -1,0 +1,524 @@
+/* ===============================================
+   MOBILE RESPONSIVE OPTIMIZATION
+   Mobile-first approach for all screen sizes
+   =============================================== */
+
+/* ===================
+   BREAKPOINTS
+   =================== */
+/*
+  Mobile:  < 640px
+  Tablet:  640px - 1024px
+  Desktop: > 1024px
+*/
+
+/* ===================
+   BASE MOBILE STYLES
+   =================== */
+
+/* Touch-friendly tap targets (minimum 44x44px) */
+@media (max-width: 1024px) {
+  .btn,
+  .action-btn,
+  .icon-btn,
+  button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+
+  /* Larger text for readability */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Prevent zoom on input focus iOS */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Optimize scroll performance */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ===================
+   TABLET (640px - 1024px)
+   =================== */
+
+@media (max-width: 1024px) {
+  /* OPTIMIZED: Reduced main padding for compact layout */
+  main {
+    padding: 12px; /* OPTIMIZED: Reduced from 16px */
+  }
+
+  /* Header */
+  .app-header {
+    padding: 16px;
+  }
+
+  .header-top {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-top h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Action buttons - keep horizontal */
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .action-buttons .btn-secondary,
+  .action-buttons .btn-primary {
+    font-size: 0.875rem;
+    padding: 10px 16px;
+  }
+
+  /* Search */
+  #search-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  /* Tables */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .course-table {
+    min-width: 700px;
+  }
+}
+
+/* ===================
+   MOBILE (< 768px)
+   =================== */
+
+@media (max-width: 768px) {
+  /* OPTIMIZED: Main Layout - Compact and no overflow */
+  main {
+    padding: 10px; /* OPTIMIZED: Reduced from 12px */
+    padding-bottom: 80px; /* OPTIMIZED: Reduced from 100px */
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* OPTIMIZED: Header Optimization */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg);
+    padding: 10px; /* OPTIMIZED: Reduced from 12px */
+    min-height: 60px;
+  }
+
+  .header-top {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* OPTIMIZED: Reduced from 12px */
+  }
+
+  .header-logo h1 {
+    font-size: 1.25rem; /* OPTIMIZED: Reduced from 1.375rem */
+    text-align: center;
+  }
+
+  /* OPTIMIZED: Action Buttons - Compact Grid */
+  .action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px; /* OPTIMIZED: Reduced from 8px */
+    width: 100%;
+  }
+
+  .action-buttons .btn-primary {
+    grid-column: 1 / -1;
+  }
+
+  .action-buttons .btn-secondary,
+  .action-buttons .btn-primary {
+    padding: 12px;
+    font-size: 0.875rem;
+    justify-content: center;
+    margin: 0;
+  }
+
+  /* Week Navigation */
+  .week-navigation {
+    padding: 10px;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .week-navigation::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .week-navigation::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
+  }
+
+  /* OPTIMIZED: Course Cards - Compact */
+  .course-card {
+    padding: 10px; /* OPTIMIZED: Reduced from 12px */
+    margin: 6px 0; /* OPTIMIZED: Reduced from 8px 0 */
+  }
+
+  .course-card h4 {
+    font-size: 0.9375rem; /* OPTIMIZED: Reduced from 1rem */
+  }
+
+  .course-details {
+    font-size: 0.8125rem; /* OPTIMIZED: Reduced from 0.875rem */
+  }
+
+  /* Holiday Banner */
+  .holiday-note {
+    margin: 12px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+  }
+
+  /* Search Input */
+  #search-input {
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Tables - Horizontal Scroll */
+  .table-wrapper {
+    margin: 16px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+
+  .course-table {
+    min-width: 600px;
+    font-size: 0.875rem;
+  }
+
+  .course-table th,
+  .course-table td {
+    padding: 12px 10px;
+  }
+
+  .action-btn {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    min-width: 44px;
+  }
+
+  /* Sections */
+  /* OPTIMIZED: Section Containers - Compact */
+  .notes-container,
+  .course-list-section {
+    padding: 12px 10px; /* OPTIMIZED: Reduced from 16px 12px */
+    margin-top: 12px; /* OPTIMIZED: Reduced from 16px */
+  }
+
+  .section-header h3 {
+    font-size: 1.125rem; /* OPTIMIZED: Reduced from 1.25rem */
+  }
+
+  /* OPTIMIZED: Notes Grid - Compact */
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 10px; /* OPTIMIZED: Reduced from 12px */
+  }
+
+  .note-card {
+    padding: 12px; /* OPTIMIZED: Reduced from 16px */
+  }
+
+  .note-card h4 {
+    font-size: 0.9375rem; /* OPTIMIZED: Reduced from 1rem */
+  }
+
+  .note-card p {
+    font-size: 0.8125rem; /* OPTIMIZED: Reduced from 0.875rem */
+  }
+
+  /* OPTIMIZED: Stats Cards - Compact */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; /* OPTIMIZED: Reduced from 12px */
+  }
+
+  .stat-card {
+    padding: 12px; /* OPTIMIZED: Reduced from 16px */
+  }
+
+  .stat-number {
+    font-size: 1.5rem; /* OPTIMIZED: Reduced from 1.75rem */
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+  }
+
+  /* Sidebar Mobile Optimization */
+  .input-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .sidebar-title {
+    font-size: 1.25rem;
+  }
+
+  .input-sidebar form {
+    padding: 20px 16px;
+  }
+
+  /* Modals */
+  .modal {
+    padding: 0;
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .modal-header {
+    padding: 16px;
+  }
+
+  .modal-body {
+    padding: 16px;
+    max-height: calc(100vh - 140px);
+  }
+
+  .modal-footer {
+    padding: 16px;
+    position: sticky;
+    bottom: 0;
+    background: var(--color-bg);
+  }
+}
+
+/* ===================
+   SMALL MOBILE (< 480px)
+   =================== */
+
+@media (max-width: 480px) {
+  /* Typography */
+  .header-top h1 {
+    font-size: 1.25rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.125rem;
+  }
+
+  /* Compact Action Buttons */
+  .action-buttons .btn-secondary,
+  .action-buttons .btn-primary {
+    padding: 10px 8px;
+    font-size: 0.8125rem;
+  }
+
+  /* Week Navigation - removed unused styles */
+
+  /* Course Cards */
+  .course-card h4 {
+    font-size: 0.9375rem;
+  }
+
+  .course-details {
+    font-size: 0.8125rem;
+  }
+
+  /* Stats Grid - Single Column */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Tables - More Compact */
+  .course-table th,
+  .course-table td {
+    padding: 10px 8px;
+    font-size: 0.8125rem;
+  }
+
+  /* Notes */
+  .note-card {
+    padding: 12px;
+  }
+
+  .note-card h4 {
+    font-size: 0.9375rem;
+  }
+
+  .note-card p {
+    font-size: 0.8125rem;
+  }
+
+  /* Buttons */
+  .btn,
+  .action-btn {
+    font-size: 0.8125rem;
+    padding: 10px 14px;
+  }
+
+  /* Form Elements */
+  .form-group label {
+    font-size: 0.875rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px; /* Prevent zoom */
+    padding: 10px 12px;
+  }
+}
+
+/* ===================
+   LANDSCAPE MOBILE
+   =================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce header height in landscape */
+  .app-header {
+    padding: 8px 12px;
+  }
+
+  .header-top h1 {
+    font-size: 1.125rem;
+  }
+
+  .action-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .action-buttons .btn-primary {
+    grid-column: auto;
+  }
+
+  /* Compact week navigation */
+  .week-navigation {
+    padding: 6px 8px;
+  }
+
+  /* Modals take less height */
+  .modal {
+    max-height: 90vh;
+  }
+}
+
+/* ===================
+   PERFORMANCE OPTIMIZATIONS
+   =================== */
+
+@media (max-width: 768px) {
+  /* Reduce animations on mobile for performance */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Disable complex transforms */
+  .course-card:hover,
+  .note-card:hover,
+  .stat-card:hover {
+    transform: none;
+  }
+
+  /* Simplify shadows */
+  .card,
+  .btn,
+  .modal {
+    box-shadow: var(--shadow-sm) !important;
+  }
+
+  /* Optimize scroll */
+  .table-wrapper,
+  .week-navigation,
+  .modal-body {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ===================
+   ACCESSIBILITY
+   =================== */
+
+/* Ensure minimum tap target size */
+@media (max-width: 768px) {
+  a,
+  button,
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Better focus indicators for keyboard navigation */
+  *:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* ===================
+   PRINT STYLES
+   =================== */
+
+@media print {
+  .app-header,
+  .action-buttons,
+  .sidebar,
+  .input-sidebar,
+  .modal-footer,
+  button {
+    display: none !important;
+  }
+
+  main {
+    padding: 0;
+  }
+
+  .course-card,
+  .note-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ===================
+   HIGH CONTRAST MODE
+   =================== */
+
+@media (prefers-contrast: high) {
+  .btn,
+  .course-card,
+  .note-card {
+    border: 2px solid currentColor;
+  }
+
+  a:focus,
+  button:focus {
+    outline: 3px solid currentColor;
+  }
+}

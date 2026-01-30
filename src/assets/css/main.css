@@ -2,12 +2,21 @@
 @import url("./base/variables.css");
 /* Layout */
 @import url("./base/layout.css");
+/* Mobile Responsive */
+@import url("./base/mobile.css");
+/* Mobile Utilities */
+@import url("./base/utilities-mobile.css");
 /* Component modules */
 @import url("./components/buttons.css");
 @import url("./components/cards.css");
 @import url("./components/forms.css");
 @import url("./components/sidebar.css");
 @import url("./components/search.css");
+@import url("./components/mobile-menu.css");
+@import url("./components/desktop-sidebar.css");
+@import url("./components/header-tabs.css");
+@import url("./components/loading.css");
+@import url("./components/toast.css");
 /* Feature modules */
 @import url("./pages/settings.css");
 @import url("./pages/dashboard.css");
@@ -20,7 +29,14 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; /* FIX ISSUE 1: Ensure all elements use border-box */
+}
+
+/* FIX ISSUE 1: Prevent horizontal overflow on mobile */
+html,
+body {
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 body {
@@ -35,31 +51,37 @@ body {
 }
 
 /* --- MAIN CONTENT --- */
+/* Centered content container - like header tabs */
 main {
-  padding: var(--space-6);
-  max-width: var(--container-max);
-  margin: 0 auto;
+  padding: var(--space-4);
   animation: fadeIn var(--transition-normal) ease-out;
 }
 
-/* --- COURSES HEADER --- */
+/* Main content is just a wrapper, no special centering here */
+.main-content {
+  width: 100%;
+}
+
+/* --- COURSES HEADER (OPTIMIZED) --- */
 .courses-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px; /* OPTIMIZED: Reduced from 16px */
+  margin-bottom: 16px; /* OPTIMIZED: Reduced from 20px */
 }
 
 .courses-header h3 {
   margin: 0;
+  font-size: 1.125rem; /* OPTIMIZED: Compact header */
 }
 
+/* OPTIMIZED: Compact actions layout */
 .courses-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px; /* OPTIMIZED: Reduced from 12px */
   flex-wrap: wrap;
 }
 
@@ -68,7 +90,8 @@ main {
 }
 
 .courses-actions .search-input {
-  min-width: 250px;
+  min-width: 200px; /* OPTIMIZED: Reduced from 250px */
+  max-width: 250px; /* OPTIMIZED: Prevent excessive width */
 }
 
 /* Dashboard Week Navigation */
@@ -128,8 +151,18 @@ main {
   }
 }
 
+/* Timetable centered animation */
 .timetable-container {
   animation: slideInUp 0.4s ease-out;
+}
+
+/* Tab content - just shows/hides, no special styling */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
 }
 
 /* Reduce motion cho users có nhu cầu */
@@ -159,27 +192,80 @@ main {
 .app-header {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-3) var(--space-4);
   position: sticky;
   top: 0;
   z-index: 100;
   box-shadow: var(--shadow-sm);
 }
 
+/* Desktop header layout with centered tabs */
 .header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: var(--container-max);
-  margin: 0 auto var(--space-3);
+  margin: 0 auto;
+  padding: 0;
+  gap: 16px;
 }
 
+/* Desktop: 3-column layout - Actions | Tabs | App Name */
+@media (min-width: 769px) {
+  .header-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+  }
+}
+
+.sidebar-toggle {
+  display: none;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Header Logo / App Name - Show on both desktop (right side) and mobile (center) */
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+
+/* Desktop: App name on the right */
+@media (min-width: 769px) {
+  .header-logo {
+    justify-content: flex-end;
+  }
+
+  .header-logo h1 {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+  }
+}
+
+/* Mobile: Show header title centered */
+@media (max-width: 768px) {
+  .header-logo {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* OPTIMIZED: Compact header title */
 .header-logo h1 {
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   color: var(--color-text-dark);
   font-weight: var(--font-bold);
   margin: 0;
   line-height: var(--leading-tight);
+  text-align: left;
+  white-space: nowrap;
 }
 
 .btn-icon {
@@ -217,14 +303,9 @@ main {
   display: inline-block;
 }
 
-/* Week Navigation */
+/* OLD Week Navigation - Hidden, replaced by week-slider */
 .week-navigation {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  max-width: 1400px;
-  margin: 0 auto;
-  justify-content: center;
+  display: none; /* Hidden - replaced by week-slider */
 }
 
 .nav-btn {
@@ -259,7 +340,9 @@ main {
   box-shadow: var(--shadow-focus);
 }
 
+/* Week select dropdown - Hidden, replaced by week-slider */
 .week-select {
+  display: none; /* Hidden - replaced by week-slider */
   padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: 6px;
@@ -279,48 +362,6 @@ main {
 .week-select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: var(--shadow-focus);
-}
-
-/* Tab Navigation */
-.tab-navigation {
-  display: flex;
-  gap: 4px;
-  max-width: 1400px;
-  margin: 12px auto 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.tab-btn {
-  padding: 10px 20px;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-button);
-  color: var(--color-text-gray);
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  margin: 4px;
-}
-
-.tab-btn:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  background: var(--color-background);
-}
-
-.tab-btn.active {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  font-weight: var(--font-semibold);
-  background: var(--color-background);
-  box-shadow: var(--shadow-sm);
-}
-
-.tab-btn:focus-visible {
-  outline: none;
   box-shadow: var(--shadow-focus);
 }
 
@@ -344,59 +385,6 @@ main {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Nút tuần (Chips) */
-.week-chip {
-  flex: 0 0 auto;
-  padding: 8px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  backdrop-filter: blur(5px);
-}
-.week-chip:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-.week-chip.active {
-  background: #ffffff;
-  color: var(--color-primary);
-  box-shadow: var(--shadow-md);
-  border-color: #ffffff;
-  transform: scale(1.05);
-}
-.week-chip.is-current {
-  position: relative;
-}
-.week-chip.is-current::after {
-  content: "";
-  position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
-  background: #fbbf24;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translateX(-50%) scale(1.2);
   }
 }
 
@@ -513,11 +501,11 @@ main {
   align-items: center;
   gap: 6px;
 }
-/* KHU VỰC DANH SÁCH CHI TIẾT */
+/* OPTIMIZED: Compact course list section */
 .course-list-section {
-  margin-top: 30px;
+  margin-top: 20px; /* OPTIMIZED: Reduced from 30px */
   background: var(--color-surface);
-  padding: 25px;
+  padding: 16px; /* OPTIMIZED: Reduced from 25px */
   border-radius: var(--border-radius-card);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--color-border);
@@ -544,13 +532,14 @@ main {
   gap: 10px;
 }
 
-/* Search input */
+/* OPTIMIZED: Compact search input */
 #search-input {
-  padding: 12px 16px;
+  padding: 10px 14px; /* OPTIMIZED: Reduced from 12px 16px */
   border: 2px solid var(--color-border);
   border-radius: var(--border-radius-default);
-  width: 320px;
-  font-size: 0.95rem;
+  width: 100%; /* OPTIMIZED: Responsive width */
+  max-width: 280px; /* OPTIMIZED: Reduced from fixed 320px */
+  font-size: 0.875rem; /* OPTIMIZED: Reduced from 0.95rem */
   transition: var(--transition-normal);
   background: var(--color-surface);
   color: var(--color-text-dark);
@@ -675,16 +664,32 @@ main {
 
 /* Responsive adjustments for main layout (can be moved to layout.css) */
 
-/* Tablet */
+/* OPTIMIZED: Tablet - Ensure courses header fits */
 @media (max-width: 1024px) {
   main {
-    padding: 15px;
+    padding: 14px; /* OPTIMIZED: Reduced from 15px */
   }
   .header-top h1 {
-    font-size: 1.5rem;
+    font-size: 1.375rem; /* OPTIMIZED: Reduced from 1.5rem */
   }
+
+  /* OPTIMIZED: Courses actions for tablet */
+  .courses-header {
+    gap: 10px;
+  }
+
+  .courses-actions {
+    gap: 8px;
+  }
+
+  .courses-actions .search-input {
+    min-width: 180px;
+    max-width: 220px;
+  }
+
   #search-input {
-    width: 250px;
+    width: 100%;
+    max-width: 220px; /* OPTIMIZED: Reduced from 250px */
   }
 }
 
@@ -732,17 +737,6 @@ main {
     gap: 8px;
   }
 
-  .nav-arrow {
-    width: 32px;
-    height: 32px;
-    font-size: 0.9rem;
-  }
-
-  .week-chip {
-    padding: 6px 12px;
-    font-size: 0.75rem;
-  }
-
   /* Holiday Banner */
   .holiday-note {
     margin: 10px;
@@ -750,31 +744,58 @@ main {
     font-size: 0.8rem;
   }
 
-  /* Sections */
+  /* OPTIMIZED: Sections - Compact */
   .notes-container,
   .course-list-section {
-    padding: 15px;
-    margin-top: 20px;
+    padding: 12px; /* OPTIMIZED: Reduced from 15px */
+    margin-top: 16px; /* OPTIMIZED: Reduced from 20px */
   }
 
   .notes-container h3,
   .course-list-section h3 {
-    font-size: 1.1rem;
+    font-size: 1rem; /* OPTIMIZED: Reduced from 1.1rem */
   }
 
   .notes-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px; /* OPTIMIZED: Reduced from 12px */
   }
 
   .note-card {
-    padding: 14px;
+    padding: 12px; /* OPTIMIZED: Reduced from 14px */
+  }
+
+  /* OPTIMIZED: Courses header responsive */
+  .courses-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px; /* Compact spacing */
+  }
+
+  .courses-actions {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .courses-actions .search-bar-container {
+    width: 100%;
+  }
+
+  .courses-actions .search-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+  }
+
+  .courses-actions .btn-primary {
+    width: 100%; /* Full width button for easy tap */
   }
 
   /* Course List Section Header */
   .course-list-section > div:first-child {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px; /* OPTIMIZED: Reduced from 12px */
   }
 
   #search-input {
@@ -814,19 +835,6 @@ main {
 
   .action-buttons .btn-primary {
     grid-column: 1 / -1;
-  }
-
-  .week-chip {
-    padding: 5px 10px;
-    font-size: 0.7rem;
-    /* Disable animation trên mobile */
-    transition: none;
-  }
-
-  .nav-arrow {
-    width: 28px;
-    height: 28px;
-    transition: none;
   }
 
   .notes-container h3,
@@ -879,4 +887,14 @@ main {
   .sidebar-overlay {
     backdrop-filter: none;
   }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimize for mobile touch */
+* {
+  -webkit-tap-highlight-color: transparent;
 }

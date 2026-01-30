@@ -212,12 +212,35 @@ dialog::backdrop {
 
 /* Dark mode tooltip */
 [data-theme="dark"] .course-tooltip {
-  background: #1e293b;
-  border: 2px solid #3b82f6;
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary-dark);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="dark"] .course-tooltip .tooltip-header h4 {
-  color: #60a5fa;
-  border-bottom: 1px solid #334155;
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .course-tooltip .tooltip-row strong {
+  color: var(--color-text-dark);
+}
+
+[data-theme="dark"] .course-tooltip .tooltip-row {
+  color: var(--color-text-gray);
+}
+
+[data-theme="dark"] .btn-favorite {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .btn-favorite:hover {
+  background: var(--color-hover);
+}
+
+[data-theme="dark"] .btn-favorite.active {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
 }

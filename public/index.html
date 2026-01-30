@@ -2,176 +2,429 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="theme-color" content="#667eea" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Smart University Timetable</title>
     <link rel="stylesheet" href="../src/assets/css/main.css" />
   </head>
   <body>
-    <header class="app-header">
-      <div class="header-top">
-        <div class="header-logo">
-          <h1>Timetable</h1>
-        </div>
-        <button
-          id="btn-theme-toggle"
-          class="btn-icon"
-          title="Toggle theme"
-          aria-label="Toggle theme"
-        >
-          <svg class="icon icon-lg" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    <!-- Mobile Hamburger Menu -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+    
+    <!-- Mobile Menu Sidebar -->
+    <nav class="mobile-menu" id="mobile-menu">
+      <div class="mobile-menu-header">
+        <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"></line>
           </svg>
         </button>
       </div>
+      
+      <div class="mobile-menu-content">
+        <!-- Theme Toggle in Mobile Menu -->
+        <div class="mobile-menu-section">
+          <button id="btn-theme-toggle-mobile" class="mobile-menu-item">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <span>Toggle Theme</span>
+          </button>
+        </div>
 
-      <!-- Tab Navigation -->
-      <nav class="tab-navigation">
-        <button class="tab-btn active" data-tab="dashboard">
-          Dashboard
+        <!-- Navigation Links -->
+        <div class="mobile-menu-section">
+          <h3>Navigation</h3>
+          <button class="mobile-menu-item tab-btn-mobile active" data-tab="dashboard">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="timetable">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Timetable</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="assignments">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>Assignments</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="exams">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+            <span>Exams</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="attendance">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Attendance</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="courses">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <span>Courses</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="notes">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            <span>Notes</span>
+          </button>
+          <button class="mobile-menu-item tab-btn-mobile" data-tab="settings">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Settings</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Desktop Sidebar Navigation -->
+    <aside class="desktop-sidebar hide-mobile">
+      <div class="sidebar-logo">
+        <h2>Study Management</h2>
+      </div>
+      <nav class="sidebar-navigation">
+        <button class="sidebar-btn active" data-tab="dashboard">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          <span>Dashboard</span>
         </button>
-        <button class="tab-btn" data-tab="timetable">
-          Timetable
+        <button class="sidebar-btn" data-tab="timetable">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span>Timetable</span>
         </button>
-        <button class="tab-btn" data-tab="assignments">
-          Assignments
+        <button class="sidebar-btn" data-tab="assignments">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>Assignments</span>
         </button>
-        <button class="tab-btn" data-tab="exams">
-          Exams
+        <button class="sidebar-btn" data-tab="exams">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          <span>Exams</span>
         </button>
-        <button class="tab-btn" data-tab="attendance">
-          Attendance
+        <button class="sidebar-btn" data-tab="attendance">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>Attendance</span>
         </button>
-        <button class="tab-btn" data-tab="courses">
-          Courses
+        <button class="sidebar-btn" data-tab="courses">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          <span>Courses</span>
         </button>
-        <button class="tab-btn" data-tab="notes">
-          Notes
+        <button class="sidebar-btn" data-tab="notes">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          <span>Notes</span>
         </button>
-        <button class="tab-btn" data-tab="settings">
-          Settings
+        <button class="sidebar-btn" data-tab="settings">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>Settings</span>
         </button>
       </nav>
+    </aside>
+
+    <header class="app-header">
+      <div class="header-top">
+        <div class="header-actions">
+          <button
+            id="btn-theme-toggle"
+            class="btn-icon hide-mobile"
+            title="Toggle theme"
+            aria-label="Toggle theme"
+          >
+            <svg class="icon icon-lg" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Desktop Header Tabs - Centered -->
+        <nav class="header-tabs" id="header-tabs">
+          <button class="header-tab active" data-tab="dashboard">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+          <button class="header-tab" data-tab="timetable">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Timetable</span>
+          </button>
+          <button class="header-tab" data-tab="assignments">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span>Assignments</span>
+          </button>
+          <button class="header-tab" data-tab="exams">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+            <span>Exams</span>
+          </button>
+          <button class="header-tab" data-tab="attendance">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Attendance</span>
+          </button>
+          <button class="header-tab" data-tab="courses">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <span>Courses</span>
+          </button>
+          <button class="header-tab" data-tab="notes">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            <span>Notes</span>
+          </button>
+          <button class="header-tab" data-tab="settings">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        <div class="header-logo">
+          <h1>Study Management</h1>
+        </div>
+      </div>
 
       <div id="holiday-banner" class="holiday-note"></div>
     </header>
 
-    <main>
+    <main class="main-content">
       <!-- Tab: Dashboard -->
       <div class="tab-content active" id="tab-dashboard">
-        <!-- Week Navigation -->
-        <nav class="week-navigation dashboard-week-nav">
-          <button id="btn-prev-week" class="nav-btn" aria-label="Previous week">
+        <!-- Week Slider - Horizontal scrollable -->
+        <div class="week-slider" id="week-slider-dashboard">
+          <button class="week-slider-arrow" id="btn-prev-week" aria-label="Previous week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
           </button>
-          <select id="week-dropdown-header" class="week-select"></select>
-          <button id="btn-next-week" class="nav-btn" aria-label="Next week">
+          <div class="week-slider-track">
+            <div class="week-slider-container" id="week-container-dashboard"></div>
+          </div>
+          <button class="week-slider-arrow" id="btn-next-week" aria-label="Next week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
-        </nav>
+        </div>
+        <!-- Custom scrollbar for week slider -->
+        <div class="week-scrollbar" id="week-scrollbar-dashboard">
+          <div class="week-scrollbar-track">
+            <div class="week-scrollbar-thumb" id="week-scrollbar-thumb-dashboard"></div>
+          </div>
+        </div>
 
         <!-- Dashboard & Analytics -->
-      <section class="dashboard-section">
-        <div class="dashboard-header">
-          <h3>Dashboard & Analytics</h3>
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <p class="dashboard-subtitle">Overview statistics</p>
-            <select id="dashboard-view-select" class="filter-select" style="padding: 6px 12px; font-size: 0.85rem;">
-              <option value="semester">Full Semester</option>
-              <option value="week" selected>Current Week</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="dashboard-cards">
-          <div class="dash-card" id="card-total-courses">
-            <div class="dash-label" id="dash-label-courses">Courses This Week</div>
-            <div class="dash-value" id="stat-courses">0</div>
-            <div class="dash-meta" id="dash-meta-courses">All courses scheduled this week</div>
-          </div>
-          <div class="dash-card" id="card-total-hours">
-            <div class="dash-label">Total Periods</div>
-            <div class="dash-value" id="stat-periods">0</div>
-            <div class="dash-meta" id="stat-hours">≈ 0 hrs</div>
-          </div>
-          <div class="dash-card" id="card-favorites">
-            <div class="dash-label">Favorites</div>
-            <div class="dash-value" id="stat-favorites">0</div>
-            <div class="dash-meta">Bookmarked courses</div>
-          </div>
-          <div class="dash-card" id="card-next-class">
-            <div class="dash-label">Next Class</div>
-            <div class="dash-value" id="stat-next-title">—</div>
-            <div class="dash-meta" id="stat-next-meta">No upcoming classes</div>
-          </div>
-          <div class="dash-card" id="card-attendance">
-            <div class="dash-label">Attendance</div>
-            <div class="dash-value" id="stat-attendance">0/0</div>
-            <div class="dash-meta">Attended / Total sessions</div>
-          </div>
-        </div>
+        <div class="week-content-wrapper">
+          <div class="week-content visible" id="dashboard-content">
+            <section class="dashboard-section">
+              <div class="dashboard-header">
+                <h3>Dashboard & Analytics</h3>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <p class="dashboard-subtitle">Overview statistics</p>
+                  <select id="dashboard-view-select" class="filter-select" style="padding: 6px 12px; font-size: 0.85rem;">
+                    <option value="semester">Full Semester</option>
+                    <option value="week" selected>Current Week</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dashboard-cards">
+                <div class="dash-card" id="card-total-courses">
+                  <div class="dash-label" id="dash-label-courses">Courses This Week</div>
+                  <div class="dash-value" id="stat-courses">0</div>
+                  <div class="dash-meta" id="dash-meta-courses">All courses scheduled this week</div>
+                </div>
+                <div class="dash-card" id="card-total-hours">
+                  <div class="dash-label">Total Periods</div>
+                  <div class="dash-value" id="stat-periods">0</div>
+                  <div class="dash-meta" id="stat-hours">≈ 0 hrs</div>
+                </div>
+                <div class="dash-card" id="card-favorites">
+                  <div class="dash-label">Favorites</div>
+                  <div class="dash-value" id="stat-favorites">0</div>
+                  <div class="dash-meta">Bookmarked courses</div>
+                </div>
+                <div class="dash-card" id="card-next-class">
+                  <div class="dash-label">Next Class</div>
+                  <div class="dash-value" id="stat-next-title">—</div>
+                  <div class="dash-meta" id="stat-next-meta">No upcoming classes</div>
+                </div>
+                <div class="dash-card" id="card-attendance">
+                  <div class="dash-label">Attendance</div>
+                  <div class="dash-value" id="stat-attendance">0/0</div>
+                  <div class="dash-meta">Attended / Total sessions</div>
+                </div>
+              </div>
 
-        <div class="dashboard-grid">
-          <div class="chart-card">
-            <div class="chart-header">
-              <h4 id="chart-title-load">Weekly Load</h4>
-              <span class="chart-hint" id="chart-hint-load">Periods per day</span>
-            </div>
-            <div id="weekly-load-chart" class="bar-chart"></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-header">
-              <h4>Holidays</h4>
-              <span class="chart-hint">Weeks with holidays</span>
-            </div>
-            <ul id="holiday-mini-list" class="holiday-mini-list"></ul>
+              <div class="dashboard-grid">
+                <div class="chart-card">
+                  <div class="chart-header">
+                    <h4 id="chart-title-load">Weekly Load</h4>
+                    <span class="chart-hint" id="chart-hint-load">Periods per day</span>
+                  </div>
+                  <div id="weekly-load-chart" class="bar-chart"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-header">
+                    <h4>Holidays</h4>
+                    <span class="chart-hint">Weeks with holidays</span>
+                  </div>
+                  <ul id="holiday-mini-list" class="holiday-mini-list"></ul>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
-      </section>
       </div>
 
       <!-- Tab: Timetable -->
       <div class="tab-content" id="tab-timetable">
-        <!-- Week Navigation -->
-        <nav class="week-navigation timetable-week-nav">
-          <button id="btn-prev-week-2" class="nav-btn" aria-label="Previous week">
+        <!-- Week Slider - Horizontal scrollable -->
+        <div class="week-slider" id="week-slider-timetable">
+          <button class="week-slider-arrow" id="btn-prev-week-2" aria-label="Previous week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
           </button>
-          <select id="week-dropdown-2" class="week-select"></select>
-          <button id="btn-next-week-2" class="nav-btn" aria-label="Next week">
+          <div class="week-slider-track">
+            <div class="week-slider-container" id="week-container-timetable"></div>
+          </div>
+          <button class="week-slider-arrow" id="btn-next-week-2" aria-label="Next week">
             <svg class="icon" viewBox="0 0 24 24">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
-        </nav>
-
-        <div class="timetable-container">
-        <div class="grid-header">
-          <div>Period / Day</div>
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div>Sat</div>
-          <div>Sun</div>
+        </div>
+        <!-- Custom scrollbar for week slider -->
+        <div class="week-scrollbar" id="week-scrollbar-timetable">
+          <div class="week-scrollbar-track">
+            <div class="week-scrollbar-thumb" id="week-scrollbar-thumb-timetable"></div>
+          </div>
         </div>
 
-        <div id="timetable-grid" class="grid-body"></div>
-      </div>
+        <div class="week-content-wrapper">
+          <div class="week-content visible" id="timetable-content">
+            <div class="timetable-container">
+              <div class="grid-header">
+                <div>Period / Day</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+                <div>Sun</div>
+              </div>
+              <div id="timetable-grid" class="grid-body"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Tab: Exams -->

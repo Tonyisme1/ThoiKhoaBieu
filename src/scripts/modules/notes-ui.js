@@ -267,21 +267,15 @@ export function updateCharCount() {
  * Setup notes listeners
  */
 export function setupNotesListeners() {
-  console.log("=== setupNotesListeners called ===");
-
   // Create note button
   const createBtn = document.getElementById("btn-add-note");
-  console.log("Note button found:", createBtn);
 
   if (createBtn) {
     createBtn.onclick = function (e) {
-      console.log("Add note button clicked");
       e.preventDefault();
       e.stopPropagation();
       openNoteModal();
     };
-  } else {
-    console.error("btn-add-note not found!");
   }
 
   // Close modal buttons
@@ -301,17 +295,13 @@ export function setupNotesListeners() {
 
   // Save note button - use onclick
   const saveBtn = document.getElementById("btn-save-note");
-  console.log("Save button found:", saveBtn);
 
   if (saveBtn) {
     saveBtn.onclick = function (e) {
-      console.log("Save note button clicked");
       e.preventDefault();
       e.stopPropagation();
       saveNote();
     };
-  } else {
-    console.error("btn-save-note not found!");
   }
 
   // Content input change

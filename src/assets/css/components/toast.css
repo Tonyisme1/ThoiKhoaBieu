@@ -1,0 +1,220 @@
+/* ===============================================
+   TOAST NOTIFICATIONS
+   User-friendly success/error messages
+   =============================================== */
+
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.toast {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 300px;
+  opacity: 0;
+  transform: translateX(400px);
+  animation: toast-slide-in var(--transition-normal) forwards;
+}
+
+.toast.hiding {
+  animation: toast-slide-out var(--transition-normal) forwards;
+}
+
+@keyframes toast-slide-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-slide-out {
+  to {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+}
+
+/* Toast variants */
+.toast-success {
+  border-left: 4px solid var(--color-success);
+}
+
+.toast-error {
+  border-left: 4px solid var(--color-danger);
+}
+
+.toast-warning {
+  border-left: 4px solid var(--color-warning);
+}
+
+.toast-info {
+  border-left: 4px solid var(--color-primary);
+}
+
+/* Toast icon */
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-success .toast-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+
+.toast-error .toast-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+
+.toast-warning .toast-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+}
+
+.toast-info .toast-icon {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--color-primary);
+}
+
+.toast-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Toast content */
+.toast-content {
+  flex: 1;
+}
+
+.toast-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text-dark);
+  margin-bottom: 2px;
+}
+
+.toast-message {
+  font-size: 0.8125rem;
+  color: var(--color-text-gray);
+  line-height: 1.4;
+}
+
+/* Toast close button */
+.toast-close {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-gray);
+  cursor: pointer;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-close:hover {
+  background: var(--color-hover);
+  color: var(--color-text-dark);
+}
+
+.toast-close svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* Dark mode */
+[data-theme="dark"] .toast {
+  background: var(--color-surface);
+  color: var(--color-text-dark);
+  box-shadow:
+    0 20px 25px rgba(0, 0, 0, 0.3),
+    0 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .toast-title {
+  color: var(--color-text-dark);
+}
+
+[data-theme="dark"] .toast-message {
+  color: var(--color-text-gray);
+}
+
+[data-theme="dark"] .toast-close {
+  color: var(--color-text-gray);
+}
+
+[data-theme="dark"] .toast-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-dark);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .toast-container {
+    bottom: 80px; /* Above mobile menu */
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+
+  .toast {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+/* Progress indicator for auto-dismiss */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--color-primary);
+  animation: toast-progress 3s linear forwards;
+}
+
+.toast-success .toast-progress {
+  background: var(--color-success);
+}
+
+.toast-error .toast-progress {
+  background: var(--color-danger);
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

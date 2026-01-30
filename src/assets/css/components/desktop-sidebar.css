@@ -1,0 +1,143 @@
+/* ===============================================
+   DESKTOP SIDEBAR NAVIGATION
+   Vertical navigation for desktop screens
+   =============================================== */
+
+/* OPTIMIZED: Compact sidebar */
+.desktop-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 240px; /* OPTIMIZED: Reduced from 260px to 240px */
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-theme="dark"] .desktop-sidebar {
+  background: var(--color-surface);
+  border-right-color: #334155;
+}
+
+/* OPTIMIZED: Compact sidebar logo */
+.sidebar-logo {
+  padding: 16px; /* OPTIMIZED: Reduced from 24px 20px */
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar-logo h2 {
+  font-size: 1.125rem; /* OPTIMIZED: Reduced from 1.25rem */
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+[data-theme="dark"] .sidebar-logo {
+  border-bottom-color: #334155;
+}
+
+/* OPTIMIZED: Compact sidebar navigation */
+.sidebar-navigation {
+  flex: 1;
+  padding: 12px 0; /* OPTIMIZED: Reduced from 16px 0 */
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* OPTIMIZED: Reduced from 4px */
+}
+
+/* Sidebar Buttons */
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.sidebar-btn .icon {
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sidebar-btn span {
+  flex: 1;
+}
+
+/* Hover State */
+.sidebar-btn:hover {
+  background: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* Active State */
+.sidebar-btn.active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.sidebar-btn.active::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+/* Focus State */
+.sidebar-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .sidebar-btn:hover {
+  background: #334155;
+}
+
+[data-theme="dark"] .sidebar-btn.active {
+  background: rgba(102, 126, 234, 0.15);
+}
+
+/* HIDE SIDEBAR ON DESKTOP - Now using header tabs */
+@media (min-width: 769px) {
+  .desktop-sidebar {
+    display: none !important; /* Hidden - replaced by header tabs */
+  }
+
+  /* Hide old tab navigation */
+  .tab-navigation {
+    display: none !important;
+  }
+}
+
+/* Hide sidebar on mobile */
+@media (max-width: 768px) {
+  .desktop-sidebar {
+    display: none !important;
+  }
+}

@@ -40,18 +40,27 @@
 }
 
 /* Dark mode forms */
+[data-theme="dark"] .form-group label {
+  color: var(--color-text-dark);
+}
+
 [data-theme="dark"] .form-group input,
 [data-theme="dark"] .form-group select,
 [data-theme="dark"] .form-group textarea {
-  background-color: #1e293b;
-  border: 1px solid #334155;
-  color: #f1f5f9;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dark);
+}
+
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder {
+  color: var(--color-text-gray);
+  opacity: 0.7;
 }
 
 [data-theme="dark"] .form-group input:focus,
 [data-theme="dark"] .form-group select:focus,
 [data-theme="dark"] .form-group textarea:focus {
-  border-color: #60a5fa;
-  background-color: #253449;
+  border-color: var(--color-primary);
+  background-color: var(--color-hover);
 }
-

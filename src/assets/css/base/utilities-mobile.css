@@ -1,0 +1,465 @@
+/* ===============================================
+   MOBILE UTILITY CLASSES
+   Responsive helper classes for mobile optimization
+   =============================================== */
+
+/* ===================
+   DISPLAY UTILITIES
+   =================== */
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Show only on mobile */
+.show-mobile {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .show-mobile {
+    display: block !important;
+  }
+
+  .show-mobile-flex {
+    display: flex !important;
+  }
+
+  .show-mobile-grid {
+    display: grid !important;
+  }
+}
+
+/* ===================
+   SPACING UTILITIES
+   =================== */
+
+@media (max-width: 768px) {
+  /* Padding */
+  .p-mobile-0 {
+    padding: 0 !important;
+  }
+  .p-mobile-1 {
+    padding: 0.25rem !important;
+  }
+  .p-mobile-2 {
+    padding: 0.5rem !important;
+  }
+  .p-mobile-3 {
+    padding: 0.75rem !important;
+  }
+  .p-mobile-4 {
+    padding: 1rem !important;
+  }
+
+  .px-mobile-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .px-mobile-2 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .px-mobile-4 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .py-mobile-0 {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .py-mobile-2 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  .py-mobile-4 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Margin */
+  .m-mobile-0 {
+    margin: 0 !important;
+  }
+  .m-mobile-2 {
+    margin: 0.5rem !important;
+  }
+  .m-mobile-4 {
+    margin: 1rem !important;
+  }
+
+  .mt-mobile-0 {
+    margin-top: 0 !important;
+  }
+  .mt-mobile-2 {
+    margin-top: 0.5rem !important;
+  }
+  .mt-mobile-4 {
+    margin-top: 1rem !important;
+  }
+
+  .mb-mobile-0 {
+    margin-bottom: 0 !important;
+  }
+  .mb-mobile-2 {
+    margin-bottom: 0.5rem !important;
+  }
+  .mb-mobile-4 {
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* ===================
+   LAYOUT UTILITIES
+   =================== */
+
+@media (max-width: 768px) {
+  /* Flex Direction */
+  .flex-mobile-column {
+    flex-direction: column !important;
+  }
+
+  .flex-mobile-row {
+    flex-direction: row !important;
+  }
+
+  /* Grid */
+  .grid-mobile-1 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-mobile-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Width */
+  .w-mobile-full {
+    width: 100% !important;
+  }
+
+  .w-mobile-auto {
+    width: auto !important;
+  }
+
+  /* Text Align */
+  .text-mobile-center {
+    text-align: center !important;
+  }
+
+  .text-mobile-left {
+    text-align: left !important;
+  }
+}
+
+/* ===================
+   TYPOGRAPHY UTILITIES
+   =================== */
+
+@media (max-width: 768px) {
+  .text-mobile-sm {
+    font-size: 0.875rem !important;
+  }
+
+  .text-mobile-base {
+    font-size: 1rem !important;
+  }
+
+  .text-mobile-lg {
+    font-size: 1.125rem !important;
+  }
+
+  .text-mobile-xl {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* ===================
+   TOUCH UTILITIES
+   =================== */
+
+/* Better tap targets */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prevent text selection on tap */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Enable text selection */
+.select-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* ===================
+   SCROLL UTILITIES
+   =================== */
+
+/* Horizontal scroll with touch */
+.scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.scroll-x::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scroll-x::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+.scroll-x::-webkit-scrollbar-track {
+  background: var(--color-border);
+}
+
+/* Vertical scroll with touch */
+.scroll-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.scroll-y::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-y::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+/* Hide scrollbar but keep functionality */
+.scroll-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===================
+   PERFORMANCE UTILITIES
+   =================== */
+
+/* GPU acceleration */
+.gpu-accelerate {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Contain layout for better performance */
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+/* ===================
+   SAFE AREA (iPhone X+)
+   =================== */
+
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ===================
+   MOBILE CARD STACK
+   =================== */
+
+@media (max-width: 768px) {
+  .card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card-stack > * {
+    width: 100%;
+  }
+}
+
+/* ===================
+   MOBILE BUTTON GROUP
+   =================== */
+
+@media (max-width: 768px) {
+  .btn-group-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .btn-group-mobile > button,
+  .btn-group-mobile > a {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===================
+   MOBILE STICKY HEADER
+   =================== */
+
+.sticky-mobile {
+  position: static;
+}
+
+@media (max-width: 768px) {
+  .sticky-mobile {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ===================
+   MOBILE MODAL FULL SCREEN
+   =================== */
+
+@media (max-width: 768px) {
+  .modal-fullscreen-mobile {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+/* ===================
+   MOBILE FLOATING ACTION BUTTON
+   =================== */
+
+.fab-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .fab-mobile {
+    display: flex;
+    position: fixed;
+    bottom: 80px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 99;
+    transition: transform 0.3s ease;
+  }
+
+  .fab-mobile:active {
+    transform: scale(0.95);
+  }
+}
+
+/* ===================
+   MOBILE BOTTOM NAV
+   =================== */
+
+@media (max-width: 768px) {
+  .bottom-nav-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    padding: env(safe-area-inset-bottom, 0.5rem) 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    min-width: 64px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.75rem;
+    transition: color 0.2s;
+  }
+
+  .bottom-nav-item.active {
+    color: var(--color-primary);
+  }
+
+  .bottom-nav-item svg,
+  .bottom-nav-item .icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* ===================
+   MOBILE PULL TO REFRESH
+   =================== */
+
+@media (max-width: 768px) {
+  .pull-to-refresh {
+    overscroll-behavior-y: contain;
+  }
+}

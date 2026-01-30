@@ -57,17 +57,19 @@
 
 /* Dark mode attendance cards */
 [data-theme="dark"] .attendance-course-card {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dark);
 }
 
 [data-theme="dark"] .attendance-course-card:hover {
-  background: #253449;
+  background: var(--color-hover);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 [data-theme="dark"] .attendance-course-header {
-  border-bottom: 2px solid #334155;
+  border-bottom: 2px solid var(--color-border);
+  color: var(--color-text-dark);
 }
 
 .attendance-course-header {
@@ -162,12 +164,15 @@
 
 /* Dark mode attendance sessions */
 [data-theme="dark"] .attendance-session {
-  background: #1a2332;
-  border: 1px solid #2d3748;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dark);
 }
 
 [data-theme="dark"] .attendance-session.present {
-  background: #0d2818;
+  background: rgba(34, 197, 94, 0.1);
+  border-left-color: var(--color-success);
+}
   border-left: 4px solid #4ade80;
 }
 
@@ -314,3 +319,48 @@
   }
 }
 
+/* Dark mode attendance badges - improved colors */
+[data-theme="dark"] .attendance-rate-badge.high {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+[data-theme="dark"] .attendance-rate-badge.medium {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .attendance-rate-badge.low {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .attendance-session.present .status-btn:first-child.active {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #4ade80;
+  color: #86efac;
+}
+
+[data-theme="dark"] .attendance-session.late .status-btn:nth-child(2).active {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .attendance-session.absent .status-btn:last-child.active {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #fb7185;
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .attendance-session.present .status-label {
+  color: #86efac;
+}
+
+[data-theme="dark"] .attendance-session.absent .status-label {
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .attendance-session.late .status-label {
+  color: #fcd34d;
+}

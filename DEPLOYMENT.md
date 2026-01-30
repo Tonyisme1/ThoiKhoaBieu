@@ -8,7 +8,7 @@ This guide will help you deploy Smart Timetable to GitHub and GitHub Pages.
 - GitHub account
 - Basic knowledge of Git commands
 
-## 🔧 Step-by-Step Deployment
+## � Step-by-Step Deployment
 
 ### 1. Prepare Your Repository
 
@@ -187,6 +187,27 @@ After deployment, share your project:
 2. **Add to your GitHub profile** as a pinned repository
 3. **Share on social media** or with classmates
 4. **Submit to lists** of open-source projects
+5. **Add screenshots** to showcase features
+6. **Record demo video** showing dark mode and features
+
+## ⚡ Performance Optimization
+
+### Already Optimized
+
+- ✅ **No build tools** - Direct browser execution
+- ✅ **CSS modules** - Organized imports, browser caching
+- ✅ **Vanilla JS** - Zero dependencies, lightweight
+- ✅ **LocalStorage** - No server requests needed
+- ✅ **Passive events** - Better scroll performance
+- ✅ **CSS variables** - Instant theme switching
+
+### Best Practices Implemented
+
+- **Semantic HTML** for better SEO
+- **ARIA labels** for accessibility
+- **Mobile-first** responsive design
+- **Touch-optimized** UI elements
+- **Keyboard navigation** support
 
 ## 🐛 Troubleshooting
 
@@ -223,6 +244,7 @@ After deployment, share your project:
 
 ## ✅ Deployment Checklist
 
+### Repository Setup
 - [ ] Git repository initialized
 - [ ] All files committed
 - [ ] GitHub repository created
@@ -232,8 +254,23 @@ After deployment, share your project:
 - [ ] Site is live and accessible
 - [ ] README links updated
 - [ ] Repository description added
-- [ ] Topics/tags added
+- [ ] Topics/tags added (`javascript`, `dark-mode`, `timetable`, `student-app`)
 - [ ] License file included
+
+### Feature Testing
+- [ ] Light mode displays correctly
+- [ ] Dark mode switches properly
+- [ ] All text readable in both themes
+- [ ] Week slider works smoothly
+- [ ] Draggable scrollbar functional
+- [ ] Keyboard navigation (arrow keys)
+- [ ] Mobile swipe gestures
+- [ ] Toast notifications appear
+- [ ] Loading states display
+- [ ] Forms work in dark mode
+- [ ] All badges have good contrast
+- [ ] Responsive on mobile (320px+)
+- [ ] No console errors
 
 ## 🎉 Success!
 

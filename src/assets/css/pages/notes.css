@@ -106,6 +106,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2; /* Standard property */
   -webkit-box-orient: vertical;
 }
 
@@ -170,6 +171,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 4;
+  line-clamp: 4; /* Standard property */
   -webkit-box-orient: vertical;
 }
 
@@ -571,19 +573,23 @@
 /* ============= DARK MODE ============= */
 
 [data-theme="dark"] .note-card {
-  background: #1e293b;
+  background: var(--color-surface);
+  color: var(--color-text-dark);
 }
 
 [data-theme="dark"] .note-action-btn {
   background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-gray);
 }
 
 [data-theme="dark"] .note-action-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-dark);
 }
 
 [data-theme="dark"] .todo-item {
   background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-dark);
 }
 
 /* ============= RESPONSIVE ============= */

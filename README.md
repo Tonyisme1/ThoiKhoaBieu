@@ -88,10 +88,16 @@ http://localhost:3001/public/index.html
 
 ### 📅 Smart Timetable
 
-- Visual weekly schedule with color-coded courses
-- Course details on hover (room, instructor, weeks)
-- Week-by-week navigation
-- Semester and holiday management
+- **Visual weekly schedule** with color-coded courses
+- **Course details on hover** (room, instructor, weeks)
+- **Week-by-week navigation** with horizontal slider
+- **Draggable scrollbar** for quick week navigation
+- **Arrow buttons** to slide and select weeks
+- **Keyboard navigation** - Use left/right arrow keys
+- **Swipe gestures** for mobile navigation
+- **Smooth animations** - 400ms cubic-bezier transitions
+- **Semester and holiday management**
+- **Today indicator** - Auto-highlight current day
 
 ### 📊 Analytics Dashboard
 
@@ -150,26 +156,49 @@ http://localhost:3001/public/index.html
 - Data import/export (JSON)
 - Theme customization
 
+### 🔔 Toast Notifications
+
+- **Success messages** - Green confirmation toasts
+- **Error alerts** - Red warning notifications
+- **Auto-dismiss** - 3-5 second duration
+- **Progress bar** - Visual countdown
+- **Smooth animations** - Slide in from bottom-right
+- **Mobile optimized** - Above navigation bar
+
+### ⏳ Loading States
+
+- **Spinner animations** - Smooth rotation
+- **Skeleton screens** - Content placeholders
+- **Progress bars** - Visual feedback
+- **Overlay states** - Non-blocking indicators
+
 ### 🌙 Dark Mode
 
-- Beautiful dark theme
-- Instant theme switching
-- Persistent theme preference
-- Optimized for eye comfort
+- **Beautiful dark theme** with optimized color contrast
+- **Instant theme switching** with smooth transitions
+- **Persistent theme preference** saved to localStorage
+- **Optimized for eye comfort** - WCAG 2.1 AA compliant
+- **Enhanced readability** - Text colors automatically adjust
+- **Consistent design** - All components support dark mode
+- **Smart badges** - Color-coded status with better contrast
 
 ## 🛠️ Technology Stack
 
 ### Frontend
 
-- **HTML5** - Semantic markup
+- **HTML5** - Semantic markup with ARIA attributes
 - **CSS3** - Modern styling with CSS Variables
-  - Modular architecture (14 CSS files)
+  - Modular architecture (20+ CSS files)
   - CSS Grid & Flexbox layouts
-  - Smooth transitions and animations
+  - Smooth transitions (cubic-bezier easing)
+  - Dark mode with WCAG 2.1 AA contrast ratios
+  - Responsive design (320px - 4K)
 - **JavaScript ES6+** - Pure vanilla JavaScript
   - ES6 Modules for code organization
   - No frameworks or libraries
   - Event-driven architecture
+  - Touch event handling
+  - Keyboard navigation support
 
 ### Data & Storage
 
@@ -314,8 +343,18 @@ Open the app in your browser and test:
 
 - No build process or bundling
 - Instant page loads
-- Smooth transitions
+- Smooth transitions (150-400ms)
 - Optimized performance
+- Passive event listeners for better scroll
+
+### ♿ Accessibility Features
+
+- **ARIA labels** for screen readers
+- **Keyboard navigation** support
+- **Focus states** with 2px outline
+- **High contrast** in dark mode
+- **Touch-friendly** 44px minimum tap targets
+- **Responsive** from 320px to 4K displays
 
 ### 🎨 Beautiful Design
 
