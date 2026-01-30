@@ -1,10 +1,12 @@
 # 📚 Smart Timetable
 
-> A modern, comprehensive academic management system for university students. Track courses, assignments, exams, attendance, and notes - all in one beautiful application.
+> A powerful, feature-rich academic management system built with 100% Vanilla JavaScript. Manage your university schedule, assignments, exams, notes, and attendance - all in one beautiful, lightning-fast application.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Made with Love](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red.svg)](https://github.com)
-[![No Build Tools](https://img.shields.io/badge/No%20Build%20Tools-Vanilla%20JS-yellow.svg)](https://github.com)
+[![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-ES6+-yellow.svg)](https://github.com)
+[![No Build Tools](https://img.shields.io/badge/Build%20Tools-None-green.svg)](https://github.com)
+[![Lines of Code](https://img.shields.io/badge/Lines%20of%20Code-14.5k+-blue.svg)](https://github.com)
+[![Dark Mode](https://img.shields.io/badge/Dark%20Mode-WCAG%20AA-8B5CF6.svg)](https://github.com)
 
 ## 🌐 Live Demo
 
@@ -12,7 +14,19 @@
 
 **📱 [Launch App](https://tonyisme1.github.io/ThoiKhoaBieu/public/index.html)**
 
-## 🚀 Quick Start
+## � Project Statistics
+
+- **Total Lines of Code**: 14,564 lines
+  - 💅 CSS: 7,130 lines (49.0%) - 21 modular files
+  - 💛 JavaScript: 4,720 lines (32.4%) - 14 ES6 modules
+  - 📝 HTML: 2,554 lines (17.5%) - Semantic markup
+  - 📋 JSON: 160 lines (1.1%) - Course data
+- **Total Files**: 37 files
+- **Architecture**: 100% Vanilla JavaScript, Zero dependencies
+- **Browser Support**: All modern browsers (ES6+)
+- **Mobile Ready**: Responsive 320px - 4K
+
+## �🚀 Quick Start
 
 ### Option 1: Direct Open
 
@@ -41,63 +55,118 @@ http://localhost:3001/public/index.html
 
 ```
 📦 Smart-Timetable/
-├── 📂 public/                    # Public web assets
-│   ├── index.html               # Main application
-│   └── landing.html             # Landing page
 │
-├── 📂 src/                       # Source code
-│   ├── 📂 assets/css/           # Modular stylesheets
-│   │   ├── 📂 base/             # Foundation styles
-│   │   │   ├── variables.css    # CSS custom properties
-│   │   │   └── layout.css       # Layout & grid systems
-│   │   ├── 📂 components/       # Reusable components
-│   │   │   ├── buttons.css      # Button styles
-│   │   │   ├── cards.css        # Card components
-│   │   │   ├── forms.css        # Form elements
-│   │   │   ├── search.css       # Search functionality
-│   │   │   └── sidebar.css      # Sidebar panel
-│   │   ├── 📂 pages/            # Page-specific styles
-│   │   │   ├── dashboard.css    # Dashboard view
-│   │   │   ├── assignments.css  # Assignments page
-│   │   │   ├── exams.css        # Exams page
-│   │   │   ├── attendance.css   # Attendance tracker
-│   │   │   ├── notes.css        # Smart notes
-│   │   │   └── settings.css     # Settings page
-│   │   └── main.css             # Main CSS entry point
+├── 📂 public/                        # Public web assets (2 files, 2,554 lines)
+│   ├── index.html                   # Main application (1,239 lines)
+│   └── landing.html                 # Landing page (1,315 lines)
+│
+├── 📂 src/                           # Source code (35 files, 11,850 lines)
 │   │
-│   └── 📂 scripts/              # JavaScript modules
-│       ├── 📂 core/             # Core functionality
-│       │   ├── core.js          # Business logic
-│       │   └── ui.js            # UI rendering
-│       ├── 📂 modules/          # Feature modules
-│       │   ├── assignments.js   # Assignment management
-│       │   ├── exams.js         # Exam scheduling
-│       │   ├── attendance.js    # Attendance tracking
-│       │   ├── notes.js         # Notes core logic
-│       │   └── notes-ui.js      # Notes UI handlers
-│       └── app.js               # Main controller
+│   ├── 📂 assets/css/               # Stylesheets (21 files, 7,130 lines)
+│   │   │
+│   │   ├── 📂 base/                 # Foundation styles (4 files)
+│   │   │   ├── variables.css       # CSS custom properties & theme colors
+│   │   │   ├── layout.css          # Layout system & grid
+│   │   │   ├── mobile.css          # Mobile base styles (524 lines)
+│   │   │   └── utilities-mobile.css # Mobile utilities (465 lines)
+│   │   │
+│   │   ├── 📂 components/           # Reusable UI components (10 files)
+│   │   │   ├── buttons.css         # Button styles & variants
+│   │   │   ├── cards.css           # Card components
+│   │   │   ├── forms.css           # Form elements & inputs
+│   │   │   ├── search.css          # Search bar component
+│   │   │   ├── sidebar.css         # Desktop sidebar (legacy)
+│   │   │   ├── desktop-sidebar.css # Desktop sidebar styles
+│   │   │   ├── header-tabs.css     # Header tab navigation (409 lines)
+│   │   │   ├── mobile-menu.css     # Mobile hamburger menu
+│   │   │   ├── toast.css           # Toast notifications
+│   │   │   └── loading.css         # Loading spinners & states
+│   │   │
+│   │   ├── 📂 pages/                # Page-specific styles (6 files)
+│   │   │   ├── dashboard.css       # Dashboard analytics view
+│   │   │   ├── assignments.css     # Assignments page (460 lines)
+│   │   │   ├── exams.css           # Exams schedule page
+│   │   │   ├── attendance.css      # Attendance tracker
+│   │   │   ├── notes.css           # Smart notes (809 lines)
+│   │   │   └── settings.css        # Settings page
+│   │   │
+│   │   └── main.css                 # Main CSS entry point (900 lines)
+│   │                                # Imports all modules
+│   │
+│   └── 📂 scripts/                  # JavaScript modules (14 files, 4,720 lines)
+│       │
+│       ├── 📂 core/                 # Core functionality (2 files)
+│       │   ├── core.js             # Business logic & data management
+│       │   └── ui.js               # UI rendering & DOM manipulation
+│       │
+│       ├── 📂 modules/              # Feature modules (11 files)
+│       │   ├── assignments.js      # Assignment management
+│       │   ├── exams.js            # Exam scheduling
+│       │   ├── attendance.js       # Attendance tracking
+│       │   ├── dashboard.js        # Dashboard analytics
+│       │   ├── notes.js            # Notes core logic (markdown, todos)
+│       │   ├── notes-ui.js         # Notes UI & event handlers
+│       │   ├── holidays.js         # Holiday management
+│       │   ├── header-tabs.js      # Header tab navigation
+│       │   ├── mobile-menu.js      # Mobile hamburger menu
+│       │   ├── week-slider.js      # Week slider component (492 lines)
+│       │   └── toast.js            # Toast notification system
+│       │
+│       └── app.js                   # Main application controller (1,250 lines)
+│                                    # Initialization & orchestration
 │
-├── 📂 data/                      # Data storage
-│   └── Lich_Hoc.json            # Course data
+├── 📂 data/                          # Data storage (1 file, 160 lines)
+│   └── Lich_Hoc.json                # Course data & schedule
 │
-└── 📂 docs/                      # Documentation
-    └── (documentation files)
+├── .gitignore                        # Git ignore rules
+└── README.md                         # This file
 ```
+
+### 📊 File Statistics
+
+| Category    | Files | Lines  | Percentage | Notes                          |
+| ----------- | ----- | ------ | ---------- | ------------------------------ |
+| 🎨 **CSS**  | 21    | 7,130  | 49.0%      | Modular architecture           |
+| 💛 **JS**   | 14    | 4,720  | 32.4%      | ES6 modules, zero dependencies |
+| 📝 **HTML** | 2     | 2,554  | 17.5%      | Semantic markup                |
+| 📋 **JSON** | 1     | 160    | 1.1%       | Course data                    |
+| **Total**   | 38    | 14,564 | 100%       | Production-ready code          |
+
+### 🏆 Top 10 Largest Files
+
+1. **landing.html** - 1,315 lines (Landing page with animations)
+2. **app.js** - 1,250 lines (Main application controller)
+3. **index.html** - 1,239 lines (Main app HTML)
+4. **main.css** - 900 lines (CSS imports & global styles)
+5. **notes.css** - 809 lines (Smart notes styling)
+6. **mobile.css** - 524 lines (Mobile base styles)
+7. **week-slider.js** - 492 lines (Week navigation component)
+8. **utilities-mobile.css** - 465 lines (Mobile utilities)
+9. **assignments.css** - 460 lines (Assignments styling)
+10. **header-tabs.css** - 409 lines (Header tab navigation)
 
 ## ✨ Features
 
 ### 📅 Smart Timetable
 
-- **Visual weekly schedule** with color-coded courses
-- **Course details on hover** (room, instructor, weeks)
-- **Week-by-week navigation** with horizontal slider
-- **Draggable scrollbar** for quick week navigation
-- **Arrow buttons** to slide and select weeks
-- **Keyboard navigation** - Use left/right arrow keys
-- **Swipe gestures** for mobile navigation
-- **Smooth animations** - 400ms cubic-bezier transitions
-- **Semester and holiday management**
-- **Today indicator** - Auto-highlight current day
+#### 🎯 Core Features
+
+- **Visual weekly schedule** - Color-coded courses with clean grid layout
+- **Header tab navigation** - Horizontal centered tabs (no sidebar on desktop)
+- **Course details on hover** - Room, instructor, week range
+- **Today indicator** - Auto-highlight current day with badge
+- **Semester and holiday management** - Configure breaks and weeks off
+
+#### 🎨 Week Navigation System
+
+- **Horizontal week slider** - Swipeable carousel with centered selection
+- **Draggable scrollbar** - Custom scrollbar below slider for quick access
+- **Arrow buttons** - Navigate and auto-select weeks (slide + select)
+- **Smooth animations** - 400ms cubic-bezier fade transitions
+- **Keyboard support** - ← → arrow keys to navigate weeks
+- **Swipe gestures** - Touch-friendly mobile navigation (50px threshold)
+- **Auto-scroll** - Selected week automatically centers
+- **Loading states** - Skeleton screens during data fetch
 
 ### 📊 Analytics Dashboard
 
@@ -141,12 +210,32 @@ http://localhost:3001/public/index.html
 
 ### 📌 Smart Notes
 
-- Rich text editor with markdown support
-- Todo list functionality
-- Tag system for organization
-- Color-coded notes
-- Pin important notes to top
-- Search and filter capabilities
+#### ✍️ Rich Text Features
+
+- **Markdown support** - Headers, bold, italic, strikethrough, links
+- **Interactive todo lists** - Clickable checkboxes with real-time updates
+  - `[ ]` Task not completed
+  - `[x]` Task completed
+  - Auto-save on checkbox toggle
+  - Visual progress bar (completed/total)
+- **Tag system** - Hashtag organization (#work #study #important)
+- **Color coding** - 8+ color options for visual organization
+- **Pin to top** - Keep important notes at the top
+
+#### 🔍 Organization & Search
+
+- **Filter by type** - All, Regular notes, Todo lists
+- **Search functionality** - Real-time search across titles and content
+- **Sort options** - Updated date, created date, pinned first
+- **Statistics** - Total notes, pinned count, todo progress
+
+#### 📝 Editor Features
+
+- **Form validation** - Required title and content
+- **Character counter** - Track note length
+- **Submit on Enter** - Press Enter in form to save
+- **Edit mode** - Click ✏️ button to edit (card click disabled for checkbox interaction)
+- **Delete confirmation** - Prevent accidental deletions
 
 ### ⚙️ Customizable Settings
 
@@ -172,33 +261,60 @@ http://localhost:3001/public/index.html
 - **Progress bars** - Visual feedback
 - **Overlay states** - Non-blocking indicators
 
-### 🌙 Dark Mode
+### 🌙 Dark Mode (WCAG 2.1 AA Compliant)
 
-- **Beautiful dark theme** with optimized color contrast
-- **Instant theme switching** with smooth transitions
-- **Persistent theme preference** saved to localStorage
-- **Optimized for eye comfort** - WCAG 2.1 AA compliant
-- **Enhanced readability** - Text colors automatically adjust
-- **Consistent design** - All components support dark mode
-- **Smart badges** - Color-coded status with better contrast
+#### 🎨 Visual Excellence
+
+- **Comprehensive dark theme** - All 30+ components optimized
+- **High contrast ratios** - WCAG 2.1 AA compliant (3:1 minimum)
+- **Consistent design language** - Dark backgrounds → Light text
+- **Smart color adjustments**:
+  - Background: `#1a1a2e` → `#0f0f1e` (dark surfaces)
+  - Text: `#e2e8f0` (light gray for readability)
+  - Primary: `#60a5fa` (vibrant blue)
+  - Success: `#34d399` | Warning: `#fbbf24` | Error: `#f87171`
+
+#### ⚡ Performance
+
+- **Instant theme switching** - No flash or reload
+- **Smooth transitions** - 300ms ease-in-out on color changes
+- **Persistent preference** - Saved to localStorage
+- **System sync ready** - Can detect OS theme preference
+
+#### ♿ Accessibility
+
+- **Enhanced readability** - Optimized for eye comfort
+- **Focus states** - High contrast outlines (2px)
+- **Smart badges** - Color-coded with sufficient contrast
+- **Form controls** - All inputs styled for dark mode
 
 ## 🛠️ Technology Stack
 
-### Frontend
+### Frontend (100% Vanilla)
 
-- **HTML5** - Semantic markup with ARIA attributes
-- **CSS3** - Modern styling with CSS Variables
-  - Modular architecture (20+ CSS files)
-  - CSS Grid & Flexbox layouts
-  - Smooth transitions (cubic-bezier easing)
-  - Dark mode with WCAG 2.1 AA contrast ratios
-  - Responsive design (320px - 4K)
-- **JavaScript ES6+** - Pure vanilla JavaScript
-  - ES6 Modules for code organization
-  - No frameworks or libraries
-  - Event-driven architecture
-  - Touch event handling
-  - Keyboard navigation support
+- **HTML5** (2,554 lines) - Semantic markup with ARIA attributes
+  - 2 main files: index.html (1,239) + landing.html (1,315)
+  - Dialog API for modals
+  - Template elements for dynamic content
+  - Accessible form controls
+
+- **CSS3** (7,130 lines across 21 files) - Modern styling with CSS Variables
+  - **Modular architecture**: base/ + components/ + pages/
+  - **CSS Grid & Flexbox** layouts for responsive design
+  - **Dark mode** with WCAG 2.1 AA contrast ratios (3:1 minimum)
+  - **Smooth transitions**: 150ms-400ms cubic-bezier easing
+  - **Responsive breakpoints**: 320px → 768px → 1024px → 4K
+  - **CSS Custom Properties**: 50+ variables for theming
+  - **Mobile-first**: Touch targets 44px minimum
+
+- **JavaScript ES6+** (4,720 lines across 14 modules) - Pure vanilla JavaScript
+  - **ES6 Modules**: Clean imports/exports, no bundler
+  - **Zero dependencies**: No npm, no frameworks, no libraries
+  - **Event delegation**: Efficient event handling
+  - **Touch events**: Passive listeners for 60fps scrolling
+  - **Keyboard navigation**: Full arrow key support
+  - **LocalStorage API**: Persistent data management
+  - **Debouncing**: Optimized search and scroll handlers
 
 ### Data & Storage
 

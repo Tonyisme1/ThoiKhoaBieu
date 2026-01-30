@@ -80,7 +80,7 @@ export function renderSmartNotes() {
     const card = createNoteCard(note, {
       onEdit: openNoteModal,
       onDelete: deleteNote,
-      onClick: openNoteModal,
+      onClick: null, // Removed click to edit - only use edit button
     });
     grid.appendChild(card);
   });
@@ -240,6 +240,76 @@ export function saveNote() {
 }
 
 /**
+ * Handle todo checkbox click
+ */
+function handleTodoCheckboxClick(checkbox) {
+  console.log("Checkbox clicked:", checkbox);
+
+  // Find the note content container
+  const contentContainer = checkbox.closest(".note-content-preview");
+  if (!contentContainer) {
+    console.error("Content container not found");
+    return;
+  }
+
+  const noteId = contentContainer.dataset.noteId;
+  if (!noteId) {
+    console.error("Note ID not found");
+    return;
+  }
+
+  console.log("Note ID:", noteId);
+
+  // Find the note in data
+  const note = appData.smartNotes.find((n) => n.id === noteId);
+  if (!note) {
+    console.error("Note not found in data");
+    return;
+  }
+
+  console.log("Note found:", note);
+
+  // Update the content - toggle checkbox state
+  const todoItem = checkbox.closest(".todo-item");
+  const taskText = todoItem.querySelector("span").textContent.trim();
+
+  let updatedContent = note.content;
+
+  if (checkbox.checked) {
+    // Mark as completed: [ ] -> [x]
+    updatedContent = updatedContent.replace(
+      new RegExp(`\\[ \\]\\s+${escapeRegex(taskText)}`, "i"),
+      `[x] ${taskText}`,
+    );
+    todoItem.classList.add("completed");
+  } else {
+    // Mark as incomplete: [x] -> [ ]
+    updatedContent = updatedContent.replace(
+      new RegExp(`\\[x\\]\\s+${escapeRegex(taskText)}`, "i"),
+      `[ ] ${taskText}`,
+    );
+    todoItem.classList.remove("completed");
+  }
+
+  // Update note content
+  note.content = updatedContent;
+  note.updatedAt = new Date().toISOString();
+
+  // Save to localStorage
+  saveDataCallback();
+
+  // Re-render to update progress bar
+  renderSmartNotes();
+}
+
+/**
+ * Escape regex special characters
+ */
+function escapeRegex(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
  * Delete note
  */
 export function deleteNote(noteId) {
@@ -267,6 +337,28 @@ export function updateCharCount() {
  * Setup notes listeners
  */
 export function setupNotesListeners() {
+  // Delegate todo checkbox clicks
+  const notesGrid = document.getElementById("smart-notes-list");
+  console.log("Setting up notes listeners, grid:", notesGrid);
+
+  if (notesGrid) {
+    notesGrid.addEventListener("click", function (e) {
+      console.log(
+        "Grid clicked, target:",
+        e.target,
+        "classList:",
+        e.target.classList,
+      );
+
+      // Stop propagation to prevent note card click
+      if (e.target.classList.contains("todo-checkbox")) {
+        console.log("Todo checkbox detected!");
+        e.stopPropagation();
+        handleTodoCheckboxClick(e.target);
+      }
+    });
+  }
+
   // Create note button
   const createBtn = document.getElementById("btn-add-note");
 
@@ -293,9 +385,17 @@ export function setupNotesListeners() {
     };
   }
 
+  // Form submit handler - prevent default form submission
+  const noteForm = document.getElementById("note-form");
+  if (noteForm) {
+    noteForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      saveNote();
+    });
+  }
+
   // Save note button - use onclick
   const saveBtn = document.getElementById("btn-save-note");
-
   if (saveBtn) {
     saveBtn.onclick = function (e) {
       e.preventDefault();

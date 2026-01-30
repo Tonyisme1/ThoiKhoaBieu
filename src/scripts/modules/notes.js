@@ -31,15 +31,17 @@ export function renderMarkdown(text) {
     '<a href="$1" target="_blank">$1</a>',
   );
 
-  // Todo checkboxes
+  // Todo checkboxes (interactive - can be checked/unchecked)
   html = html.replace(
     /\[x\]\s(.+)/gi,
-    '<div class="todo-item completed"><input type="checkbox" class="todo-checkbox" checked disabled> <span>$1</span></div>',
+    '<div class="todo-item completed"><input type="checkbox" class="todo-checkbox" checked> <span>$1</span></div>',
   );
   html = html.replace(
     /\[ \]\s(.+)/g,
-    '<div class="todo-item"><input type="checkbox" class="todo-checkbox" disabled> <span>$1</span></div>',
+    '<div class="todo-item"><input type="checkbox" class="todo-checkbox"> <span>$1</span></div>',
   );
+
+  console.log("Rendered markdown HTML:", html);
 
   // Bullet lists
   html = html.replace(/^\- (.+)$/gim, "<li>$1</li>");
@@ -192,6 +194,7 @@ export function createNoteCard(note, { onEdit, onDelete, onClick }) {
   const content = document.createElement("div");
   content.className = "note-content-preview rendered-markdown";
   content.innerHTML = renderMarkdown(note.content);
+  content.dataset.noteId = note.id; // Store note ID for checkbox updates
   card.appendChild(content);
 
   // Footer
@@ -214,8 +217,11 @@ export function createNoteCard(note, { onEdit, onDelete, onClick }) {
   footer.appendChild(meta);
   card.appendChild(footer);
 
-  // Click to expand/view
-  card.onclick = () => onClick(note);
+  // Click to expand/view (only if onClick is provided)
+  if (onClick) {
+    card.onclick = () => onClick(note);
+    card.style.cursor = "pointer";
+  }
 
   return card;
 }

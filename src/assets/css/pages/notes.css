@@ -454,6 +454,16 @@
 .todo-checkbox {
   margin-top: 0.25rem;
   cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+  min-width: 1rem;
+  min-height: 1rem;
+  flex-shrink: 0;
+  pointer-events: auto;
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  position: relative;
+  z-index: 10;
 }
 
 /* ============= COLOR PICKER ============= */
@@ -797,6 +807,14 @@
   width: 1rem;
   height: 1rem;
   cursor: pointer;
+}
+
+/* Override mobile min-height for todo checkboxes */
+@media (max-width: 768px) {
+  .todo-checkbox {
+    min-width: 1.25rem !important;
+    min-height: 1.25rem !important;
+  }
 }
 
 #note-modal .modal-actions {
